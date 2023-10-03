@@ -23,6 +23,7 @@
             android:layout_marginBottom="4dp"
             >
             <ImageView
+                android:id="@+id/back_from_settings"
                 android:src="@drawable/arrow_back"
                 android:layout_marginEnd="@dimen/icon_padding"
                 android:layout_width="@dimen/icon_size"
