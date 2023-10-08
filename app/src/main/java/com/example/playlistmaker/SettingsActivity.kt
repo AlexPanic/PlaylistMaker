@@ -8,7 +8,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        findViewById<ImageView>(R.id.back_from_settings).setOnClickListener{
+        findViewById<ImageView>(R.id.go_back).setOnClickListener{
             this.onBackPressed()
         }
 

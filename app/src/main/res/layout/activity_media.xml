@@ -1,55 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MediaActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Screen">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical"
-        android:padding="@dimen/main_padding">
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:layout_gravity="center_vertical"
-        android:layout_marginBottom="24dp"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
-            >
-            <ImageView
-                android:id="@+id/back_from_settings"
-                android:src="@drawable/arrow_back"
-                android:layout_marginEnd="@dimen/icon_padding"
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginRight="12dp"
-                />
-            <TextView
-                android:text="@string/btn_media"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:layout_marginLeft="12dp"
-                android:layout_gravity="top|center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/main_text"
-                />
-        </LinearLayout>
-    </LinearLayout>
+    <LinearLayout style="@style/Top">
+        <ImageView style="@style/backArrow"
+            android:id="@+id/go_back"/>
+        <TextView style="@style/Header"
+            android:text="@string/btn_media" />
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
