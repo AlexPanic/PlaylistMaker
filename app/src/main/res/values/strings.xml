@@ -7,4 +7,8 @@
     <string name="settings_share">Поделиться приложением</string>
     <string name="settings_support">Написать в поддержку</string>
     <string name="settings_agreement">Пользовательское соглашение</string>
+    <string name="imgBack">Back</string>
+    <string name="imgShare">Share</string>
+    <string name="imgSupport">Support</string>
+    <string name="imgAgreement">Agreement</string>
 </resources>
