@@ -11,4 +11,11 @@
     <string name="imgShare">Share</string>
     <string name="imgSupport">Support</string>
     <string name="imgAgreement">Agreement</string>
+    <string name="shareSubject">Мое приложение</string>
+    <string name="shareText">Замечательное приложение для Android</string>
+    <string name="shareTitle">Поделиться</string>
+    <string name="mailTo">alexey.panichev@yandex.ru</string>
+    <string name="supportSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="supportText">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="agreementUrl">https://yandex.ru/legal/practicum_offer/</string>
 </resources>

@@ -14,10 +14,12 @@
         <TextView style="@style/Option"
             android:text="@string/settings_dark" />
         <Switch style="@style/darkThemeSwitch"
+            android:id="@+id/darkThemeSwitch"
             />
     </FrameLayout>
 
-    <FrameLayout style="@style/Line">
+    <FrameLayout style="@style/Line"
+        android:id="@+id/action_share">
         <TextView style="@style/Option"
             android:text="@string/settings_share" />
         <ImageView style="@style/optionIcon"
@@ -26,7 +28,8 @@
             />
     </FrameLayout>
 
-    <FrameLayout style="@style/Line">
+    <FrameLayout style="@style/Line"
+        android:id="@+id/action_support">
         <TextView style="@style/Option"
             android:text="@string/settings_support" />
 
@@ -36,7 +39,8 @@
             />
     </FrameLayout>
 
-    <FrameLayout style="@style/Line">
+    <FrameLayout style="@style/Line"
+        android:id="@+id/action_agreement">
         <TextView style="@style/Option"
             android:text="@string/settings_agreement" />
 
