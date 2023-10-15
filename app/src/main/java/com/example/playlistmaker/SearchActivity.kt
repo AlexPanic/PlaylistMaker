@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -7,8 +8,26 @@ import android.text.TextWatcher
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 
 class SearchActivity : AppCompatActivity() {
+
+    companion object {
+        const val SEARCH_MASK = "SEARCH_MASK"
+        const val SEARCH_MASK_DEF = ""
+    }
+
+    private var searchMask: String = SEARCH_MASK_DEF
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_MASK, searchMask)
+    }
+    override fun onRestoreInstanceState(outState: Bundle) {
+        super.onRestoreInstanceState(outState)
+        searchMask = outState.getString(SEARCH_MASK, SEARCH_MASK_DEF)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
@@ -18,8 +37,9 @@ class SearchActivity : AppCompatActivity() {
         }
 
         val inputEditText = findViewById<EditText>(R.id.search_input)
-        val clearButton = findViewById<ImageView>(R.id.clear_search_input)
+        inputEditText.setText(searchMask)
 
+        val clearButton = findViewById<ImageView>(R.id.clear_search_input)
         clearButton.setOnClickListener {
             inputEditText.setText("")
         }
@@ -34,6 +54,7 @@ class SearchActivity : AppCompatActivity() {
                     // empty
                 } else {
                     val input = s.toString()
+                    searchMask = input
                     // empty
                 }
                 clearButton.visibility = clearButtonVisibility(s)
@@ -53,4 +74,5 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
+
 }
