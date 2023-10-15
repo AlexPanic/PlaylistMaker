@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Screen">
+    style="@style/screen">
 
-    <LinearLayout style="@style/Top">
-        <ImageView style="@style/backArrow"
+    <LinearLayout style="@style/top">
+        <ImageView style="@style/back_arrow"
             android:id="@+id/go_back"/>
-        <TextView style="@style/Header"
-            android:text="@string/btn_media" />
+        <TextView style="@style/header"
+            android:text="@string/act_media" />
     </LinearLayout>
 
 </LinearLayout>

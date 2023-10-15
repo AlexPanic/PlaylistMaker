@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/mainScreen"
+    style="@style/main_screen"
     >
 
     <TextView
-        style="@style/AppHeader"
+        style="@style/app_header"
         android:text="@string/app_name"
         />
 
     <Button
-        android:text="@string/btn_search"
+        android:text="@string/act_search"
         android:id="@+id/btn_search"
         app:icon="@drawable/search"
-        style="@style/mainButton"
+        style="@style/main_button"
         />
 
     <Button
-        android:text="@string/btn_media"
+        android:text="@string/act_media"
         android:id="@+id/btn_media"
         app:icon="@drawable/media"
-        style="@style/mainButton"
+        style="@style/main_button"
         />
 
     <Button
-        android:text="@string/btn_settings"
+        android:text="@string/act_settings"
         android:id="@+id/btn_settings"
         app:icon="@drawable/settings"
-        style="@style/mainButton"
+        style="@style/main_button"
         />
 
 

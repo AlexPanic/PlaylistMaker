@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Screen">
+    <style name="screen">
         <item name="android:background">@color/yp_white</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
         <item name="android:padding">@dimen/main_padding</item>
     </style>
-    <style name="mainScreen" parent="Screen">
+    <style name="main_screen" parent="screen">
         <item name="android:background">?attr/colorPrimary</item>
     </style>
 
-    <style name="Top">
+    <style name="top">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">48dp</item>
         <item name="android:layout_marginVertical">4dp</item>
     </style>
-    <style name="backArrow">
+    <style name="back_arrow">
         <item name="android:src">@drawable/arrow_back</item>
         <item name="android:layout_marginEnd">@dimen/icon_padding</item>
         <item name="android:layout_width">@dimen/icon_size</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginTop">12dp</item>
-        <item name="android:contentDescription">@string/imgBack</item>
+        <item name="android:contentDescription">@string/img_back</item>
     </style>
 
-    <style name="headerText">
+    <style name="header_text">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/header_text</item>
     </style>
 
-    <style name="Header" parent="headerText">
+    <style name="header" parent="header_text">
         <item name="android:layout_gravity">top|center</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginStart">12dp</item>
@@ -39,7 +39,7 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="AppHeader" parent="Header">
+    <style name="app_header" parent="header">
         <item name="android:layout_gravity">start</item>
         <item name="android:layout_marginStart">0dp</item>
         <item name="android:layout_marginTop">0dp</item>
@@ -47,7 +47,7 @@
         <item name="android:textColor">#ffffff</item>
     </style>
 
-    <style name="mainButton">
+    <style name="main_button">
         <item name="android:backgroundTint">@color/yp_white</item>
         <item name="android:textColor">@color/yp_black</item>
         <item name="iconTint">@color/yp_black</item>
@@ -61,23 +61,23 @@
         <item name="cornerRadius">@dimen/btn_radius</item>
     </style>
 
-    <style name="normalText">
+    <style name="normal_text">
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/text</item>
     </style>
 
-    <style name="Line">
+    <style name="line">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingVertical">20dp</item>
     </style>
 
-    <style name="Option" parent="normalText">
+    <style name="option" parent="normal_text">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="optionIcon">
+    <style name="option_icon">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">end</item>
@@ -85,12 +85,39 @@
         <item name="android:layout_marginEnd">@dimen/list_icon_margin_right</item>
     </style>
 
-    <style name="darkThemeSwitch">
+    <style name="dark_theme_switch">
         <item name="android:checked">false</item>
         <item name="android:switchMinWidth">56dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_gravity">end</item>
         <item name="android:layout_marginEnd">4dp</item>
+    </style>
+
+    <style name="input">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/shape</item>
+        <item name="android:layout_marginVertical">8dp</item>
+    </style>
+
+    <style name="search_input">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/input_text</item>
+        <item name="android:textColorHint">@color/input_hint_color</item>
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:background">@null</item>
+        <item name="android:drawableStart">@drawable/search_input</item>
+        <item name="android:drawablePadding">5dp</item>
+    </style>
+
+    <style name="clear_input">
+        <item name="android:src">@drawable/clear_icon</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:visibility">gone</item>
     </style>
 </resources>

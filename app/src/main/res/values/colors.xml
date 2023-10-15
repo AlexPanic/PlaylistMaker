@@ -11,4 +11,7 @@
 
     <color name="yp_black">#1A1B22</color>
     <color name="yp_white">#FFFFFF</color>
+
+    <color name="input_background">#E6E8EB</color>
+    <color name="input_hint_color">#AEAFB4</color>
 </resources>

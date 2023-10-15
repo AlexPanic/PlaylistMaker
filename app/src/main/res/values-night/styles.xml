@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Screen">
+    <style name="screen">
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
         <item name="android:padding">@dimen/main_padding</item>
     </style>
-    <style name="darkThemeSwitch">
+    <style name="dark_theme_switch">
         <item name="android:checked">true</item>
         <item name="android:switchMinWidth">56dp</item>
         <item name="android:layout_width">wrap_content</item>

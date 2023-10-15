@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Screen">
+    style="@style/screen">
 
-    <LinearLayout style="@style/Top">
-        <ImageView style="@style/backArrow"
+    <LinearLayout style="@style/top">
+        <ImageView style="@style/back_arrow"
             android:id="@+id/go_back"/>
-        <TextView style="@style/Header"
-            android:text="@string/btn_settings" />
+        <TextView style="@style/header"
+            android:text="@string/act_settings" />
     </LinearLayout>
 
 
-    <FrameLayout style="@style/Line">
-        <TextView style="@style/Option"
+    <FrameLayout style="@style/line">
+        <TextView style="@style/option"
             android:text="@string/settings_dark" />
-        <Switch style="@style/darkThemeSwitch"
+        <Switch style="@style/dark_theme_switch"
             android:id="@+id/darkThemeSwitch"
             />
     </FrameLayout>
 
-    <FrameLayout style="@style/Line"
+    <FrameLayout style="@style/line"
         android:id="@+id/action_share">
-        <TextView style="@style/Option"
+        <TextView style="@style/option"
             android:text="@string/settings_share" />
-        <ImageView style="@style/optionIcon"
+        <ImageView style="@style/option_icon"
             android:src="@drawable/share"
-            android:contentDescription="@string/imgShare"
+            android:contentDescription="@string/img_share"
             />
     </FrameLayout>
 
-    <FrameLayout style="@style/Line"
+    <FrameLayout style="@style/line"
         android:id="@+id/action_support">
-        <TextView style="@style/Option"
+        <TextView style="@style/option"
             android:text="@string/settings_support" />
 
-        <ImageView style="@style/optionIcon"
+        <ImageView style="@style/option_icon"
             android:src="@drawable/support"
-            android:contentDescription="@string/imgSupport"
+            android:contentDescription="@string/img_support"
             />
     </FrameLayout>
 
-    <FrameLayout style="@style/Line"
+    <FrameLayout style="@style/line"
         android:id="@+id/action_agreement">
-        <TextView style="@style/Option"
+        <TextView style="@style/option"
             android:text="@string/settings_agreement" />
 
-        <ImageView style="@style/optionIcon"
+        <ImageView style="@style/option_icon"
             android:src="@drawable/arrow_forward"
-            android:contentDescription="@string/imgAgreement"
+            android:contentDescription="@string/img_agreement"
             />
     </FrameLayout>
 

@@ -38,20 +38,20 @@ class SettingsActivity : AppCompatActivity() {
         findViewById<FrameLayout>(R.id.action_share).setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.shareSubject))
-            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.shareText))
-            startActivity(Intent.createChooser(intent, getString(R.string.shareTitle)))
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject))
+            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text))
+            startActivity(Intent.createChooser(intent, getString(R.string.share_title)))
         }
 
         findViewById<FrameLayout>(R.id.action_support).setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+getString(R.string.mailTo)))
-            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.supportSubject))
-            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.supportText))
+            val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+getString(R.string.mail_to)))
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject))
+            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.support_text))
             startActivity(intent)
         }
 
         findViewById<FrameLayout>(R.id.action_agreement).setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.agreementUrl)))
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.agreement_url)))
             startActivity(intent)
         }
 

@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Screen">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/screen">
 
-    <LinearLayout style="@style/Top">
-        <ImageView style="@style/backArrow"
+    <LinearLayout style="@style/top">
+        <ImageView style="@style/back_arrow"
             android:id="@+id/go_back"/>
-        <TextView style="@style/Header"
-            android:text="@string/btn_search" />
+        <TextView style="@style/header"
+            android:text="@string/act_search" />
     </LinearLayout>
+
+    <FrameLayout style="@style/input">
+      <EditText style="@style/search_input"
+          android:id="@+id/search_input"
+          android:inputType="text"
+          android:lines="1"
+          android:maxLength="100"
+          android:hint="@string/act_search"
+          />
+      <ImageView style="@style/clear_input"
+            android:id="@+id/clear_search_input" />
+    </FrameLayout>
 
 </LinearLayout>
