@@ -1,0 +1,16 @@
+<resources>
+    <dimen name="main_text">26sp</dimen>
+    <dimen name="text">16sp</dimen>
+
+    <dimen name="header_margin">16dp</dimen>
+    <dimen name="main_padding">16dp</dimen>
+
+    <dimen name="btn_margin">8dp</dimen>
+    <dimen name="btn_radius">16dp</dimen>
+    <dimen name="icon_padding">8dp</dimen>
+
+    <dimen name="icon_size">24dp</dimen>
+    <dimen name="list_padding">20dp</dimen>
+    <dimen name="list_icon_margin_left">8dp</dimen>
+    <dimen name="list_icon_margin_right">12dp</dimen>
+</resources>
