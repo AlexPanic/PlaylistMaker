@@ -44,9 +44,13 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         findViewById<FrameLayout>(R.id.action_support).setOnClickListener {
-            val intent = Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:"+getString(R.string.mail_to)))
-            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject))
-            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.support_text))
+
+            val intent = Intent(Intent.ACTION_SENDTO).apply {
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail_to)))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.support_subject))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.support_text))
+            }
             startActivity(intent)
         }
 
