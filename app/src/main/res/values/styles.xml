@@ -47,7 +47,7 @@
         <item name="android:textColor">#ffffff</item>
     </style>
 
-    <style name="main_button">
+    <style name="main_button" parent="Widget.MaterialComponents.Button.UnelevatedButton">
         <item name="android:backgroundTint">@color/yp_white</item>
         <item name="android:textColor">@color/yp_black</item>
         <item name="iconTint">@color/yp_black</item>
