@@ -9,7 +9,8 @@ class MediaActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_media)
 
-        findViewById<ImageView>(R.id.back_from_settings).setOnClickListener{
+        val btnBack = findViewById<ImageView>(R.id.go_back)
+        btnBack.setOnClickListener{
             this.onBackPressed()
         }
     }

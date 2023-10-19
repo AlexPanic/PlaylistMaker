@@ -1,133 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:padding="@dimen/main_padding">
+    style="@style/screen">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginVertical="4dp"
-        >
-        <ImageView
-            android:id="@+id/back_from_settings"
-            android:src="@drawable/arrow_back"
-            android:layout_marginEnd="@dimen/icon_padding"
-            android:layout_width="@dimen/icon_size"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:contentDescription="@string/imgBack"
-            />
-        <TextView
-            android:text="@string/btn_settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginStart="12dp"
-            android:layout_gravity="top|center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/main_text"
-            />
+    <LinearLayout style="@style/top">
+        <ImageView style="@style/back_arrow"
+            android:id="@+id/go_back"/>
+        <TextView style="@style/header"
+            android:text="@string/act_settings" />
     </LinearLayout>
 
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/list_padding"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_dark"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text"
-            android:background="@color/white" />
-
-        <Switch
+    <FrameLayout style="@style/line">
+        <TextView style="@style/option"
+            android:text="@string/settings_dark" />
+        <Switch style="@style/dark_theme_switch"
+            android:id="@+id/darkThemeSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:switchMinWidth="6dp"/>
+            android:layout_marginEnd="4dp"
+        />
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/list_padding"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_share"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text"
-            android:background="@color/white" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginStart="@dimen/list_icon_margin_left"
-            android:layout_marginEnd="@dimen/list_icon_margin_right"
+    <FrameLayout style="@style/line"
+        android:id="@+id/action_share">
+        <TextView style="@style/option"
+            android:text="@string/settings_share" />
+        <ImageView style="@style/option_icon"
             android:src="@drawable/share"
-            android:contentDescription="@string/imgShare"
+            android:contentDescription="@string/img_share"
             />
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/list_padding"
-        >
+    <FrameLayout style="@style/line"
+        android:id="@+id/action_support">
+        <TextView style="@style/option"
+            android:text="@string/settings_support" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_support"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text"
-            android:background="@color/white" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginStart="@dimen/list_icon_margin_left"
-            android:layout_marginEnd="@dimen/list_icon_margin_right"
+        <ImageView style="@style/option_icon"
             android:src="@drawable/support"
-            android:contentDescription="@string/imgSupport"
+            android:contentDescription="@string/img_support"
             />
     </FrameLayout>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/list_padding"
-        >
+    <FrameLayout style="@style/line"
+        android:id="@+id/action_agreement">
+        <TextView style="@style/option"
+            android:text="@string/settings_agreement" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_agreement"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text"
-            android:background="@color/white" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginStart="@dimen/list_icon_margin_left"
-            android:layout_marginEnd="@dimen/list_icon_margin_right"
+        <ImageView style="@style/option_icon"
             android:src="@drawable/arrow_forward"
-            android:contentDescription="@string/imgAgreement"
+            android:contentDescription="@string/img_agreement"
             />
     </FrameLayout>
-
 
 </LinearLayout>
