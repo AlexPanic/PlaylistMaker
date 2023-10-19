@@ -10,7 +10,12 @@
             android:text="@string/act_search" />
     </LinearLayout>
 
-    <FrameLayout style="@style/input">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape"
+        android:layout_marginVertical="8dp"
+        >
       <EditText style="@style/search_input"
           android:id="@+id/search_input"
           android:inputType="text"
