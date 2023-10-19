@@ -1,74 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background"
-    android:orientation="vertical"
-    android:padding="@dimen/main_padding">
+    style="@style/main_screen"
+    >
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
+        style="@style/app_header"
         android:text="@string/app_name"
-        android:textColor="@color/white"
-        android:textSize="@dimen/main_text"
-        android:layout_marginBottom="@dimen/header_margin"
         />
 
     <Button
+        android:text="@string/act_search"
         android:id="@+id/btn_search"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/btn_margin"
-        android:layout_weight="1"
-        android:backgroundTint="@color/white"
-        android:text="@string/btn_search"
-        android:textColor="@color/black"
-        android:textSize="@dimen/main_text"
         app:icon="@drawable/search"
-        app:iconGravity="textStart"
-        app:iconPadding="@dimen/icon_padding"
-        app:iconTint="@color/black"
-        app:cornerRadius="@dimen/btn_radius"
-        android:textAllCaps="false"
+        style="@style/main_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/btn_margin"
+        android:layout_weight="1"
         />
 
     <Button
+        android:text="@string/act_media"
         android:id="@+id/btn_media"
+        app:icon="@drawable/media"
+        style="@style/main_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/btn_margin"
         android:layout_weight="1"
-        android:backgroundTint="@color/white"
-        android:text="@string/btn_media"
-        android:textColor="@color/black"
-        android:textSize="@dimen/main_text"
-        app:icon="@drawable/media"
-        app:iconGravity="textStart"
-        app:iconPadding="@dimen/icon_padding"
-        app:iconTint="@color/black"
-        app:cornerRadius="@dimen/btn_radius"
-        android:textAllCaps="false"
         />
 
     <Button
+        android:text="@string/act_settings"
         android:id="@+id/btn_settings"
+        app:icon="@drawable/settings"
+        style="@style/main_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/btn_margin"
         android:layout_weight="1"
-        android:backgroundTint="@color/white"
-        android:text="@string/btn_settings"
-        android:textColor="@color/black"
-        android:textSize="@dimen/main_text"
-        app:icon="@drawable/settings"
-        app:iconGravity="textStart"
-        app:iconPadding="@dimen/icon_padding"
-        app:iconTint="@color/black"
-        app:cornerRadius="@dimen/btn_radius"
-        android:textAllCaps="false"
         />
 
 

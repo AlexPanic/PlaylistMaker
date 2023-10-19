@@ -1,14 +1,22 @@
 <resources>
     <string name="app_name">Playlist maker</string>
-    <string name="btn_search">Поиск</string>
-    <string name="btn_media">Медиатека</string>
-    <string name="btn_settings">Настройки</string>
+    <string name="act_search">Поиск</string>
+    <string name="act_media">Медиатека</string>
+    <string name="act_settings">Настройки</string>
+
     <string name="settings_dark">Темная тема</string>
     <string name="settings_share">Поделиться приложением</string>
     <string name="settings_support">Написать в поддержку</string>
     <string name="settings_agreement">Пользовательское соглашение</string>
-    <string name="imgBack">Back</string>
-    <string name="imgShare">Share</string>
-    <string name="imgSupport">Support</string>
-    <string name="imgAgreement">Agreement</string>
+    <string name="img_back">Back</string>
+    <string name="img_share">Share</string>
+    <string name="img_support">Support</string>
+    <string name="img_agreement">Agreement</string>
+    <string name="share_subject">Мое приложение</string>
+    <string name="share_text">Замечательное приложение для Android</string>
+    <string name="share_title">Поделиться</string>
+    <string name="mail_to">alexey.panichev@yandex.ru</string>
+    <string name="support_subject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="support_text">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="agreement_url">https://yandex.ru/legal/practicum_offer/</string>
 </resources>
