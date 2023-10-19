@@ -11,12 +11,11 @@ import android.widget.ImageView
 
 class SearchActivity : AppCompatActivity() {
 
-    companion object {
+    private companion object {
         const val SEARCH_MASK = "SEARCH_MASK"
-        const val SEARCH_MASK_DEF = ""
     }
 
-    private var searchMask: String = SEARCH_MASK_DEF
+    private var searchMask: String = ""
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -24,14 +23,15 @@ class SearchActivity : AppCompatActivity() {
     }
     override fun onRestoreInstanceState(outState: Bundle) {
         super.onRestoreInstanceState(outState)
-        searchMask = outState.getString(SEARCH_MASK, SEARCH_MASK_DEF)
+        searchMask = outState.getString(SEARCH_MASK, "")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        findViewById<ImageView>(R.id.go_back).setOnClickListener{
+        val btnBack = findViewById<ImageView>(R.id.go_back)
+        btnBack.setOnClickListener{
             this.onBackPressed()
         }
 

@@ -15,7 +15,11 @@
             android:text="@string/settings_dark" />
         <Switch style="@style/dark_theme_switch"
             android:id="@+id/darkThemeSwitch"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="4dp"
+        />
     </FrameLayout>
 
     <FrameLayout style="@style/line"

@@ -1,8 +1,6 @@
 package com.example.playlistmaker
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,26 +14,22 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        findViewById<ImageView>(R.id.go_back).setOnClickListener{
+        val btnBack = findViewById<ImageView>(R.id.go_back)
+        btnBack.setOnClickListener{
             this.onBackPressed()
         }
 
-        findViewById<Switch>(R.id.darkThemeSwitch).setOnCheckedChangeListener{ _, isChecked ->
-            val editor:SharedPreferences.Editor
-            val sharedPreferences = getSharedPreferences("MODE", Context.MODE_PRIVATE)
+        val darkThemeSwitch = findViewById<Switch>(R.id.darkThemeSwitch)
+        darkThemeSwitch.setOnCheckedChangeListener{ _, isChecked ->
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                editor = sharedPreferences.edit()
-                editor.putBoolean("nightMode", true)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                editor = sharedPreferences.edit()
-                editor.putBoolean("nightMode", false)
             }
-            editor.apply()
         }
 
-        findViewById<FrameLayout>(R.id.action_share).setOnClickListener {
+        val btnShare = findViewById<FrameLayout>(R.id.action_share)
+        btnShare.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/plain"
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject))
@@ -43,8 +37,8 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(Intent.createChooser(intent, getString(R.string.share_title)))
         }
 
-        findViewById<FrameLayout>(R.id.action_support).setOnClickListener {
-
+        val btnSupport = findViewById<FrameLayout>(R.id.action_support)
+        btnSupport.setOnClickListener {
             val intent = Intent(Intent.ACTION_SENDTO).apply {
                 data = Uri.parse("mailto:")
                 putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.mail_to)))
@@ -54,7 +48,8 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        findViewById<FrameLayout>(R.id.action_agreement).setOnClickListener {
+        val btnAgreement = findViewById<FrameLayout>(R.id.action_agreement)
+        btnAgreement.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.agreement_url)))
             startActivity(intent)
         }
