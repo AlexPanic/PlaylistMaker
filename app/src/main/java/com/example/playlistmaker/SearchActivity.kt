@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 
@@ -40,6 +41,12 @@ class SearchActivity : AppCompatActivity() {
         val clearButton = findViewById<ImageView>(R.id.clear_search_input)
         clearButton.setOnClickListener {
             inputEditText.setText("")
+            val view: View? = this.currentFocus
+            if (view != null) {
+                val inputMethodManager =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+            }
         }
 
         val simpleTextWatcher = object : TextWatcher {
