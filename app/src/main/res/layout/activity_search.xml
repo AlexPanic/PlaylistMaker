@@ -24,7 +24,11 @@
           android:hint="@string/act_search"
           />
       <ImageView style="@style/clear_input"
-            android:id="@+id/clear_search_input" />
+            android:id="@+id/clear_search_input"
+            android:layout_height="match_parent"
+            android:layout_width="40dp"
+            android:layout_gravity="right"
+        />
     </FrameLayout>
 
 </LinearLayout>
