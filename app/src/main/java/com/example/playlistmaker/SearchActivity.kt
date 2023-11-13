@@ -159,6 +159,7 @@ class SearchActivity : AppCompatActivity() {
         val clearButton = findViewById<ImageView>(R.id.clear_search_input)
         clearButton.setOnClickListener {
             showMessage("","")
+            showAlertIcon(null)
             inputEditText.setText("")
             tracks.clear()
             adapter.notifyDataSetChanged()
