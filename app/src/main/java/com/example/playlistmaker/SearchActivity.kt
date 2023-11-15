@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -12,7 +13,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import retrofit2.Call
 import retrofit2.Callback
@@ -51,33 +52,32 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun showAlertIcon(whatIcon: String?) {
-        reSearchButton.visibility = View.GONE
-        when (whatIcon) {
-            "nothing_found" -> {
-                placeholderAlertIcon.setImageResource(R.drawable.nothing_found)
-                placeholderAlertIcon.visibility = View.VISIBLE
-            }
-            "something_went_wrong" -> {
-                placeholderAlertIcon.setImageResource(R.drawable.something_went_wrong)
-                placeholderAlertIcon.visibility = View.VISIBLE
+    enum class ResultsIcon(val drawableId: Int) {
+        NOTHING_FOUND(R.drawable.nothing_found),
+        SOMETHING_WENT_WRONG(R.drawable.something_went_wrong),
+        EMPTY(0)
+    }
+
+    private fun showAlertIcon(icon: ResultsIcon) {
+        placeholderAlertIcon.setImageResource(icon.drawableId)
+        when (icon) {
+            ResultsIcon.SOMETHING_WENT_WRONG -> {
                 reSearchButton.visibility = View.VISIBLE
             }
             else -> {
-                placeholderAlertIcon.setImageResource(0)
-                placeholderAlertIcon.visibility = View.GONE
+                reSearchButton.visibility = View.GONE
             }
         }
     }
 
     private fun somethingWentWrong() {
         showMessage(getString(R.string.something_went_wrong), "")
-        showAlertIcon("something_went_wrong")
+        showAlertIcon(ResultsIcon.SOMETHING_WENT_WRONG)
         hideKeyboard()
     }
 
     private fun findItunes() {
-        showAlertIcon(null)
+        showAlertIcon(ResultsIcon.EMPTY)
         showMessage("Ищем...", "")
         itunesService.findTracks(inputEditText.text.toString())
             .enqueue(object : Callback<FindTracksResponse> {
@@ -87,14 +87,14 @@ class SearchActivity : AppCompatActivity() {
                 ) {
                     when (response.code()) {
                         200 -> {
-                            showAlertIcon(null)
+                            showAlertIcon(ResultsIcon.EMPTY)
                             tracks.clear()
                             if (response.body()?.results?.isNotEmpty() == true) {
                                 tracks.addAll(response.body()?.results!!)
                                 adapter.notifyDataSetChanged()
                             } else {
                                 showMessage(getString(R.string.nothing_found), "")
-                                showAlertIcon("nothing_found")
+                                showAlertIcon(ResultsIcon.NOTHING_FOUND)
                             }
                         }
                         else -> {
@@ -144,11 +144,6 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val btnBack = findViewById<ImageView>(R.id.go_back)
-        btnBack.setOnClickListener{
-            this.onBackPressed()
-        }
-
         placeholderMessage = findViewById(R.id.placeholderMessage)
         placeholderAlertIcon = findViewById(R.id.placeholderAlertIcon)
 
@@ -159,7 +154,7 @@ class SearchActivity : AppCompatActivity() {
         val clearButton = findViewById<ImageView>(R.id.clear_search_input)
         clearButton.setOnClickListener {
             showMessage("","")
-            showAlertIcon(null)
+            showAlertIcon(ResultsIcon.EMPTY)
             inputEditText.setText("")
             tracks.clear()
             adapter.notifyDataSetChanged()
@@ -209,10 +204,21 @@ class SearchActivity : AppCompatActivity() {
 
 
         val trackList = findViewById<RecyclerView>(R.id.trackList)
-        trackList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter = TrackAdapter(tracks)
         trackList.adapter = adapter
 
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 

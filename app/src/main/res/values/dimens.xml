@@ -1,4 +1,6 @@
 <resources>
+    <dimen name="toolbar_height">60dp</dimen>
+
     <dimen name="header_text">26sp</dimen>
     <dimen name="input_text">19sp</dimen>
     <dimen name="text">16sp</dimen>

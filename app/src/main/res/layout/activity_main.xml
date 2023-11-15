@@ -1,41 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/main_screen">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <TextView
-        style="@style/app_header"
-        android:text="@string/app_name" />
-
-    <Button
-        android:id="@+id/btn_search"
-        style="@style/main_button"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/btn_margin"
-        android:layout_weight="1"
-        android:text="@string/act_search"
-        app:icon="@drawable/search" />
+        android:layout_height="@dimen/toolbar_height"
+        app:title="@string/app_name"
+        app:titleTextAppearance="@style/toolbar_main"
+        style="@style/toolbar_main"
+        />
 
-    <Button
-        android:id="@+id/btn_media"
-        style="@style/main_button"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/btn_margin"
-        android:layout_weight="1"
-        android:text="@string/act_media"
-        app:icon="@drawable/media" />
+    <LinearLayout style="@style/main_screen">
 
-    <Button
-        android:id="@+id/btn_settings"
-        style="@style/main_button"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="@dimen/btn_margin"
-        android:layout_weight="1"
-        android:text="@string/act_settings"
-        app:icon="@drawable/settings" />
+        <Button
+            android:id="@+id/btn_search"
+            style="@style/main_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/btn_margin"
+            android:layout_weight="1"
+            android:text="@string/act_search"
+            app:icon="@drawable/search"
+            tools:ignore="Suspicious0dp" />
 
+        <Button
+            android:id="@+id/btn_media"
+            style="@style/main_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/btn_margin"
+            android:layout_weight="1"
+            android:text="@string/act_media"
+            app:icon="@drawable/media"
+            tools:ignore="Suspicious0dp" />
 
+        <Button
+            android:id="@+id/btn_settings"
+            style="@style/main_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="@dimen/btn_margin"
+            android:layout_weight="1"
+            android:text="@string/act_settings"
+            app:icon="@drawable/settings"
+            tools:ignore="Suspicious0dp" />
+
+    </LinearLayout>
 </LinearLayout>
