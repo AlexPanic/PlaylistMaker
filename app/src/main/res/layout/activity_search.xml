@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -15,37 +16,26 @@
 
     <LinearLayout style="@style/screen">
 
-        <FrameLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/search_input_layout"
+            style="@style/search_input_back"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp"
-            android:background="@drawable/shape">
+            android:layout_height="wrap_content">
 
-            <EditText
-                android:id="@+id/search_input"
+            <com.google.android.material.textfield.TextInputEditText
                 style="@style/search_input"
-                android:hint="@string/act_search"
-                android:imeOptions="actionDone"
-                android:inputType="text"
-                android:lines="1"
-                android:maxLength="100"
-                android:singleLine="true" />
-
-            <ImageView
-                android:id="@+id/clear_search_input"
-                style="@style/clear_input"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="end" />
-        </FrameLayout>
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="@string/act_search" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trackList"
-            tools:layout_height="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="16dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:layout_height="0dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -55,32 +45,33 @@
 
             <ImageView
                 android:id="@+id/placeholderAlertIcon"
-                tools:src="@drawable/something_went_wrong"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:contentDescription="@string/img_alert_icon"
+                tools:src="@drawable/something_went_wrong" />
 
             <TextView
                 android:id="@+id/placeholderMessage"
                 style="@style/placeholder_message"
-                tools:text="Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/placeholderAlertIcon"
                 android:layout_marginVertical="24dp"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                tools:text="Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету" />
 
             <Button
                 android:id="@+id/btnReloadSearch"
                 style="@style/update_button"
-                tools:visibility="visible"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/placeholderMessage"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/update"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                tools:visibility="visible" />
 
         </RelativeLayout>
 

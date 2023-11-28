@@ -9,12 +9,12 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,7 +31,7 @@ class SearchActivity : AppCompatActivity() {
     private val itunesService = retrofit.create(ItunesApi::class.java)
     private var tracks = mutableListOf<Track>()
 
-    private lateinit var inputEditText: EditText
+    private lateinit var searchTextLayout: TextInputLayout
     private lateinit var placeholderMessage: TextView
     private lateinit var placeholderAlertIcon: ImageView
     private lateinit var reSearchButton: Button
@@ -64,6 +64,7 @@ class SearchActivity : AppCompatActivity() {
             ResultsIcon.SOMETHING_WENT_WRONG -> {
                 reSearchButton.visibility = View.VISIBLE
             }
+
             else -> {
                 reSearchButton.visibility = View.GONE
             }
@@ -79,7 +80,7 @@ class SearchActivity : AppCompatActivity() {
     private fun findItunes() {
         showAlertIcon(ResultsIcon.EMPTY)
         showMessage("Ищем...", "")
-        itunesService.findTracks(inputEditText.text.toString())
+        itunesService.findTracks(searchTextLayout.editText?.text.toString())
             .enqueue(object : Callback<FindTracksResponse> {
                 override fun onResponse(
                     call: Call<FindTracksResponse>,
@@ -97,6 +98,7 @@ class SearchActivity : AppCompatActivity() {
                                 showAlertIcon(ResultsIcon.NOTHING_FOUND)
                             }
                         }
+
                         else -> {
                             somethingWentWrong()
                         }
@@ -118,23 +120,17 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun clearButtonVisibility(s: CharSequence?): Int {
-        return if (s.isNullOrEmpty()) {
-            View.GONE
-        } else {
-            View.VISIBLE
-        }
-    }
-
     private companion object {
         const val SEARCH_MASK = "SEARCH_MASK"
     }
+
     private var searchMask: String = ""
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_MASK, searchMask)
     }
+
     override fun onRestoreInstanceState(outState: Bundle) {
         super.onRestoreInstanceState(outState)
         searchMask = outState.getString(SEARCH_MASK, "")
@@ -144,28 +140,47 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
+        // область сообщений
         placeholderMessage = findViewById(R.id.placeholderMessage)
         placeholderAlertIcon = findViewById(R.id.placeholderAlertIcon)
-
-        inputEditText = findViewById<EditText>(R.id.search_input)
-        inputEditText.setText(searchMask)
-
-        // кнопка очистки поисковой маски
-        val clearButton = findViewById<ImageView>(R.id.clear_search_input)
-        clearButton.setOnClickListener {
-            showMessage("","")
+        // поле с маской поиска
+        searchTextLayout = findViewById<TextInputLayout>(R.id.search_input_layout)
+        // установим сохраненное значение
+        searchTextLayout.editText?.setText(searchMask)
+        // действия на иконку очистки маски
+        searchTextLayout.setEndIconOnClickListener {
+            searchTextLayout.editText?.setText("")
+            showMessage("", "")
             showAlertIcon(ResultsIcon.EMPTY)
-            inputEditText.setText("")
             tracks.clear()
             adapter.notifyDataSetChanged()
             hideKeyboard()
         }
 
+
+
+        /*
+                    new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // DO STUFF
+                }
+                )
+
+         */
+            /*
+            showMessage("", "")
+            showAlertIcon(ResultsIcon.EMPTY)
+            tracks.clear()
+            adapter.notifyDataSetChanged()
+            hideKeyboard()*/
+        //}
+
         // кнопка перезапуска последнего поискового запроса
         reSearchButton = findViewById<Button>(R.id.btnReloadSearch)
         reSearchButton.setOnClickListener {
             if (searchMask.isNotEmpty()) {
-                inputEditText.setText(searchMask)
+                searchTextLayout.editText?.setText(searchMask)
                 findItunes()
             }
         }
@@ -183,7 +198,6 @@ class SearchActivity : AppCompatActivity() {
                     searchMask = input
                     // empty
                 }
-                clearButton.visibility = clearButtonVisibility(s)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -191,12 +205,14 @@ class SearchActivity : AppCompatActivity() {
             }
         }
 
-        inputEditText.addTextChangedListener(simpleTextWatcher)
+        searchTextLayout.editText?.addTextChangedListener(simpleTextWatcher)
 
-        inputEditText.setOnEditorActionListener { _, actionId, _ ->
+        searchTextLayout.editText?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (inputEditText.text.isNotEmpty()) {
+                if (searchTextLayout.editText?.text.toString().isNotEmpty()) {
                     findItunes()
+                } else {
+                    showMessage("empty mask", "empty mask")
                 }
             }
             false
@@ -220,7 +236,6 @@ class SearchActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 
 
 }
