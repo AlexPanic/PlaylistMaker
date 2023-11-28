@@ -4,20 +4,16 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.widget.FrameLayout
-import android.widget.ImageView
 import android.widget.Switch
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-
-        val btnBack = findViewById<ImageView>(R.id.go_back)
-        btnBack.setOnClickListener{
-            this.onBackPressed()
-        }
 
         val darkThemeSwitch = findViewById<Switch>(R.id.darkThemeSwitch)
         darkThemeSwitch.setOnCheckedChangeListener{ _, isChecked ->
@@ -54,5 +50,16 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

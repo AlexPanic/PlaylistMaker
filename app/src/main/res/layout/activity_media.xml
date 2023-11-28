@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/screen">
 
-    <LinearLayout style="@style/top">
-        <ImageView style="@style/back_arrow"
-            android:id="@+id/go_back"/>
-        <TextView style="@style/header"
-            android:text="@string/act_media" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        app:title="@string/act_media"
+        app:titleTextAppearance="@style/toolbar" />
+
+    <LinearLayout style="@style/screen">
+        <TextView
+            style="@style/option"
+            android:text="@string/lorem_ipsum" />
     </LinearLayout>
+
 
 </LinearLayout>
