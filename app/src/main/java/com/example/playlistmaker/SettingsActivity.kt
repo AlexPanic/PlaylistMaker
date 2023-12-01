@@ -6,23 +6,30 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.FrameLayout
-import android.widget.Switch
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.example.playlistmaker.App.Companion.darkTheme
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val darkThemeSwitch = findViewById<Switch>(R.id.darkThemeSwitch)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
+        }
+        themeSwitcher.isChecked = darkTheme
+
+
+        /*val darkThemeSwitch = findViewById<Switch>(R.id.darkThemeSwitch)
         darkThemeSwitch.setOnCheckedChangeListener{ _, isChecked ->
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
-        }
+        }*/
 
         val btnShare = findViewById<FrameLayout>(R.id.action_share)
         btnShare.setOnClickListener {

@@ -25,4 +25,7 @@
     <string name="something_went_wrong">Проблемы со связью\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="update">Обновить</string>
     <string name="img_alert_icon">Алерт в результатах поиска</string>
+
+    <string name="file_preferences">playlist_maker_pref</string>
+    <string name="pref_darkmode_last">darkmode_last_switch</string>
 </resources>

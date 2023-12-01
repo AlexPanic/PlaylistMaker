@@ -33,6 +33,14 @@
                 tools:ignore="UseSwitchCompatOrMaterialXml" />
         </FrameLayout>
 
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/themeSwitcher"
+            android:text="Темная тема"
+            android:layout_marginHorizontal="60dp"
+            android:layout_gravity="start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
         <FrameLayout
             android:id="@+id/action_share"
             style="@style/line">
