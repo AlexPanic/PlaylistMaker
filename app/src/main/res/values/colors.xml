@@ -13,6 +13,9 @@
     <color name="yp_white">#FFFFFF</color>
     <color name="black">#000000</color>
 
+    <color name="switcher_thumb">#CECFD2</color>
+    <color name="switcher_track">#F0F1F3</color>
+
     <color name="input_background">#E6E8EB</color>
     <color name="input_hint">#AEAFB4</color>
 
