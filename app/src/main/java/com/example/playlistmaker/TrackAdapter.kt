@@ -1,21 +1,19 @@
 package com.example.playlistmaker
 
-import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class TrackAdapter(private val tracks: MutableList<Track>, private val addToHistoryByClick: Boolean = true) : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter(private val tracks: MutableList<Track>, private val history: TrackSearchHistory? = null) : RecyclerView.Adapter<TrackViewHolder>() {
     override fun getItemCount(): Int {
         return tracks.count()
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
-        if (addToHistoryByClick) {
+        if (history!==null) {
             holder.itemView.setOnClickListener{
-                val trackSearchHistory = TrackSearchHistory(App.getSharedPreferences())
-                trackSearchHistory.addTrack(tracks[position])
+                history.addTrack(tracks[position])
             }
         }
     }

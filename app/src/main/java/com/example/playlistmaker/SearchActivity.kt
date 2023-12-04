@@ -4,7 +4,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -35,13 +34,16 @@ class SearchActivity : AppCompatActivity() {
     private val itunesService = retrofit.create(ItunesApi::class.java)
     private var tracks = mutableListOf<Track>()
     private var tracksHistory = mutableListOf<Track>()
-
+    private lateinit var history: TrackSearchHistory
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener
     private lateinit var searchTextLayout: TextInputLayout
     private lateinit var placeholderMessage: TextView
     private lateinit var placeholderAlertIcon: ImageView
     private lateinit var reSearchButton: Button
     private lateinit var adapter: TrackAdapter
     private lateinit var adapterHistory: TrackAdapter
+
     private fun showMessage(text: String, additionalMessage: String) {
         if (text.isNotEmpty()) {
             placeholderMessage.visibility = View.VISIBLE
@@ -125,64 +127,74 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private var searchMask: String = ""
+
     private companion object {
-        const val SEARCH_MASK = "SEARCH_MASK"
+        var SEARCH_STRING = "SEARCH_STRING"
     }
 
-    private var searchMask: String = ""
+    private fun searchHistoryVisibility(visible: Boolean) {
+        val searchHistoryView = findViewById<ViewGroup>(R.id.searchHistory)
+        searchHistoryView.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    private fun updateSearchHistory() {
+        tracksHistory = history.getTracks()
+        if (tracksHistory.isEmpty()) {
+            searchHistoryVisibility(false)
+        } else {
+            // здесь такая команда почему-то (???) не работает (список истории не меняется)
+            // adapterHistory.notifyDataSetChanged()
+            // поэтому полный перезагруз адаптера (так работает)
+            val searchHistoryTracksRecyclerView =
+                findViewById<RecyclerView>(R.id.searchHistoryTracks)
+            adapterHistory = TrackAdapter(tracksHistory, null)
+            searchHistoryTracksRecyclerView.adapter = adapterHistory
+        }
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_MASK, searchMask)
+        outState.putString(SEARCH_STRING, searchMask)
     }
 
     override fun onRestoreInstanceState(outState: Bundle) {
         super.onRestoreInstanceState(outState)
-        searchMask = outState.getString(SEARCH_MASK, "")
+        searchMask = outState.getString(SEARCH_STRING, "")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val sharedPrefs = App.getSharedPreferences()
-        val sharedPrefsListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { sharedPrefs, key ->
-                Log.d("mine", "// Global History changed!")
-            }
-
-        /*val sharedPrefs = getSharedPreferences(getString(R.string.file_preferences), MODE_PRIVATE)
-        val sharedPrefsListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { sharedPrefs, key ->
-                /*if (key == TrackSearchHistory.searchHistoryKey) {
-                    tracksHistory = TrackSearchHistory.getTracks()
-                    adapterHistory.notifyDataSetChanged()
-                    Log.d("mine", "History count: " + tracksHistory.size.toString())
-                }*/
-                Log.d("mine", "// History changed!")
-            }*/
-        sharedPrefs.registerOnSharedPreferenceChangeListener(sharedPrefsListener)
-        val TrackSearchHistory = TrackSearchHistory(sharedPrefs)
-
-        // адаптер истории поиска
-        val searchHistoryTracksRecyclerView = findViewById<RecyclerView>(R.id.searchHistoryTracks)
-        tracksHistory = TrackSearchHistory.getTracks()
-        adapterHistory = TrackAdapter(tracksHistory, false)
-        searchHistoryTracksRecyclerView.adapter = adapterHistory
-
-
-
-
-        /*val sharedPreferences = App.getSharedPreferences()
-        val sharedPrefsListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                if (key == TrackSearchHistory.searchHistoryKey) {
-                    tracksHistory = TrackSearchHistory.getTracks()
-                    adapterHistory.notifyDataSetChanged()
-                    Log.d("mine", "History count: " + tracksHistory.size.toString())
+        // инстанс настроек приложения
+        sharedPref = getSharedPreferences(getString(R.string.file_preferences), MODE_PRIVATE)
+        sharedPrefsListener =
+            SharedPreferences.OnSharedPreferenceChangeListener { sharedPref, key ->
+                if (key == TrackSearchHistory.sharedPrefKey) {
+                    updateSearchHistory()
                 }
             }
-        sharedPreferences.registerOnSharedPreferenceChangeListener(sharedPrefsListener)*/
+        sharedPref.registerOnSharedPreferenceChangeListener(sharedPrefsListener)
+
+        // объект для управления историей
+        history = TrackSearchHistory(sharedPref)
+
+        // адаптер результатов поиска
+        val trackList = findViewById<RecyclerView>(R.id.trackList)
+        adapter = TrackAdapter(tracks, history)
+        trackList.adapter = adapter
+
+        updateSearchHistory()
+        // адаптер истории поиска
+        // так не работает adapterHistory.notifyDataSetChanged
+        // поэтому полный перезагруз адаптера в updateSearchHistory()
+        /*
+        val searchHistoryTracksRecyclerView = findViewById<RecyclerView>(R.id.searchHistoryTracks)
+        tracksHistory = history.getTracks()
+        adapterHistory = TrackAdapter(tracksHistory, null)
+        searchHistoryTracksRecyclerView.adapter = adapterHistory
+         */
 
         // область сообщений
         placeholderMessage = findViewById(R.id.placeholderMessage)
@@ -198,24 +210,23 @@ class SearchActivity : AppCompatActivity() {
             showAlertIcon(ResultsIcon.EMPTY)
             tracks.clear()
             adapter.notifyDataSetChanged()
-            adapterHistory.notifyDataSetChanged()
+            updateSearchHistory()
             hideKeyboard()
         }
 
         // покажем историю поиска при выполнении условий
-        val searchHistoryView = findViewById<ViewGroup>(R.id.searchHistory)
         searchTextLayout.editText?.setOnFocusChangeListener { view, hasFocus ->
-            searchHistoryView.visibility =
-                if (hasFocus
-                    && searchTextLayout.editText?.text.toString().isEmpty()
-                    && tracksHistory.isNotEmpty()
-                ) View.VISIBLE else View.GONE
+            searchHistoryVisibility(
+                hasFocus
+                        && searchTextLayout.editText?.text.toString().isEmpty()
+                        && tracksHistory.isNotEmpty()
+            )
         }
 
         // очистка истории поиска
         val btnSearchHistoryClear = findViewById<Button>(R.id.btnSearchHistoryClear)
         btnSearchHistoryClear.setOnClickListener {
-            TrackSearchHistory.clearTracks()
+            history.clearTracks()
         }
 
         // кнопка перезапуска последнего поискового запроса
@@ -240,8 +251,7 @@ class SearchActivity : AppCompatActivity() {
                     val input = s.toString()
                     searchMask = input
                 }
-                searchHistoryView.visibility =
-                    if (searchTextLayout.editText!!.hasFocus() && s?.isEmpty() == true) View.VISIBLE else View.GONE
+                searchHistoryVisibility(searchTextLayout.editText!!.hasFocus() && s!!.isEmpty())
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -260,11 +270,6 @@ class SearchActivity : AppCompatActivity() {
             }
             false
         }
-
-        // адаптер результатов поиска
-        val trackList = findViewById<RecyclerView>(R.id.trackList)
-        adapter = TrackAdapter(tracks, true)
-        trackList.adapter = adapter
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)

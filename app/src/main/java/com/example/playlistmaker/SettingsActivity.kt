@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.widget.FrameLayout
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.switchmaterial.SwitchMaterial
-import com.example.playlistmaker.App.Companion.darkTheme
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +18,7 @@ class SettingsActivity : AppCompatActivity() {
         themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
             (applicationContext as App).switchTheme(checked)
         }
-        themeSwitcher.isChecked = darkTheme
+        themeSwitcher.isChecked = App.darkTheme
 
         val btnShare = findViewById<FrameLayout>(R.id.action_share)
         btnShare.setOnClickListener {

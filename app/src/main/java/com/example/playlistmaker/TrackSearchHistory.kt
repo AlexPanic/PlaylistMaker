@@ -6,16 +6,19 @@ import com.google.gson.reflect.TypeToken
 
 class TrackSearchHistory(private val sharedPref: SharedPreferences) {
 
+    companion object {
+        val sharedPrefKey = "SearchHistoryKey"
+    }
+
     private val maxTracks = 10
-    val searchHistoryKey = "SearchHistoryKey"
     fun clearTracks() {
         sharedPref.edit()
-            .putString(searchHistoryKey, "")
+            .putString(sharedPrefKey, "")
             .apply()
     }
 
     fun getTracks(): MutableList<Track> {
-        val strJson = sharedPref.getString(searchHistoryKey, "")
+        val strJson = sharedPref.getString(sharedPrefKey, "")
         return if (strJson!!.isNotEmpty()) {
             val type = object : TypeToken<MutableList<Track?>?>() {}.type
             return Gson().fromJson(strJson, type)
@@ -25,17 +28,16 @@ class TrackSearchHistory(private val sharedPref: SharedPreferences) {
     }
 
     fun addTrack(newTrack: Track) {
-        var tracks = getTracks()
+        val tracks = getTracks()
         if (tracks.isNotEmpty()) {
             tracks.removeIf { track -> track.trackId == newTrack.trackId }
         }
         if (tracks.size == maxTracks) {
             tracks.removeAt(maxTracks - 1)
         }
-        tracks.add(0, newTrack);
-        val sp = App.getSharedPreferences()
-        sp.edit()
-            .putString(searchHistoryKey, Gson().toJson(tracks))
+        tracks.add(0, newTrack)
+        sharedPref.edit()
+            .putString(sharedPrefKey, Gson().toJson(tracks))
             .apply()
     }
 

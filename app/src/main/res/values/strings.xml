@@ -31,4 +31,5 @@
 
     <string name="search_history_header">Вы искали</string>
     <string name="search_history_clear">Очистить историю</string>
+
 </resources>

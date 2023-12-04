@@ -22,4 +22,8 @@
     <color name="track_name">#000000</color>
     <color name="track_info">#AEAFB4</color>
 
+    <color name="header_color">@color/yp_black</color>
+    <color name="filled_button_tint">@color/yp_black</color>
+    <color name="filled_button_text">@color/yp_white</color>
+
 </resources>
