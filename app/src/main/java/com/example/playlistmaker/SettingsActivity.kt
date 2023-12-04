@@ -21,16 +21,6 @@ class SettingsActivity : AppCompatActivity() {
         }
         themeSwitcher.isChecked = darkTheme
 
-
-        /*val darkThemeSwitch = findViewById<Switch>(R.id.darkThemeSwitch)
-        darkThemeSwitch.setOnCheckedChangeListener{ _, isChecked ->
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-        }*/
-
         val btnShare = findViewById<FrameLayout>(R.id.action_share)
         btnShare.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)

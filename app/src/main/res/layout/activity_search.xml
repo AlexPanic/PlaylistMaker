@@ -29,6 +29,44 @@
                 android:hint="@string/act_search" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:id="@+id/searchHistory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/ttt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="16dp"
+                android:text="@string/search_history_header"
+                android:textAlignment="center"
+                android:textColor="@color/black" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchHistoryTracks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="16dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:layout_height="0dp" />
+
+            <Button
+                android:id="@+id/btnSearchHistoryClear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/placeholderMessage"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="@color/yp_black"
+                android:text="@string/search_history_clear" />
+        </LinearLayout>
+
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/trackList"
             android:layout_width="match_parent"

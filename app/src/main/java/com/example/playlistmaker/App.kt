@@ -6,21 +6,29 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 
 class App : Application() {
+
     companion object {
-        lateinit var sharedPrefs: SharedPreferences
+        private var sharedPreferences : SharedPreferences ?= null
+        fun setSharedPreferences(sharedPrefs: SharedPreferences) {
+            sharedPreferences = sharedPrefs
+        }
+        fun getSharedPreferences(): SharedPreferences {
+            return sharedPreferences!!
+        }
         var darkTheme = false
     }
 
     override fun onCreate() {
         super.onCreate()
-        sharedPrefs = getSharedPreferences(getString(R.string.file_preferences), MODE_PRIVATE)
+        val sharedPrefs = getSharedPreferences(getString(R.string.file_preferences), MODE_PRIVATE)
+        setSharedPreferences(sharedPrefs)
         darkTheme = sharedPrefs.getBoolean(getString(R.string.pref_darkmode_last), false)
         switchTheme(darkTheme)
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
-        sharedPrefs.edit()
+        sharedPreferences!!.edit()
             .putBoolean(getString(R.string.pref_darkmode_last), darkThemeEnabled)
             .apply()
         AppCompatDelegate.setDefaultNightMode(
