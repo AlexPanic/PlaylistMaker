@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -84,15 +85,21 @@ class SearchActivity : AppCompatActivity() {
         hideKeyboard()
     }
 
+    private fun showProgressBar(visible: Boolean) {
+        val bar = findViewById<ProgressBar>(R.id.progressBar)
+        bar.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
     private fun findItunes() {
         showAlertIcon(ResultsIcon.EMPTY)
-        showMessage("Ищем...", "")
+        showProgressBar(true)
         itunesService.findTracks(searchTextLayout.editText?.text.toString())
             .enqueue(object : Callback<FindTracksResponse> {
                 override fun onResponse(
                     call: Call<FindTracksResponse>,
                     response: Response<FindTracksResponse>
                 ) {
+                    showProgressBar(false)
                     when (response.code()) {
                         200 -> {
                             showAlertIcon(ResultsIcon.EMPTY)

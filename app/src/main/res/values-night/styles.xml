@@ -2,15 +2,25 @@
 <resources>
 
     <style name="main">
-        <item name="android:background">@color/yp_black</item>
+        <item name="android:background">?attr/colorPrimaryVariant</item>
     </style>
 
     <style name="screen">
-        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:background">?attr/colorPrimaryVariant</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:paddingHorizontal">@dimen/main_padding</item>
+    </style>
+
+    <style name="main_screen" parent="screen">
+        <item name="android:background">@color/yp_black</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="toolbar_main" parent="toolbar">
+        <item name="android:background">@color/yp_black</item>
+        <item name="android:textColor">@color/yp_white</item>
     </style>
 
     <style name="option" parent="normal_text">
