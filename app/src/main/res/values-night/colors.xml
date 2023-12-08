@@ -3,6 +3,14 @@
     <color name="input_background">@color/yp_white</color>
     <color name="input_hint">@color/yp_black</color>
 
+    <color name="switcher_thumb">@color/blue</color>
+    <color name="switcher_track">#5A6887</color>
+
     <color name="track_name">@color/yp_white</color>
     <color name="track_info">@color/yp_white</color>
+
+    <color name="header_color">@color/yp_white</color>
+    <color name="filled_button_tint">@color/yp_white</color>
+    <color name="filled_button_text">@color/yp_black</color>
+
 </resources>

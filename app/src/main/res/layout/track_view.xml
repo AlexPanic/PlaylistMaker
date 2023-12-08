@@ -44,6 +44,13 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 tools:text="Nirvana nananananananannananannananannannannananna" />
+            <TextView
+                android:id="@+id/trackId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/track_info"
+                android:textColor="@color/blue"
+                tools:text="123456" />
 
             <ImageView
                 android:layout_width="wrap_content"
