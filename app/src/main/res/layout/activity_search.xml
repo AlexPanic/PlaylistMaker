@@ -68,18 +68,18 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:layout_height="0dp" />
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
             android:gravity="center_vertical">
-
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/placeholderAlertIcon"
@@ -99,19 +99,16 @@
                 android:textAlignment="center"
                 tools:text="Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету" />
 
-            <Button
-                android:id="@+id/btnReloadSearch"
-                style="@style/update_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/placeholderMessage"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/update"
-                android:visibility="invisible"
-                tools:visibility="visible" />
-
         </RelativeLayout>
+        <Button
+            android:id="@+id/btnReloadSearch"
+            style="@style/update_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/update"
+            android:visibility="invisible"
+            tools:visibility="visible" />
 
 
     </LinearLayout>

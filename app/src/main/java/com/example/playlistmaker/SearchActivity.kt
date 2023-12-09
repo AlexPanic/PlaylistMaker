@@ -92,6 +92,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun findItunes() {
         showAlertIcon(ResultsIcon.EMPTY)
+        showMessage("","")
         showProgressBar(true)
         itunesService.findTracks(searchTextLayout.editText?.text.toString())
             .enqueue(object : Callback<FindTracksResponse> {
@@ -120,6 +121,7 @@ class SearchActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<FindTracksResponse>, t: Throwable) {
+                    showProgressBar(false)
                     somethingWentWrong()
                 }
             })
