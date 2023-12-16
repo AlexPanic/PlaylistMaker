@@ -1,9 +1,22 @@
 package com.example.playlistmaker
 
-data class Track (
+data class Track(
     val trackId: Int,
     val trackName: String,
     val artistName: String,
     val trackTimeMillis: Int,
-    val artworkUrl100: String
-)
+    val artworkUrl100: String,
+    val collectionName: String,
+    val releaseDate: String,
+    val primaryGenreName: String,
+    val country: String
+) {
+    fun getArtworkUrl512() = artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")
+    fun getYear() = releaseDate.substring(0,4)
+    fun trackTime():String {
+        val sec = trackTimeMillis / 1000
+        val mm = sec / 60
+        val ss = "%02d".format(sec % 60)
+        return "$mm:$ss"
+    }
+}

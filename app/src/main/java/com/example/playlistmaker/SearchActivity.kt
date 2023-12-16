@@ -1,5 +1,6 @@
 package com.example.playlistmaker
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
@@ -18,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
+import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,7 +27,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
 
     private val itunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
@@ -92,7 +94,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun findItunes() {
         showAlertIcon(ResultsIcon.EMPTY)
-        showMessage("","")
+        showMessage("", "")
         showProgressBar(true)
         itunesService.findTracks(searchTextLayout.editText?.text.toString())
             .enqueue(object : Callback<FindTracksResponse> {
@@ -157,7 +159,7 @@ class SearchActivity : AppCompatActivity() {
             // поэтому полный перезагруз адаптера (так работает)
             val searchHistoryTracksRecyclerView =
                 findViewById<RecyclerView>(R.id.searchHistoryTracks)
-            adapterHistory = TrackAdapter(tracksHistory, null)
+            adapterHistory = TrackAdapter(this, tracksHistory, null)
             searchHistoryTracksRecyclerView.adapter = adapterHistory
         }
     }
@@ -191,7 +193,7 @@ class SearchActivity : AppCompatActivity() {
 
         // адаптер результатов поиска
         val trackList = findViewById<RecyclerView>(R.id.trackList)
-        adapter = TrackAdapter(tracks, history)
+        adapter = TrackAdapter(this, tracks, history)
         trackList.adapter = adapter
 
         updateSearchHistory()
@@ -201,7 +203,7 @@ class SearchActivity : AppCompatActivity() {
         /*
         val searchHistoryTracksRecyclerView = findViewById<RecyclerView>(R.id.searchHistoryTracks)
         tracksHistory = history.getTracks()
-        adapterHistory = TrackAdapter(tracksHistory, null)
+        adapterHistory = TrackAdapter(this, tracksHistory, null)
         searchHistoryTracksRecyclerView.adapter = adapterHistory
          */
 
@@ -292,6 +294,15 @@ class SearchActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onItemClick(position: Int, fromHistory: Boolean) {
+        val intent = Intent(this, PlayerActivity::class.java)
+        intent.putExtra(
+            "track",
+            Gson().toJson(if (fromHistory) tracksHistory[position] else tracks[position])
+        )
+        startActivity(intent)
     }
 
 

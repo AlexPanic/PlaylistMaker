@@ -25,4 +25,6 @@
     <color name="filled_button_tint">@color/yp_black</color>
     <color name="filled_button_text">@color/yp_white</color>
 
+    <color name="inactive_button_background">#c5c6c7</color>
+
 </resources>

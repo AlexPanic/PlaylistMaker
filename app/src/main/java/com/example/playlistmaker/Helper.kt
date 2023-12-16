@@ -12,11 +12,5 @@ class Helper {
                 Resources.getSystem().displayMetrics
             ).toInt()
         }
-        fun millisToString(millis: Int): String {
-            val sec = millis / 1000
-            val mm = sec / 60
-            val ss = "%02d".format(sec % 60)
-            return "$mm:$ss"
-        }
     }
 }

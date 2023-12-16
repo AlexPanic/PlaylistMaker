@@ -15,7 +15,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(model: Track) {
         track.text = model.trackName
         artist.text = model.artistName
-        time.text = Helper.millisToString(model.trackTimeMillis)
+        time.text = model.trackTime()
         val cornerRadius = 2f// in design pixels
         Glide.with(itemView)
             .load(model.artworkUrl100)
