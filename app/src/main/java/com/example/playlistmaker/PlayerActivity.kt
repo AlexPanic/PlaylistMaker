@@ -3,12 +3,12 @@ package com.example.playlistmaker
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
@@ -30,11 +30,8 @@ class PlayerActivity : AppCompatActivity() {
         val trackCover = findViewById<ImageView>(R.id.trackCover)
         val coverUrl = track.getArtworkUrl512()
         val cornersRadius = 8f
-        Glide.with(applicationContext)
-            .load(coverUrl)
-            .fitCenter()
-            .transform(RoundedCorners(Helper.dpToPx(cornersRadius)))
-            .into(trackCover)
+        Glide.with(applicationContext).load(coverUrl).fitCenter()
+            .transform(RoundedCorners(Helper.dpToPx(cornersRadius))).into(trackCover)
 
         // свойства трека
         val trackName = findViewById<TextView>(R.id.trackName)
@@ -55,8 +52,8 @@ class PlayerActivity : AppCompatActivity() {
         val trackAlbum = findViewById<TextView>(R.id.trackAlbum)
         val hasAlbum = track.collectionName.isNotEmpty()
         trackAlbum.text = track.collectionName
-        trackAlbum.visibility = if (hasAlbum) View.VISIBLE else View.GONE
-        labelTrackAlbum.visibility = if (hasAlbum) View.VISIBLE else View.GONE
+        trackAlbum.isVisible = hasAlbum
+        labelTrackAlbum.isVisible = hasAlbum
 
     }
 
