@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
-import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -143,6 +142,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
     private companion object {
         var SEARCH_STRING = "SEARCH_STRING"
     }
+
 
     private fun searchHistoryVisibility(visible: Boolean) {
         val searchHistoryView = findViewById<ViewGroup>(R.id.searchHistory)
@@ -299,8 +299,8 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
     override fun onItemClick(position: Int, fromHistory: Boolean) {
         val intent = Intent(this, PlayerActivity::class.java)
         intent.putExtra(
-            "track",
-            Gson().toJson(if (fromHistory) tracksHistory[position] else tracks[position])
+            Track.INTENT_EXTRA_ID,
+            if (fromHistory) tracksHistory[position] else tracks[position]
         )
         startActivity(intent)
     }
