@@ -89,10 +89,9 @@
         android:background="@drawable/btn1"
         android:clickable="true"
         app:backgroundTint="@null"
-
         app:layout_constraintEnd_toStartOf="@+id/player_button_2"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@+id/trackCover"
         app:layout_constraintTop_toBottomOf="@id/artistName" />
 
@@ -128,13 +127,13 @@
         android:id="@+id/trackPos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="0:30"
         android:textColor="@color/main_text_color"
         android:textFontWeight="800"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/player_button_2" />
+        app:layout_constraintTop_toBottomOf="@id/player_button_2"
+        tools:text="0:30" />
 
 
     <androidx.constraintlayout.widget.Barrier
