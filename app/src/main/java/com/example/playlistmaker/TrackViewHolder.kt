@@ -15,13 +15,13 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(model: Track) {
         track.text = model.trackName
         artist.text = model.artistName
-        time.text = Helper.millisToString(model.trackTimeMillis)
-        val cornerRadius = 2f// in design pixels
+        time.text = model.trackTime()
+        val cornersRadius = 2f
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .placeholder(R.drawable.cover_placeholder)
             .fitCenter()
-            .transform(RoundedCorners(Helper.dpToPx(cornerRadius)))
+            .transform(RoundedCorners(Helper.dpToPx(cornersRadius)))
             .into(cover)
     }
 }
