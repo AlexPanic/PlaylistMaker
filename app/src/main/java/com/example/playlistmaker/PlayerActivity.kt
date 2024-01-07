@@ -27,9 +27,11 @@ class PlayerActivity : AppCompatActivity() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
     private var playerState = STATE_DEFAULT
+    private var isClickAllowed = true
 
     private lateinit var playButton: Button
     private var mediaPlayer = MediaPlayer()
@@ -116,20 +118,33 @@ class PlayerActivity : AppCompatActivity() {
         releaseTimer()
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            mainThreadHandler!!.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
     private fun playbackControl() {
-        when(playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
+        if (clickDebounce()) {
+            when (playerState) {
+                STATE_PLAYING -> {
+                    pausePlayer()
+                }
+                STATE_PREPARED, STATE_PAUSED -> {
+                    startPlayer()
+                }
             }
         }
     }
 
     private fun togglePlayButton(setAsPlay: Boolean) {
-        playButton.background = ContextCompat.getDrawable(applicationContext,
-            if (setAsPlay) R.drawable.play_btn else R.drawable.pause_btn)
+        playButton.background = ContextCompat.getDrawable(
+            applicationContext,
+            if (setAsPlay) R.drawable.play_btn else R.drawable.pause_btn
+        )
     }
 
     private fun preparePlayer(trackUrl: String) {
@@ -143,7 +158,7 @@ class PlayerActivity : AppCompatActivity() {
             togglePlayButton(true)
             playerState = STATE_PREPARED
             releaseTimer()
-            trackPositionTimer.text = "00:00"
+            trackPositionTimer.text = getString(R.string.player_track_stop_position)
         }
     }
 
@@ -166,7 +181,8 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun refreshTimer() {
-        trackPositionTimer.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+        trackPositionTimer.text =
+            SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
         if (playerState == STATE_PLAYING) {
             mainThreadHandler?.postDelayed(
                 runnable!!, 250
