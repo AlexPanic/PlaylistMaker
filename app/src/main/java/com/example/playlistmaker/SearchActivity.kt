@@ -3,6 +3,8 @@ package com.example.playlistmaker
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MenuItem
@@ -45,21 +47,9 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
     private lateinit var reSearchButton: Button
     private lateinit var adapter: TrackAdapter
     private lateinit var adapterHistory: TrackAdapter
-
-    private fun showMessage(text: String, additionalMessage: String) {
-        if (text.isNotEmpty()) {
-            placeholderMessage.visibility = View.VISIBLE
-            tracks.clear()
-            adapter.notifyDataSetChanged()
-            placeholderMessage.text = text
-            if (additionalMessage.isNotEmpty()) {
-                Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
-                    .show()
-            }
-        } else {
-            placeholderMessage.visibility = View.GONE
-        }
-    }
+    private var searchMask: String = ""
+    private val searchRunnable = Runnable { searchRequest() }
+    private var mainThreadHandler: Handler = Handler(Looper.getMainLooper())
 
     enum class ResultsIcon(val drawableId: Int) {
         NOTHING_FOUND(R.drawable.nothing_found),
@@ -67,101 +57,9 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
         EMPTY(0)
     }
 
-    private fun showAlertIcon(icon: ResultsIcon) {
-        placeholderAlertIcon.setImageResource(icon.drawableId)
-        when (icon) {
-            ResultsIcon.SOMETHING_WENT_WRONG -> {
-                reSearchButton.visibility = View.VISIBLE
-            }
-
-            else -> {
-                reSearchButton.visibility = View.GONE
-            }
-        }
-    }
-
-    private fun somethingWentWrong() {
-        showMessage(getString(R.string.something_went_wrong), "")
-        showAlertIcon(ResultsIcon.SOMETHING_WENT_WRONG)
-        hideKeyboard()
-    }
-
-    private fun showProgressBar(visible: Boolean) {
-        val bar = findViewById<ProgressBar>(R.id.progressBar)
-        bar.visibility = if (visible) View.VISIBLE else View.GONE
-    }
-
-    private fun findItunes() {
-        showAlertIcon(ResultsIcon.EMPTY)
-        showMessage("", "")
-        showProgressBar(true)
-        itunesService.findTracks(searchTextLayout.editText?.text.toString())
-            .enqueue(object : Callback<FindTracksResponse> {
-                override fun onResponse(
-                    call: Call<FindTracksResponse>,
-                    response: Response<FindTracksResponse>
-                ) {
-                    showProgressBar(false)
-                    when (response.code()) {
-                        200 -> {
-                            showAlertIcon(ResultsIcon.EMPTY)
-                            tracks.clear()
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                tracks.addAll(response.body()?.results!!)
-                                adapter.notifyDataSetChanged()
-                            } else {
-                                showMessage(getString(R.string.nothing_found), "")
-                                showAlertIcon(ResultsIcon.NOTHING_FOUND)
-                            }
-                        }
-
-                        else -> {
-                            somethingWentWrong()
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<FindTracksResponse>, t: Throwable) {
-                    showProgressBar(false)
-                    somethingWentWrong()
-                }
-            })
-    }
-
-    private fun hideKeyboard() {
-        val view: View? = this.currentFocus
-        if (view != null) {
-            val inputMethodManager =
-                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
-        }
-    }
-
-    private var searchMask: String = ""
-
     private companion object {
         var SEARCH_STRING = "SEARCH_STRING"
-    }
-
-
-    private fun searchHistoryVisibility(visible: Boolean) {
-        val searchHistoryView = findViewById<ViewGroup>(R.id.searchHistory)
-        searchHistoryView.visibility = if (visible) View.VISIBLE else View.GONE
-    }
-
-    private fun updateSearchHistory() {
-        tracksHistory = history.getTracks()
-        if (tracksHistory.isEmpty()) {
-            searchHistoryVisibility(false)
-        } else {
-            // здесь такая команда почему-то (???) не работает (список истории не меняется)
-            // adapterHistory.notifyDataSetChanged()
-            // поэтому полный перезагруз адаптера (так работает)
-            val searchHistoryTracksRecyclerView =
-                findViewById<RecyclerView>(R.id.searchHistoryTracks)
-            adapterHistory = TrackAdapter(this, tracksHistory, null)
-            searchHistoryTracksRecyclerView.adapter = adapterHistory
-        }
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -245,9 +143,11 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
         reSearchButton.setOnClickListener {
             if (searchMask.isNotEmpty()) {
                 searchTextLayout.editText?.setText(searchMask)
-                findItunes()
+                searchRequest()
             }
         }
+
+        //mainThreadHandler = Handler(Looper.getMainLooper())
 
         // следим за изменением в поисковой строке
         val simpleTextWatcher = object : TextWatcher {
@@ -256,13 +156,9 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s.isNullOrEmpty()) {
-                    // empty
-                } else {
-                    val input = s.toString()
-                    searchMask = input
-                }
+                searchMask = s.toString()
                 searchHistoryVisibility(searchTextLayout.editText!!.hasFocus() && s!!.isEmpty())
+                searchDebounce()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -274,7 +170,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
         searchTextLayout.editText?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 if (searchTextLayout.editText?.text.toString().isNotEmpty()) {
-                    findItunes()
+                    searchRequest()
                 } else {
                     showMessage("empty mask", "empty mask")
                 }
@@ -303,6 +199,120 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
             if (fromHistory) tracksHistory[position] else tracks[position]
         )
         startActivity(intent)
+    }
+
+    private fun searchHistoryVisibility(visible: Boolean) {
+        val searchHistoryView = findViewById<ViewGroup>(R.id.searchHistory)
+        searchHistoryView.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    private fun updateSearchHistory() {
+        tracksHistory = history.getTracks()
+        if (tracksHistory.isEmpty()) {
+            searchHistoryVisibility(false)
+        } else {
+            // здесь такая команда почему-то (???) не работает (список истории не меняется)
+            // adapterHistory.notifyDataSetChanged()
+            // поэтому полный перезагруз адаптера (так работает)
+            val searchHistoryTracksRecyclerView =
+                findViewById<RecyclerView>(R.id.searchHistoryTracks)
+            adapterHistory = TrackAdapter(this, tracksHistory, null)
+            searchHistoryTracksRecyclerView.adapter = adapterHistory
+        }
+    }
+
+    private fun showMessage(text: String, additionalMessage: String) {
+        if (text.isNotEmpty()) {
+            placeholderMessage.visibility = View.VISIBLE
+            tracks.clear()
+            adapter.notifyDataSetChanged()
+            placeholderMessage.text = text
+            if (additionalMessage.isNotEmpty()) {
+                Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
+                    .show()
+            }
+        } else {
+            placeholderMessage.visibility = View.GONE
+        }
+    }
+
+
+    private fun showAlertIcon(icon: ResultsIcon) {
+        placeholderAlertIcon.setImageResource(icon.drawableId)
+        when (icon) {
+            ResultsIcon.SOMETHING_WENT_WRONG -> {
+                reSearchButton.visibility = View.VISIBLE
+            }
+
+            else -> {
+                reSearchButton.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun somethingWentWrong() {
+        showMessage(getString(R.string.something_went_wrong), "")
+        showAlertIcon(ResultsIcon.SOMETHING_WENT_WRONG)
+        hideKeyboard()
+    }
+
+    private fun showProgressBar(visible: Boolean) {
+        val bar = findViewById<ProgressBar>(R.id.progressBar)
+        bar.visibility = if (visible) View.VISIBLE else View.GONE
+    }
+
+    private fun searchDebounce() {
+        mainThreadHandler.removeCallbacks(searchRunnable)
+        mainThreadHandler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun searchRequest() {
+        showAlertIcon(ResultsIcon.EMPTY)
+        showMessage("", "")
+        if (searchMask.isEmpty()) return
+        tracks.clear()
+        adapter.notifyDataSetChanged()
+        showProgressBar(true)
+        itunesService.findTracks(searchMask)
+            .enqueue(object : Callback<FindTracksResponse> {
+                override fun onResponse(
+                    call: Call<FindTracksResponse>,
+                    response: Response<FindTracksResponse>
+                ) {
+                    showProgressBar(false)
+                    when (response.code()) {
+                        200 -> {
+                            showAlertIcon(ResultsIcon.EMPTY)
+                            tracks.clear()
+                            if (response.body()?.results?.isNotEmpty() == true) {
+                                tracks.addAll(response.body()?.results!!)
+                                adapter.notifyDataSetChanged()
+                            } else {
+                                showMessage(getString(R.string.nothing_found), "")
+                                showAlertIcon(ResultsIcon.NOTHING_FOUND)
+                            }
+                        }
+
+                        else -> {
+                            somethingWentWrong()
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<FindTracksResponse>, t: Throwable) {
+                    showProgressBar(false)
+                    somethingWentWrong()
+                }
+            })
+    }
+
+    private fun hideKeyboard() {
+        val view: View? = this.currentFocus
+        if (view != null) {
+            val inputMethodManager =
+                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
 

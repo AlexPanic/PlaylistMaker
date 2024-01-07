@@ -39,4 +39,6 @@
     <string name="player_track_genre">Жанр</string>
     <string name="player_track_country">Страна</string>
 
+    <string name="player_track_stop_position">00:00</string>
+
 </resources>
