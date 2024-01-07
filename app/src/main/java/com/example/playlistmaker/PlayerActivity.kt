@@ -128,16 +128,20 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun playbackControl() {
-        if (clickDebounce()) {
-            when (playerState) {
-                STATE_PLAYING -> {
+        when (playerState) {
+            STATE_PLAYING -> {
+                if (clickDebounce()) {
                     pausePlayer()
                 }
-                STATE_PREPARED, STATE_PAUSED -> {
+            }
+
+            STATE_PREPARED, STATE_PAUSED -> {
+                if (clickDebounce()) {
                     startPlayer()
                 }
             }
         }
+
     }
 
     private fun togglePlayButton(setAsPlay: Boolean) {
