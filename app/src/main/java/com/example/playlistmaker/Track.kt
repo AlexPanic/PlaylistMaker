@@ -8,7 +8,7 @@ data class Track(
     val trackTimeMillis: Int,
     val artworkUrl100: String,
     val previewUrl: String,
-    var collectionName: String,
+    val collectionName: String,
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String
@@ -22,6 +22,6 @@ data class Track(
         return "$mm:$ss"
     }
     companion object {
-        val INTENT_EXTRA_ID = "track_object"
+        const val INTENT_EXTRA_ID = "track_object"
     }
 }
