@@ -9,9 +9,9 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val cover: ImageView = itemView.findViewById(R.id.artworkUrl)
-    private val track: TextView = itemView.findViewById(R.id.trackName)
-    private val artist: TextView = itemView.findViewById(R.id.artistName)
-    private val time: TextView =  itemView.findViewById(R.id.trackTime)
+    private val track: TextView = itemView.findViewById(R.id.tvTrackName)
+    private val artist: TextView = itemView.findViewById(R.id.tvArtistName)
+    private val time: TextView =  itemView.findViewById(R.id.tvTrackDuration)
     fun bind(model: Track) {
         track.text = model.trackName
         artist.text = model.artistName

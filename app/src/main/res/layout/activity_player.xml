@@ -46,7 +46,7 @@
         app:titleTextAppearance="@style/toolbar" />
 
     <ImageView
-        android:id="@+id/trackCover"
+        android:id="@+id/ivTrackCover"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="16dp"
@@ -58,73 +58,74 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/trackName"
-        style="@style/player_track_name"
+        android:id="@+id/tvTrackName"
+        style="@style/playerTrackName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:gravity="top"
-        app:layout_constraintEnd_toEndOf="@id/trackCover"
-        app:layout_constraintStart_toStartOf="@id/trackCover"
-        app:layout_constraintTop_toBottomOf="@id/trackCover"
+        app:layout_constraintEnd_toEndOf="@id/ivTrackCover"
+        app:layout_constraintStart_toStartOf="@id/ivTrackCover"
+        app:layout_constraintTop_toBottomOf="@id/ivTrackCover"
         tools:text="Крутое название песни" />
 
     <TextView
-        android:id="@+id/artistName"
-        style="@style/player_artist_name"
+        android:id="@+id/tvArtistName"
+        style="@style/playerTrackArtist"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:gravity="top"
-        app:layout_constraintEnd_toEndOf="@id/trackCover"
-        app:layout_constraintStart_toStartOf="@id/trackCover"
-        app:layout_constraintTop_toBottomOf="@id/trackName"
+        app:layout_constraintEnd_toEndOf="@id/ivTrackCover"
+        app:layout_constraintStart_toStartOf="@id/ivTrackCover"
+        app:layout_constraintTop_toBottomOf="@id/tvTrackName"
         tools:text="Какой-то исполнитель" />
 
     <Button
-        android:id="@+id/player_button_1"
+        android:id="@+id/btCopy"
         android:layout_width="51dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:background="@drawable/btn1"
         android:clickable="true"
         app:backgroundTint="@null"
-        app:layout_constraintEnd_toStartOf="@+id/player_button_2"
+        app:layout_constraintEnd_toStartOf="@+id/btPlayControl"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="@+id/trackCover"
-        app:layout_constraintTop_toBottomOf="@id/artistName" />
+        app:layout_constraintStart_toStartOf="@+id/ivTrackCover"
+        app:layout_constraintTop_toBottomOf="@id/tvArtistName" />
 
     <Button
-        android:id="@+id/player_button_2"
-        android:layout_width="100dp"
+        android:id="@+id/btPlayControl"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="@drawable/btn2"
+        android:background="@drawable/play_btn"
+        android:state_enabled="false"
         android:clickable="true"
         app:backgroundTint="@color/filled_button_tint"
-        app:layout_constraintBottom_toBottomOf="@id/player_button_1"
-        app:layout_constraintEnd_toStartOf="@id/player_button_3"
+        app:layout_constraintBottom_toBottomOf="@id/btCopy"
+        app:layout_constraintEnd_toStartOf="@id/btLike"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@id/player_button_1"
-        app:layout_constraintTop_toBottomOf="@id/artistName" />
+        app:layout_constraintStart_toEndOf="@id/btCopy"
+        app:layout_constraintTop_toBottomOf="@id/tvArtistName" />
 
     <Button
-        android:id="@+id/player_button_3"
+        android:id="@+id/btLike"
         android:layout_width="51dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:background="@drawable/btn3"
         android:clickable="true"
         app:backgroundTint="@null"
-        app:layout_constraintBottom_toBottomOf="@id/player_button_1"
-        app:layout_constraintEnd_toEndOf="@id/trackCover"
+        app:layout_constraintBottom_toBottomOf="@id/btCopy"
+        app:layout_constraintEnd_toEndOf="@id/ivTrackCover"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@id/player_button_2"
-        app:layout_constraintTop_toBottomOf="@id/artistName" />
+        app:layout_constraintStart_toEndOf="@id/btPlayControl"
+        app:layout_constraintTop_toBottomOf="@id/tvArtistName" />
 
     <TextView
-        android:id="@+id/trackPos"
+        android:id="@+id/tvTrackPlayPosition"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/main_text_color"
@@ -132,106 +133,106 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@id/rightBorder"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/player_button_2"
+        app:layout_constraintTop_toBottomOf="@id/btPlayControl"
         tools:text="0:30" />
 
 
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier_controls"
+        android:id="@+id/barrierBelowButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingEnd="100dp"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="trackPos" />
+        app:constraint_referenced_ids="tvTrackPlayPosition" />
 
     <!-- Characteristics -->
     <!-- Labels -->
     <TextView
-        android:id="@+id/labelTrackTime"
-        style="@style/player_chars_label"
+        android:id="@+id/tvTrackDurationTitle"
+        style="@style/dataTitle"
         android:layout_marginTop="0dp"
         android:text="@string/player_track_time"
-        app:layout_constraintBottom_toTopOf="@id/labelTrackAlbum"
+        app:layout_constraintBottom_toTopOf="@id/tvTrackAlbumTitle"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/barrier_controls"
+        app:layout_constraintTop_toBottomOf="@id/barrierBelowButtons"
         app:layout_constraintVertical_bias="0.5"
         app:layout_constraintVertical_chainStyle="spread" />
 
     <TextView
-        android:id="@+id/labelTrackAlbum"
-        style="@style/player_chars_label"
+        android:id="@+id/tvTrackAlbumTitle"
+        style="@style/dataTitle"
         android:text="@string/player_track_album"
-        app:layout_constraintBottom_toTopOf="@id/labelTrackYear"
+        app:layout_constraintBottom_toTopOf="@id/tvTrackYearTitle"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/labelTrackTime"
+        app:layout_constraintTop_toBottomOf="@id/tvTrackDurationTitle"
         app:layout_constraintVertical_bias="0.5" />
 
     <TextView
-        android:id="@+id/labelTrackYear"
-        style="@style/player_chars_label"
+        android:id="@+id/tvTrackYearTitle"
+        style="@style/dataTitle"
         android:text="@string/player_track_year"
-        app:layout_constraintBottom_toTopOf="@id/labelTrackGenre"
+        app:layout_constraintBottom_toTopOf="@id/tvTrackGenreTitle"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/labelTrackAlbum"
+        app:layout_constraintTop_toBottomOf="@id/tvTrackAlbumTitle"
         app:layout_constraintVertical_bias="0.5" />
 
     <TextView
-        android:id="@+id/labelTrackGenre"
-        style="@style/player_chars_label"
+        android:id="@+id/tvTrackGenreTitle"
+        style="@style/dataTitle"
         android:text="@string/player_track_genre"
-        app:layout_constraintBottom_toTopOf="@id/labelTrackCountry"
+        app:layout_constraintBottom_toTopOf="@id/tvTrackCountryTitle"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/labelTrackYear"
+        app:layout_constraintTop_toBottomOf="@id/tvTrackYearTitle"
         app:layout_constraintVertical_bias="0.5" />
 
     <TextView
-        android:id="@+id/labelTrackCountry"
-        style="@style/player_chars_label"
+        android:id="@+id/tvTrackCountryTitle"
+        style="@style/dataTitle"
         android:text="@string/player_track_country"
         app:layout_constraintBottom_toTopOf="@id/bottomBorder"
         app:layout_constraintStart_toStartOf="@id/leftBorder"
-        app:layout_constraintTop_toBottomOf="@id/labelTrackGenre"
+        app:layout_constraintTop_toBottomOf="@id/tvTrackGenreTitle"
         app:layout_constraintVertical_bias="0.5" />
 
     <!-- Values -->
     <TextView
-        android:id="@+id/trackTime"
-        style="@style/player_chars_value"
-        app:layout_constraintBaseline_toBaselineOf="@id/labelTrackTime"
+        android:id="@+id/tvTrackDuration"
+        style="@style/dataValue"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvTrackDurationTitle"
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
-        app:layout_constraintStart_toEndOf="@id/labelTrackTime"
+        app:layout_constraintStart_toEndOf="@id/tvTrackDurationTitle"
         tools:text="5:35" />
 
     <TextView
-        android:id="@+id/trackAlbum"
-        style="@style/player_chars_value"
-        app:layout_constraintBaseline_toBaselineOf="@id/labelTrackAlbum"
+        android:id="@+id/tvTrackAlbum"
+        style="@style/dataValue"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvTrackAlbumTitle"
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
-        app:layout_constraintStart_toEndOf="@id/labelTrackAlbum"
+        app:layout_constraintStart_toEndOf="@id/tvTrackAlbumTitle"
         tools:text="Очень very-very-very-very-very-veru длинное название альбома" />
 
     <TextView
-        android:id="@+id/trackYear"
-        style="@style/player_chars_value"
-        app:layout_constraintBaseline_toBaselineOf="@id/labelTrackYear"
+        android:id="@+id/tvTrackYear"
+        style="@style/dataValue"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvTrackYearTitle"
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
-        app:layout_constraintStart_toEndOf="@id/labelTrackYear"
+        app:layout_constraintStart_toEndOf="@id/tvTrackYearTitle"
         tools:text="2023" />
 
     <TextView
-        android:id="@+id/trackGenre"
-        style="@style/player_chars_value"
-        app:layout_constraintBaseline_toBaselineOf="@id/labelTrackGenre"
+        android:id="@+id/tvTrackGenre"
+        style="@style/dataValue"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvTrackGenreTitle"
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
-        app:layout_constraintStart_toEndOf="@id/labelTrackGenre"
+        app:layout_constraintStart_toEndOf="@id/tvTrackGenreTitle"
         tools:text="Рок-н-ролл" />
 
     <TextView
-        android:id="@+id/trackCountry"
-        style="@style/player_chars_value"
-        app:layout_constraintBaseline_toBaselineOf="@id/labelTrackCountry"
+        android:id="@+id/tvTrackCountry"
+        style="@style/dataValue"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvTrackCountryTitle"
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
-        app:layout_constraintStart_toEndOf="@id/labelTrackCountry"
+        app:layout_constraintStart_toEndOf="@id/tvTrackCountryTitle"
         tools:text="Великобритания" />
 
 

@@ -11,17 +11,16 @@ class App : Application() {
         var darkTheme = false
     }
 
-    private lateinit var sharedPref:SharedPreferences
+    private var sharedPref:SharedPreferences?=null
 
     override fun onCreate() {
         super.onCreate()
         sharedPref = getSharedPreferences(getString(R.string.file_preferences), MODE_PRIVATE)
-        darkTheme = sharedPref.getBoolean(getString(R.string.pref_darkmode_last), false)
-        // если темная тема включена на устройстве
-        val nightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        when (nightMode) {
+        darkTheme = sharedPref!!.getBoolean(getString(R.string.pref_darkmode_last), false)
+        // if device has dark mode on already
+        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> {
-                if (darkTheme==false) darkTheme = true
+                if (!darkTheme) darkTheme = true
             }
         }
         switchTheme(darkTheme)
@@ -29,7 +28,7 @@ class App : Application() {
 
     fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
-        sharedPref.edit()
+        sharedPref!!.edit()
             .putBoolean(getString(R.string.pref_darkmode_last), darkThemeEnabled)
             .apply()
         AppCompatDelegate.setDefaultNightMode(
