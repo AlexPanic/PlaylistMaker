@@ -17,26 +17,20 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.Helper
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.enums.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
-    enum class State {
-        DEFAULT,
-        PREPARED,
-        PLAYING,
-        PAUSED
-    }
-
     companion object {
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
     }
 
-    private var playerState = State.DEFAULT
+    private var playerState = PlayerState.DEFAULT
     private var isClickAllowed = true
 
     private var playButton: Button? = null
@@ -58,12 +52,12 @@ class PlayerActivity : AppCompatActivity() {
         trackPositionTimer = findViewById(R.id.tvTrackPlayPosition)
         playButton = findViewById(R.id.btPlayControl)
 
-        val track = intent.getSerializableExtra(Track.INTENT_EXTRA_ID, Track::class.java) as Track
+        val track = Creator.provideGetTrackUseCase(intent).execute()
 
         mainThreadHandler = Handler(Looper.getMainLooper())
         runnable = Runnable { refreshTimer() }
 
-        if (playButton!=null) {
+        if (playButton != null) {
             playButton!!.setOnClickListener {
                 playbackControl()
             }
@@ -133,13 +127,13 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun playbackControl() {
         when (playerState) {
-            State.PLAYING -> {
+            PlayerState.PLAYING -> {
                 if (clickDebounce()) {
                     pausePlayer()
                 }
             }
 
-            State.PREPARED, State.PAUSED -> {
+            PlayerState.PREPARED, PlayerState.PAUSED -> {
                 if (clickDebounce()) {
                     startPlayer()
                 }
@@ -164,11 +158,11 @@ class PlayerActivity : AppCompatActivity() {
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
             playButton!!.isEnabled = true
-            playerState = State.PREPARED
+            playerState = PlayerState.PREPARED
         }
         mediaPlayer.setOnCompletionListener {
             togglePlayButton(true)
-            playerState = State.PREPARED
+            playerState = PlayerState.PREPARED
             releaseTimer()
             trackPositionTimer!!.text = getString(R.string.player_track_stop_position)
         }
@@ -177,14 +171,14 @@ class PlayerActivity : AppCompatActivity() {
     private fun startPlayer() {
         mediaPlayer.start()
         togglePlayButton(false)
-        playerState = State.PLAYING
+        playerState = PlayerState.PLAYING
         mainThreadHandler?.post(runnable as Runnable)
     }
 
     private fun pausePlayer() {
         mediaPlayer.pause()
         togglePlayButton(true)
-        playerState = State.PAUSED
+        playerState = PlayerState.PAUSED
         releaseTimer()
     }
 
@@ -195,7 +189,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun refreshTimer() {
         trackPositionTimer!!.text =
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-        if (playerState == State.PLAYING) {
+        if (playerState == PlayerState.PLAYING) {
             mainThreadHandler?.postDelayed(
                 runnable!!, 250
             )

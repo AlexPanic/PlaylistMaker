@@ -23,6 +23,7 @@ import com.example.playlistmaker.FindTracksResponse
 import com.example.playlistmaker.ItunesApi
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.enums.ApiResultIcons
 import com.example.playlistmaker.presentation.ui.player.PlayerActivity
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
@@ -54,12 +55,6 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
     private var searchMask: String = ""
     private val searchRunnable = Runnable { searchRequest() }
     private var mainThreadHandler: Handler = Handler(Looper.getMainLooper())
-
-    enum class ResultsIcon(val drawableId: Int) {
-        NOTHING_FOUND(R.drawable.nothing_found),
-        SOMETHING_WENT_WRONG(R.drawable.something_went_wrong),
-        EMPTY(0)
-    }
 
     private companion object {
         var SEARCH_STRING = "SEARCH_STRING"
@@ -120,7 +115,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
         searchTextLayout!!.setEndIconOnClickListener {
             searchTextLayout!!.editText?.setText("")
             showMessage("", "")
-            showAlertIcon(ResultsIcon.EMPTY)
+            showAlertIcon(ApiResultIcons.EMPTY)
             tracks.clear()
             adapter!!.notifyDataSetChanged()
             updateSearchHistory()
@@ -220,17 +215,17 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
     }
 
 
-    private fun showAlertIcon(icon: ResultsIcon) {
+    private fun showAlertIcon(icon: ApiResultIcons) {
         placeholderAlertIcon!!.setImageResource(icon.drawableId)
         reSearchButton!!.isVisible = when (icon) {
-            ResultsIcon.SOMETHING_WENT_WRONG -> true
+            ApiResultIcons.SOMETHING_WENT_WRONG -> true
             else -> false
         }
     }
 
     private fun somethingWentWrong() {
         showMessage(getString(R.string.something_went_wrong), "")
-        showAlertIcon(ResultsIcon.SOMETHING_WENT_WRONG)
+        showAlertIcon(ApiResultIcons.SOMETHING_WENT_WRONG)
         hideKeyboard()
     }
 
@@ -245,7 +240,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
     }
 
     private fun searchRequest() {
-        showAlertIcon(ResultsIcon.EMPTY)
+        showAlertIcon(ApiResultIcons.EMPTY)
         showMessage("", "")
         if (searchMask.isEmpty()) return
         tracks.clear()
@@ -260,14 +255,14 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
                     showProgressBar(false)
                     when (response.code()) {
                         200 -> {
-                            showAlertIcon(ResultsIcon.EMPTY)
+                            showAlertIcon(ApiResultIcons.EMPTY)
                             tracks.clear()
                             if (response.body()?.results?.isNotEmpty() == true) {
                                 tracks.addAll(response.body()?.results!!)
                                 adapter!!.notifyDataSetChanged()
                             } else {
                                 showMessage(getString(R.string.nothing_found), "")
-                                showAlertIcon(ResultsIcon.NOTHING_FOUND)
+                                showAlertIcon(ApiResultIcons.NOTHING_FOUND)
                             }
                         }
 
