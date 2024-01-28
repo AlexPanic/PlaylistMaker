@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.search
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -19,6 +19,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.FindTracksResponse
+import com.example.playlistmaker.ItunesApi
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.presentation.ui.player.PlayerActivity
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Call
 import retrofit2.Callback
@@ -154,35 +159,6 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
             searchHistoryVisibility(searchTextLayout!!.editText!!.hasFocus() && searchMask.isEmpty())
             searchDebounce()
         }
-        /*
-                val simpleTextWatcher = object : TextWatcher {
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                        // empty
-                    }
-
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                        searchMask = s.toString()
-                        searchHistoryVisibility(searchTextLayout.editText!!.hasFocus() && s!!.isEmpty())
-                        searchDebounce()
-                    }
-
-                    override fun afterTextChanged(s: Editable?) {
-                        // empty
-                    }
-                }
-                searchTextLayout.editText?.addTextChangedListener(simpleTextWatcher)
-                // запускаем поиск на нажатие кнопки Enter (Done)
-                searchTextLayout.editText?.setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        if (searchTextLayout.editText?.text.toString().isNotEmpty()) {
-                            searchRequest()
-                        } else {
-                            showMessage("empty mask", "empty mask")
-                        }
-                    }
-                    false
-                }*/
-
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
