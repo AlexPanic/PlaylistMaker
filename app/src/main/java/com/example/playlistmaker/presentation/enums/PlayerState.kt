@@ -4,5 +4,6 @@ enum class PlayerState {
     DEFAULT,
     PREPARED,
     PLAYING,
-    PAUSED
+    PAUSED,
+    PLAYBACK_COMPLETE,
 }

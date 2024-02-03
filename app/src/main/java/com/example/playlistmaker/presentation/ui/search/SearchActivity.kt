@@ -19,9 +19,10 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.FindTracksResponse
-import com.example.playlistmaker.ItunesApi
+import com.example.playlistmaker.domain.api.FindTracksResponse
+import com.example.playlistmaker.domain.api.ItunesApi
 import com.example.playlistmaker.R
+import com.example.playlistmaker.core.Constants
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.enums.ApiResultIcons
 import com.example.playlistmaker.presentation.ui.player.PlayerActivity
@@ -76,7 +77,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
         setContentView(R.layout.activity_search)
 
         // инстанс настроек приложения
-        sharedPref = getSharedPreferences(getString(R.string.file_preferences), MODE_PRIVATE)
+        sharedPref = getSharedPreferences(Constants.SHARED_PREF_FILE, MODE_PRIVATE)
         sharedPrefsListener =
             SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
                 if (key == TrackSearchHistory.sharedPrefKey) {

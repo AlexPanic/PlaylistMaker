@@ -27,9 +27,6 @@
     <string name="update">Обновить</string>
     <string name="img_alert_icon">Алерт в результатах поиска</string>
 
-    <string name="file_preferences">playlist_maker_pref</string>
-    <string name="pref_darkmode_last">darkmode_last_switch</string>
-
     <string name="search_history_header">Вы искали</string>
     <string name="search_history_clear">Очистить историю</string>
 

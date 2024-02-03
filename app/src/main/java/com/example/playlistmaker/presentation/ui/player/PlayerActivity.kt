@@ -1,78 +1,99 @@
 package com.example.playlistmaker.presentation.ui.player
 
-import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.MenuItem
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.Creator
-import com.example.playlistmaker.Helper
+import com.example.playlistmaker.presentation.ui.common.Helper
 import com.example.playlistmaker.R
-import com.example.playlistmaker.presentation.enums.PlayerState
+import com.example.playlistmaker.presentation.PlayerInteract
+import com.example.playlistmaker.presentation.PlayerUiUpdater
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
-    companion object {
-        private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
-    }
-
-    private var playerState = PlayerState.DEFAULT
-    private var isClickAllowed = true
-
     private var playButton: Button? = null
-    private var mediaPlayer = MediaPlayer()
-    private var mainThreadHandler: Handler? = null
-    private var runnable: Runnable? = null
     private var trackPositionTimer: TextView? = null
+    private var trackIsPlaying = false
+    private var playerInteract: PlayerInteract? = null
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
+        Helper.setToolbar(this)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+        // получаем модель трека
+        val track = Creator.provideGetTrackUseCase(intent).execute()
 
+        // элементы view для интеракций
         trackPositionTimer = findViewById(R.id.tvTrackPlayPosition)
         playButton = findViewById(R.id.btPlayControl)
 
-        val track = Creator.provideGetTrackUseCase(intent).execute()
-
-        mainThreadHandler = Handler(Looper.getMainLooper())
-        runnable = Runnable { refreshTimer() }
-
-        if (playButton != null) {
-            playButton!!.setOnClickListener {
-                playbackControl()
+        // апдейтер
+        val playerUpdater = object: PlayerUiUpdater {
+            override fun onPlayerDefault() {
+                trackIsPlaying = false
+            }
+            override fun onPlayerPrepared() {
+                trackIsPlaying = false
+                playButton!!.isEnabled = true
+            }
+            override fun onPlayerPlaying() {
+                trackIsPlaying = true
+                playButton!!.background = ContextCompat.getDrawable(
+                    applicationContext,
+                    R.drawable.pause_btn
+                )
+            }
+            override fun onPlayerPaused() {
+                trackIsPlaying = false
+                playButton!!.background = ContextCompat.getDrawable(
+                    applicationContext,
+                    R.drawable.play_btn
+                )
+            }
+            override fun onPlayerPlaybackCompleted() {
+                trackIsPlaying = false
+                trackPositionTimer!!.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(0)
+                playButton!!.background = ContextCompat.getDrawable(
+                    applicationContext,
+                    R.drawable.play_btn
+                )
+            }
+            override fun onPositionChange(playPositionMillis: Int) {
+                trackPositionTimer!!.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playPositionMillis)
+            }
+            override fun isTrackPlaying(): Boolean {
+                return trackIsPlaying
             }
         }
-        preparePlayer(track.previewUrl)
 
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        // интерактор плеера
+        playerInteract = PlayerInteract(playerUpdater)
+        playerInteract!!.init(track.previewUrl)
 
-        // увеличенная обложка
+        playButton!!.setOnClickListener {
+            playerInteract!!.playPauseToggle(trackIsPlaying)
+        }
+
+        // задаем значения полей из модели
         val trackCover = findViewById<ImageView>(R.id.ivTrackCover)
         val coverUrl = track.getArtworkUrl512()
         val cornersRadius = 8f
         Glide.with(applicationContext).load(coverUrl).fitCenter()
             .transform(RoundedCorners(Helper.dpToPx(cornersRadius))).into(trackCover)
-
         // свойства трека
         val trackName = findViewById<TextView>(R.id.tvTrackName)
         trackName.text = track.trackName
@@ -86,7 +107,6 @@ class PlayerActivity : AppCompatActivity() {
         trackGenre.text = track.primaryGenreName
         val trackCountry = findViewById<TextView>(R.id.tvTrackCountry)
         trackCountry.text = track.country
-
         // альбом, если у трека он есть
         val labelTrackAlbum = findViewById<TextView>(R.id.tvTrackAlbumTitle)
         val trackAlbum = findViewById<TextView>(R.id.tvTrackAlbum)
@@ -107,94 +127,12 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        pausePlayer()
+        playerInteract!!.onActivityPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
-        releaseTimer()
+        playerInteract!!.onActivityDestroy()
     }
 
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            mainThreadHandler!!.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY_MILLIS)
-        }
-        return current
-    }
-
-    private fun playbackControl() {
-        when (playerState) {
-            PlayerState.PLAYING -> {
-                if (clickDebounce()) {
-                    pausePlayer()
-                }
-            }
-
-            PlayerState.PREPARED, PlayerState.PAUSED -> {
-                if (clickDebounce()) {
-                    startPlayer()
-                }
-            }
-
-            else -> {
-                // do nothing
-            }
-        }
-
-    }
-
-    private fun togglePlayButton(setAsPlay: Boolean) {
-        playButton!!.background = ContextCompat.getDrawable(
-            applicationContext,
-            if (setAsPlay) R.drawable.play_btn else R.drawable.pause_btn
-        )
-    }
-
-    private fun preparePlayer(trackUrl: String) {
-        mediaPlayer.setDataSource(trackUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playButton!!.isEnabled = true
-            playerState = PlayerState.PREPARED
-        }
-        mediaPlayer.setOnCompletionListener {
-            togglePlayButton(true)
-            playerState = PlayerState.PREPARED
-            releaseTimer()
-            trackPositionTimer!!.text = getString(R.string.player_track_stop_position)
-        }
-    }
-
-    private fun startPlayer() {
-        mediaPlayer.start()
-        togglePlayButton(false)
-        playerState = PlayerState.PLAYING
-        mainThreadHandler?.post(runnable as Runnable)
-    }
-
-    private fun pausePlayer() {
-        mediaPlayer.pause()
-        togglePlayButton(true)
-        playerState = PlayerState.PAUSED
-        releaseTimer()
-    }
-
-    private fun releaseTimer() {
-        mainThreadHandler!!.removeCallbacks(runnable!!)
-    }
-
-    private fun refreshTimer() {
-        trackPositionTimer!!.text =
-            SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-        if (playerState == PlayerState.PLAYING) {
-            mainThreadHandler?.postDelayed(
-                runnable!!, 250
-            )
-        } else {
-            releaseTimer()
-        }
-    }
 }
