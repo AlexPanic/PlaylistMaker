@@ -2,7 +2,6 @@ package com.example.playlistmaker.presentation
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.domain.api.PlayerConsumer
 import com.example.playlistmaker.domain.models.PlayerFeedback
@@ -68,7 +67,7 @@ class PlayerInteract(val playerUiUpdater: PlayerUiUpdater) {
     }
 
     private fun onPlayerStateChange(state: PlayerState) {
-        Log.d("mine", "STATE = " + PlayerFeedback.State(state))
+        //Log.d("mine", "STATE = " + PlayerFeedback.State(state))
         when (state) {
             PlayerState.DEFAULT -> playerUiUpdater.onPlayerDefault()
             PlayerState.PREPARED -> playerUiUpdater.onPlayerPrepared()

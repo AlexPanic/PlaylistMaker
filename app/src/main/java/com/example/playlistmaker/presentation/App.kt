@@ -1,43 +1,31 @@
 package com.example.playlistmaker.presentation
 
 import android.app.Application
-import android.content.SharedPreferences
-import android.content.res.Configuration
-import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.core.Constants
+import com.example.playlistmaker.data.api.AppThemeRepositoryImpl
+import com.example.playlistmaker.data.repository.SharedPreferencesProviderImpl
+import com.example.playlistmaker.domain.usecases.DarkModeUseCase
 
 class App : Application() {
 
+    private val sharedPreferencesProvider = SharedPreferencesProviderImpl(this)
+    private val themeRepository = AppThemeRepositoryImpl(sharedPreferencesProvider)
+    private val darkModeUseCase = DarkModeUseCase(themeRepository)
     companion object {
-        var darkTheme = false
+        var appDarkMode: Boolean = false
     }
-
-    private var sharedPref:SharedPreferences?=null
 
     override fun onCreate() {
         super.onCreate()
-        sharedPref = getSharedPreferences(Constants.SHARED_PREF_FILE, MODE_PRIVATE)
-        darkTheme = sharedPref!!.getBoolean(Constants.DARK_MODE_LAST_SWITCH, false)
-        // если на устройстве включен общий темный режим
-        when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_YES -> {
-                if (!darkTheme) darkTheme = true
-            }
-        }
-        switchTheme(darkTheme)
+        // темный режим включен для всего устройства
+        val deviceDarkMode = darkModeUseCase.isDeviceDarkModeOn()
+        // темный режим, сохраненный в приложении
+        appDarkMode = darkModeUseCase.isAppDarkModeOn()
+        switchTheme(deviceDarkMode || appDarkMode)
     }
 
-    fun switchTheme(darkThemeEnabled: Boolean) {
-        darkTheme = darkThemeEnabled
-        sharedPref!!.edit()
-            .putBoolean(Constants.DARK_MODE_LAST_SWITCH, darkThemeEnabled)
-            .apply()
-        AppCompatDelegate.setDefaultNightMode(
-            if (darkThemeEnabled) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
-        )
+    fun switchTheme(darkModeOn: Boolean) {
+        darkModeUseCase.setDarkMode(darkModeOn)
+        appDarkMode = darkModeOn
     }
+
 }

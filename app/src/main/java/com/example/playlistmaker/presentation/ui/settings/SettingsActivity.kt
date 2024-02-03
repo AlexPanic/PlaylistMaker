@@ -20,7 +20,7 @@ class SettingsActivity : AppCompatActivity() {
         themeSwitcher.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
         }
-        themeSwitcher.isChecked = App.darkTheme
+        themeSwitcher.isChecked = App.appDarkMode
 
         val btnShare = findViewById<FrameLayout>(R.id.action_share)
         btnShare.setOnClickListener {
