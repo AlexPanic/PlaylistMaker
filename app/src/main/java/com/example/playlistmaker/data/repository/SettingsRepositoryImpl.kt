@@ -14,7 +14,7 @@ class SettingsRepositoryImpl(context: Context) : SettingsRepository {
         return sharedPreferences.getBoolean(Constants.DARK_MODE_LAST_SWITCH, deviceDarkModeOn)
     }
 
-    override fun setDarkMode(darkModeOn: Boolean): Boolean {
+    override fun setDarkMode(darkModeOn: Boolean) {
         sharedPreferences.edit()
             .putBoolean(Constants.DARK_MODE_LAST_SWITCH, darkModeOn)
             .apply()
@@ -25,7 +25,6 @@ class SettingsRepositoryImpl(context: Context) : SettingsRepository {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
-        return darkModeOn
     }
 
 }

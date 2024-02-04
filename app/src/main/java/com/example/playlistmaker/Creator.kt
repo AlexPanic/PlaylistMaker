@@ -10,10 +10,11 @@ import com.example.playlistmaker.domain.impl.TracksInteractorImpl
 import com.example.playlistmaker.domain.repository.PlayerRepository
 import com.example.playlistmaker.domain.repository.SettingsRepository
 import com.example.playlistmaker.domain.repository.TracksRepository
-import com.example.playlistmaker.domain.usecases.ControlPlayerUseCase
-import com.example.playlistmaker.domain.usecases.GetDarkModeUseCase
-import com.example.playlistmaker.domain.usecases.IDarkModeUseCase
-import com.example.playlistmaker.domain.usecases.SetDarkModeUseCase
+import com.example.playlistmaker.domain.usecases.impl.ControlPlayerUseCase
+import com.example.playlistmaker.domain.usecases.impl.GetDarkModeUseCase
+import com.example.playlistmaker.domain.usecases.IGetDarkModeUseCase
+import com.example.playlistmaker.domain.usecases.ISetDarkModeUseCase
+import com.example.playlistmaker.domain.usecases.impl.SetDarkModeUseCase
 import com.example.playlistmaker.presentation.App
 
 object Creator {
@@ -23,11 +24,11 @@ object Creator {
         this.app = app
     }
 
-    fun provideSetDarkModeUseCase(): IDarkModeUseCase {
+    fun provideSetDarkModeUseCase(): ISetDarkModeUseCase {
         return SetDarkModeUseCase(provideSettingsRepository())
     }
 
-    fun provideGetDarkModeUseCase(): IDarkModeUseCase {
+    fun provideGetDarkModeUseCase(): IGetDarkModeUseCase {
         return GetDarkModeUseCase(provideSettingsRepository())
     }
 

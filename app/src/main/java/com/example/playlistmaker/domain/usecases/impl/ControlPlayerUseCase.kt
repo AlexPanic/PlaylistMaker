@@ -1,8 +1,9 @@
-package com.example.playlistmaker.domain.usecases
+package com.example.playlistmaker.domain.usecases.impl
 
 import com.example.playlistmaker.domain.api.PlayerConsumer
 import com.example.playlistmaker.domain.repository.PlayerRepository
 import com.example.playlistmaker.domain.models.PlayerFeedback
+import com.example.playlistmaker.domain.usecases.IControlPlayerUseCase
 import com.example.playlistmaker.presentation.enums.PlayerCommand
 
 class ControlPlayerUseCase(private val playerRepository: PlayerRepository) : IControlPlayerUseCase {
