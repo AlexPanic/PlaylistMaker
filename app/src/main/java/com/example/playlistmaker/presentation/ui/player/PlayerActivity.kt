@@ -12,9 +12,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.Creator
 import com.example.playlistmaker.presentation.ui.common.Helper
 import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.PlayerInteract
 import com.example.playlistmaker.presentation.PlayerUiUpdater
 import java.text.SimpleDateFormat
@@ -35,7 +35,7 @@ class PlayerActivity : AppCompatActivity() {
         Helper.setToolbar(this)
 
         // получаем модель трека
-        val track = Creator.provideGetTrackUseCase(intent).execute()
+        val track = intent.getSerializableExtra(Track.INTENT_EXTRA_ID, Track::class.java) as Track
 
         // элементы view для интеракций
         trackPositionTimer = findViewById(R.id.tvTrackPlayPosition)

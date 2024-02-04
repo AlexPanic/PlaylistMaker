@@ -13,14 +13,13 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.domain.api.FindTracksResponse
-import com.example.playlistmaker.domain.api.ItunesApi
+import com.example.playlistmaker.data.api.FindTracksResponse
+import com.example.playlistmaker.data.api.ItunesApi
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.Constants
 import com.example.playlistmaker.domain.models.Track
@@ -115,7 +114,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
         // очистка поискового запроса кнопкой
         searchTextLayout!!.setEndIconOnClickListener {
             searchTextLayout!!.editText?.setText("")
-            showMessage("", "")
+            showMessage("")
             showAlertIcon(ApiResultIcons.EMPTY)
             tracks.clear()
             adapter!!.notifyDataSetChanged()
@@ -200,16 +199,12 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
         }
     }
 
-    private fun showMessage(text: String, additionalMessage: String) {
+    private fun showMessage(text: String) {
         if (text.isNotEmpty()) {
             placeholderMessage!!.isVisible = true
             tracks.clear()
             adapter!!.notifyDataSetChanged()
             placeholderMessage!!.text = text
-            if (additionalMessage.isNotEmpty()) {
-                Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
-                    .show()
-            }
         } else {
             placeholderMessage!!.isVisible = false
         }
@@ -225,7 +220,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
     }
 
     private fun somethingWentWrong() {
-        showMessage(getString(R.string.something_went_wrong), "")
+        showMessage(getString(R.string.something_went_wrong))
         showAlertIcon(ApiResultIcons.SOMETHING_WENT_WRONG)
         hideKeyboard()
     }
@@ -242,7 +237,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
 
     private fun searchRequest() {
         showAlertIcon(ApiResultIcons.EMPTY)
-        showMessage("", "")
+        showMessage("")
         if (searchMask.isEmpty()) return
         tracks.clear()
         adapter!!.notifyDataSetChanged()
@@ -262,7 +257,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
                                 tracks.addAll(response.body()?.results!!)
                                 adapter!!.notifyDataSetChanged()
                             } else {
-                                showMessage(getString(R.string.nothing_found), "")
+                                showMessage(getString(R.string.nothing_found))
                                 showAlertIcon(ApiResultIcons.NOTHING_FOUND)
                             }
                         }

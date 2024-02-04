@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.api
+package com.example.playlistmaker.data.api
 
 import com.example.playlistmaker.domain.models.Track
 import retrofit2.Call

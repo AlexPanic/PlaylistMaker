@@ -13,13 +13,4 @@ data class TrackDto(
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String
-) : Serializable {
-    fun getArtworkUrl512() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
-    fun getYear() = releaseDate.substring(0, 4)
-    fun trackTime(): String {
-        val sec = trackTimeMillis / 1000
-        val mm = sec / 60
-        val ss = "%02d".format(sec % 60)
-        return "$mm:$ss"
-    }
-}
+) : Serializable
