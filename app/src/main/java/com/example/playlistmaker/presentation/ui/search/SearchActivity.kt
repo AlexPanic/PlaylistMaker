@@ -18,8 +18,8 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.data.api.FindTracksResponse
-import com.example.playlistmaker.data.api.ItunesApi
+import com.example.playlistmaker.data.network.FindTracksResponse
+import com.example.playlistmaker.data.network.ItunesApi
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.Constants
 import com.example.playlistmaker.domain.models.Track

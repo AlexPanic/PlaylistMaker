@@ -1,14 +1,14 @@
 package com.example.playlistmaker.presentation
 
 import android.app.Application
-import com.example.playlistmaker.data.api.AppThemeRepositoryImpl
-import com.example.playlistmaker.data.repository.SharedPreferencesProviderImpl
+import com.example.playlistmaker.data.repository.SettingsRepositoryImpl
+import com.example.playlistmaker.data.repository.SharedPreferencesRepositoryImpl
 import com.example.playlistmaker.domain.usecases.DarkModeUseCase
 
 class App : Application() {
 
-    private val sharedPreferencesProvider = SharedPreferencesProviderImpl(this)
-    private val themeRepository = AppThemeRepositoryImpl(sharedPreferencesProvider)
+    private val sharedPreferencesProvider = SharedPreferencesRepositoryImpl(this)
+    private val themeRepository = SettingsRepositoryImpl(sharedPreferencesProvider)
     private val darkModeUseCase = DarkModeUseCase(themeRepository)
     companion object {
         var appDarkMode: Boolean = false

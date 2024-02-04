@@ -1,4 +1,4 @@
-package com.example.playlistmaker.presentation
+package com.example.playlistmaker.presentation.ui.player
 
 import android.os.Handler
 import android.os.Looper

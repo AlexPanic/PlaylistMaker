@@ -1,9 +1,9 @@
-package com.example.playlistmaker.domain.api
+package com.example.playlistmaker.domain.repository
 
 import com.example.playlistmaker.domain.models.PlayerFeedback
 
-interface PlayerControl {
-    fun prepare(url: String): PlayerFeedback.State
+interface PlayerRepository {
+    fun prepare(url: String?): PlayerFeedback.State
     fun start(): PlayerFeedback.State
     fun pause(): PlayerFeedback.State
     fun release(): PlayerFeedback.State

@@ -12,20 +12,17 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.example.playlistmaker.presentation.ui.common.Helper
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.presentation.PlayerInteract
-import com.example.playlistmaker.presentation.PlayerUiUpdater
+import com.example.playlistmaker.presentation.ui.common.Helper
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
 
-    private var playButton: Button? = null
-    private var trackPositionTimer: TextView? = null
     private var trackIsPlaying = false
-    private var playerInteract: PlayerInteract? = null
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+    private lateinit var playerInteract: PlayerInteract
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,43 +35,49 @@ class PlayerActivity : AppCompatActivity() {
         val track = intent.getSerializableExtra(Track.INTENT_EXTRA_ID, Track::class.java) as Track
 
         // элементы view для интеракций
-        trackPositionTimer = findViewById(R.id.tvTrackPlayPosition)
-        playButton = findViewById(R.id.btPlayControl)
+        val tvTrackPlayPosition = findViewById<TextView>(R.id.tvTrackPlayPosition)
+        val btPlayControl = findViewById<Button>(R.id.btPlayControl)
 
         // апдейтер
-        val playerUpdater = object: PlayerUiUpdater {
+        val playerUpdater = object : PlayerUiUpdater {
             override fun onPlayerDefault() {
                 trackIsPlaying = false
             }
+
             override fun onPlayerPrepared() {
                 trackIsPlaying = false
-                playButton!!.isEnabled = true
+                btPlayControl.isEnabled = true
             }
+
             override fun onPlayerPlaying() {
                 trackIsPlaying = true
-                playButton!!.background = ContextCompat.getDrawable(
+                btPlayControl.background = ContextCompat.getDrawable(
                     applicationContext,
                     R.drawable.pause_btn
                 )
             }
+
             override fun onPlayerPaused() {
                 trackIsPlaying = false
-                playButton!!.background = ContextCompat.getDrawable(
+                btPlayControl.background = ContextCompat.getDrawable(
                     applicationContext,
                     R.drawable.play_btn
                 )
             }
+
             override fun onPlayerPlaybackCompleted() {
                 trackIsPlaying = false
-                trackPositionTimer!!.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(0)
-                playButton!!.background = ContextCompat.getDrawable(
+                tvTrackPlayPosition.text = dateFormat.format(0)
+                btPlayControl.background = ContextCompat.getDrawable(
                     applicationContext,
                     R.drawable.play_btn
                 )
             }
+
             override fun onPositionChange(playPositionMillis: Int) {
-                trackPositionTimer!!.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(playPositionMillis)
+                tvTrackPlayPosition.text = dateFormat.format(playPositionMillis)
             }
+
             override fun isTrackPlaying(): Boolean {
                 return trackIsPlaying
             }
@@ -82,10 +85,10 @@ class PlayerActivity : AppCompatActivity() {
 
         // интерактор плеера
         playerInteract = PlayerInteract(playerUpdater)
-        playerInteract!!.init(track.previewUrl)
+        playerInteract.init(track.previewUrl)
 
-        playButton!!.setOnClickListener {
-            playerInteract!!.playPauseToggle(trackIsPlaying)
+        btPlayControl.setOnClickListener {
+            playerInteract.playPauseToggle(trackIsPlaying)
         }
 
         // задаем значения полей из модели
@@ -127,12 +130,12 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        playerInteract!!.onActivityPause()
+        playerInteract.onActivityPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        playerInteract!!.onActivityDestroy()
+        playerInteract.onActivityDestroy()
     }
 
 }

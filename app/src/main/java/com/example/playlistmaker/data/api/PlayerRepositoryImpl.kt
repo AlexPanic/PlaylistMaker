@@ -1,14 +1,14 @@
 package com.example.playlistmaker.data.api
 
 import android.media.MediaPlayer
-import com.example.playlistmaker.domain.api.PlayerControl
+import com.example.playlistmaker.domain.repository.PlayerRepository
 import com.example.playlistmaker.domain.models.PlayerFeedback
 import com.example.playlistmaker.presentation.enums.PlayerState
 
-class PlayerControlImpl : PlayerControl {
+class PlayerRepositoryImpl : PlayerRepository {
     private var mediaPlayer = MediaPlayer()
     private var playerState = PlayerState.DEFAULT
-    override fun prepare(url: String): PlayerFeedback.State {
+    override fun prepare(url: String?): PlayerFeedback.State {
         with(mediaPlayer) {
             setDataSource(url)
             prepareAsync()

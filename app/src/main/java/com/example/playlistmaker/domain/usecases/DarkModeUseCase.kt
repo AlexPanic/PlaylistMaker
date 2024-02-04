@@ -1,8 +1,8 @@
 package com.example.playlistmaker.domain.usecases
 
-import com.example.playlistmaker.domain.repository.AppThemeRepository
+import com.example.playlistmaker.domain.repository.SettingsRepository
 
-class DarkModeUseCase(private val themeRepository: AppThemeRepository) {
+class DarkModeUseCase(private val themeRepository: SettingsRepository) {
     fun isDeviceDarkModeOn(): Boolean {
         return themeRepository.isDeviceDarkModeOn()
     }
