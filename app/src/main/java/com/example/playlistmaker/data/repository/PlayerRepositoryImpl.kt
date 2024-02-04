@@ -1,4 +1,4 @@
-package com.example.playlistmaker.data.api
+package com.example.playlistmaker.data.repository
 
 import android.media.MediaPlayer
 import com.example.playlistmaker.domain.repository.PlayerRepository

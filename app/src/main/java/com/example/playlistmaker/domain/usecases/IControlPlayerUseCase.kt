@@ -1,8 +1,9 @@
-package com.example.playlistmaker.domain.api
+package com.example.playlistmaker.domain.usecases
 
+import com.example.playlistmaker.domain.api.PlayerConsumer
 import com.example.playlistmaker.presentation.enums.PlayerCommand
 
-interface ControlPlayer {
+interface IControlPlayerUseCase {
     fun execute(
         command: PlayerCommand,
         consumer: PlayerConsumer,

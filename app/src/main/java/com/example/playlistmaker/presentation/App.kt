@@ -1,31 +1,30 @@
 package com.example.playlistmaker.presentation
 
 import android.app.Application
-import com.example.playlistmaker.data.repository.SettingsRepositoryImpl
-import com.example.playlistmaker.data.repository.SharedPreferencesRepositoryImpl
-import com.example.playlistmaker.domain.usecases.DarkModeUseCase
+import android.content.res.Configuration
+import com.example.playlistmaker.Creator
 
 class App : Application() {
 
-    private val sharedPreferencesProvider = SharedPreferencesRepositoryImpl(this)
-    private val themeRepository = SettingsRepositoryImpl(sharedPreferencesProvider)
-    private val darkModeUseCase = DarkModeUseCase(themeRepository)
-    companion object {
-        var appDarkMode: Boolean = false
-    }
-
+    private val getDarkModeUseCase by lazy {Creator.provideGetDarkModeUseCase()}
+    private val setDarkModeUseCase by lazy {Creator.provideSetDarkModeUseCase()}
     override fun onCreate() {
         super.onCreate()
-        // темный режим включен для всего устройства
-        val deviceDarkMode = darkModeUseCase.isDeviceDarkModeOn()
-        // темный режим, сохраненный в приложении
-        appDarkMode = darkModeUseCase.isAppDarkModeOn()
-        switchTheme(deviceDarkMode || appDarkMode)
+        Creator.setApplication(this)
+        // темная тема включена на устройстве
+        val deviceDarkModeOn = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        // темная тема нашего приложения
+        switchTheme(getDarkModeUseCase.execute(deviceDarkModeOn))
     }
 
+    // переключаем темную тему в приложении
     fun switchTheme(darkModeOn: Boolean) {
-        darkModeUseCase.setDarkMode(darkModeOn)
+        setDarkModeUseCase.execute(darkModeOn)
         appDarkMode = darkModeOn
+    }
+
+    companion object {
+        var appDarkMode: Boolean = false
     }
 
 }
