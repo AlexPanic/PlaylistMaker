@@ -1,9 +1,10 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.media
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import com.example.playlistmaker.R
 
 
 class MediaActivity : AppCompatActivity() {

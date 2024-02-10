@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation.ui.settings
 
 import android.content.Intent
 import android.net.Uri
@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.MenuItem
 import android.widget.FrameLayout
 import androidx.appcompat.widget.Toolbar
+import com.example.playlistmaker.presentation.App
+import com.example.playlistmaker.R
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
@@ -15,10 +17,10 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
 
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.themeSwitcher)
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+        themeSwitcher.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
         }
-        themeSwitcher.isChecked = App.darkTheme
+        themeSwitcher.isChecked = App.appDarkMode
 
         val btnShare = findViewById<FrameLayout>(R.id.action_share)
         btnShare.setOnClickListener {
