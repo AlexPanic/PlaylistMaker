@@ -3,9 +3,14 @@ package com.example.playlistmaker.data.repository
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.core.Constants
+import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.repository.SettingsRepository
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class SettingsRepositoryImpl(context: Context) : SettingsRepository {
+
+    private val maxTracks = 10
 
     private val sharedPreferences =
         context.getSharedPreferences(Constants.SHARED_PREF_FILE, Context.MODE_PRIVATE)
@@ -25,6 +30,28 @@ class SettingsRepositoryImpl(context: Context) : SettingsRepository {
                 AppCompatDelegate.MODE_NIGHT_NO
             }
         )
+    }
+
+    override fun getSearchHistory(): MutableList<Track> {
+        val strJson = sharedPreferences.getString(Constants.SEARCH_HISTORY_SHARED_PREF_KEY, "")
+        return if (strJson!!.isNotEmpty()) {
+            val type = object : TypeToken<MutableList<Track?>?>() {}.type
+            return Gson().fromJson(strJson, type)
+        } else {
+            mutableListOf()
+        }
+    }
+
+    override fun saveSearchHistory(tracks: List<Track>) {
+         sharedPreferences.edit()
+            .putString(Constants.SEARCH_HISTORY_SHARED_PREF_KEY, Gson().toJson(tracks))
+            .apply()
+    }
+
+    override fun clearSearchHistory() {
+        sharedPreferences.edit()
+            .putString(Constants.SEARCH_HISTORY_SHARED_PREF_KEY, "")
+            .apply()
     }
 
 }

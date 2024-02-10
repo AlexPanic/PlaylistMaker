@@ -6,14 +6,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.models.Track
 
-class TrackAdapter(
+class TrackListAdapter(
     private val listener: ItemClickListener,
-    private val tracks: MutableList<Track>,
-    private val history: TrackSearchHistory? = null
+    private val isHistoryAdapter: Boolean
 ) : RecyclerView.Adapter<TrackViewHolder>() {
 
+    lateinit var tracks: MutableList<Track>
+
     interface ItemClickListener {
-        fun onItemClick(position: Int, fromHistory: Boolean)
+        fun onItemClick(track: Track, isHistoryAdapter: Boolean)
     }
 
     override fun getItemCount(): Int {
@@ -22,12 +23,9 @@ class TrackAdapter(
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracks[position])
-
         holder.itemView.setOnClickListener {
-            history?.addTrack(tracks[position])
-            listener.onItemClick(position, history == null)
+            listener.onItemClick(tracks[position], isHistoryAdapter)
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {

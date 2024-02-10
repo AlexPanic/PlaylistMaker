@@ -1,7 +1,6 @@
 package com.example.playlistmaker.presentation.ui.search
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -14,47 +13,52 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.data.network.FindTracksResponse
-import com.example.playlistmaker.data.network.ItunesApi
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.Constants
+import com.example.playlistmaker.data.network.ItunesApi
+import com.example.playlistmaker.data.network.ItunesApiService
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.enums.ApiResultIcons
+import com.example.playlistmaker.presentation.ui.common.Helper
 import com.example.playlistmaker.presentation.ui.player.PlayerActivity
 import com.google.android.material.textfield.TextInputLayout
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
+class SearchActivity : AppCompatActivity(), TrackListAdapter.ItemClickListener {
 
+    private var tracksList = mutableListOf<Track>()
+    lateinit var adapter: TrackListAdapter
+    private var tracksHistoryList = mutableListOf<Track>()
+    lateinit var adapterHistory: TrackListAdapter
+    lateinit var searchTextLayout: TextInputLayout
+    private lateinit var searchInteract: SearchInteract
+
+
+    // TODO: Ниже почистить ненужное
     private val itunesBaseUrl = "https://itunes.apple.com"
     private val retrofit = Retrofit.Builder()
         .baseUrl(itunesBaseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
     private val itunesService = retrofit.create(ItunesApi::class.java)
-    private var tracks = mutableListOf<Track>()
-    private var tracksHistory = mutableListOf<Track>()
-    private var history: TrackSearchHistory? = null
-    private var sharedPref: SharedPreferences? = null
-    private var sharedPrefsListener: SharedPreferences.OnSharedPreferenceChangeListener? = null
-    private var searchTextLayout: TextInputLayout? = null
+
     private var placeholderMessage: TextView? = null
     private var placeholderAlertIcon: ImageView? = null
     private var reSearchButton: Button? = null
-    private var adapter: TrackAdapter? = null
-    private var adapterHistory: TrackAdapter? = null
+
     private var searchMask: String = ""
     private val searchRunnable = Runnable { searchRequest() }
     private var mainThreadHandler: Handler = Handler(Looper.getMainLooper())
+    private val getSearchHistoryUseCase by lazy { Creator.provideGetSearchHistoryUseCase() }
+    private val clearSearchHistoryUseCase by lazy { Creator.provideClearSearchHistoryUseCase() }
+    private val saveSearchHistoryUseCase by lazy { Creator.provideSaveSearchHistoryUseCase() }
+    private val findTracksUseCase by lazy { Creator.provideFindTracksUseCase(this) }
 
     private companion object {
         var SEARCH_STRING = "SEARCH_STRING"
@@ -71,38 +75,30 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
         searchMask = outState.getString(SEARCH_STRING, "")
     }
 
+    override fun onStop() {
+        saveSearchHistoryUseCase.execute(adapterHistory.tracks)
+        super.onStop()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        Helper.setToolbar(this)
 
-        // инстанс настроек приложения
-        sharedPref = getSharedPreferences(Constants.SHARED_PREF_FILE, MODE_PRIVATE)
-        sharedPrefsListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-                if (key == TrackSearchHistory.sharedPrefKey) {
-                    updateSearchHistory()
-                }
-            }
-        sharedPref!!.registerOnSharedPreferenceChangeListener(sharedPrefsListener)
-
-        // объект для управления историей
-        history = TrackSearchHistory(sharedPref!!)
+        // адаптер истории поиска
+        tracksHistoryList = getSearchHistoryUseCase.execute()
+        val rvHistory = findViewById<RecyclerView>(R.id.rvTracksHistory)
+        adapterHistory = TrackListAdapter(this, true).apply {
+            tracks = this@SearchActivity.tracksHistoryList
+        }
+        rvHistory.adapter = adapterHistory
 
         // адаптер результатов поиска
-        val trackList = findViewById<RecyclerView>(R.id.rvTracks)
-        adapter = TrackAdapter(this, tracks, history)
-        trackList.adapter = adapter
-
-        updateSearchHistory()
-        // адаптер истории поиска
-        // так не работает adapterHistory.notifyDataSetChanged
-        // поэтому полный перезагруз адаптера в updateSearchHistory()
-        /*
-        val searchHistoryTracksRecyclerView = findViewById<RecyclerView>(R.id.searchHistoryTracks)
-        tracksHistory = history.getTracks()
-        adapterHistory = TrackAdapter(this, tracksHistory, null)
-        searchHistoryTracksRecyclerView.adapter = adapterHistory
-         */
+        val rvTrackList = findViewById<RecyclerView>(R.id.rvTracks)
+        adapter = TrackListAdapter(this, false).apply {
+            tracks = tracksList
+        }
+        rvTrackList.adapter = adapter
 
         // область сообщений
         placeholderMessage = findViewById(R.id.tvApiResponseMessage)
@@ -110,54 +106,58 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
         // поле с маской поиска
         searchTextLayout = findViewById(R.id.tilSearchMask)
         // установим сохраненное значение
-        searchTextLayout!!.editText?.setText(searchMask)
+        searchTextLayout.editText?.setText(searchMask)
+
+        // обновления в UI
+        val searchUiUpdater = object : SearchUiUpdater {
+            override fun onClearSearchMask() {
+                searchTextLayout.editText?.setText("")
+                showMessage("")
+                showAlertIcon(ApiResultIcons.EMPTY)
+                tracksList.clear()
+                adapter.notifyDataSetChanged()
+                updateSearchHistory()
+                hideKeyboard()
+            }
+
+        }
+        searchInteract = SearchInteract(searchUiUpdater)
         // очистка поискового запроса кнопкой
-        searchTextLayout!!.setEndIconOnClickListener {
-            searchTextLayout!!.editText?.setText("")
-            showMessage("")
-            showAlertIcon(ApiResultIcons.EMPTY)
-            tracks.clear()
-            adapter!!.notifyDataSetChanged()
-            updateSearchHistory()
-            hideKeyboard()
+        searchTextLayout.setEndIconOnClickListener {
+            searchInteract.clearSearchMask()
         }
 
         // покажем историю поиска при выполнении условий
-        searchTextLayout!!.editText?.setOnFocusChangeListener { _, hasFocus ->
+        searchTextLayout.editText?.setOnFocusChangeListener { _, hasFocus ->
             searchHistoryVisibility(
                 hasFocus
-                        && searchTextLayout!!.editText?.text.toString().isEmpty()
-                        && tracksHistory.isNotEmpty()
+                        && searchTextLayout.editText?.text.toString().isEmpty()
+                        && tracksHistoryList.isNotEmpty()
             )
         }
 
         // очистка истории поиска
         val btnSearchHistoryClear = findViewById<Button>(R.id.btTrackHistoryClear)
         btnSearchHistoryClear.setOnClickListener {
-            if (history!=null) {
-                history!!.clearTracks()
-            }
+            clearSearchHistoryUseCase.execute()
         }
 
         // кнопка перезапуска последнего поискового запроса
         reSearchButton = findViewById(R.id.btSearchReload)
         reSearchButton!!.setOnClickListener {
             if (searchMask.isNotEmpty()) {
-                searchTextLayout!!.editText?.setText(searchMask)
+                searchTextLayout.editText?.setText(searchMask)
                 searchRequest()
             }
         }
 
         // следим за изменением в поисковой строке
-        searchTextLayout!!.editText!!.doOnTextChanged { text, _, _, _ ->
+        searchTextLayout.editText!!.doOnTextChanged { text, _, _, _ ->
             searchMask = text.toString()
-            searchHistoryVisibility(searchTextLayout!!.editText!!.hasFocus() && searchMask.isEmpty())
+            searchHistoryVisibility(searchTextLayout.editText!!.hasFocus() && searchMask.isEmpty())
             searchDebounce()
         }
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -168,11 +168,33 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-    override fun onItemClick(position: Int, fromHistory: Boolean) {
+    // клик по треку в адаптере
+    override fun onItemClick(track: Track, isHistoryAdapter: Boolean) {
+        // в истории поиска
+        if (!isHistoryAdapter) {
+            with(adapterHistory) {
+                // удалим трек, если он был (должен всплыть наверх)
+                if (tracks.contains(track)) {
+                    val pos = tracks.indexOf(track)
+                    tracks.remove(track)
+                    notifyItemRemoved(pos)
+                    notifyItemRangeChanged(pos, tracks.size - 1)
+                }
+                // добавим трек в историю на 0 позицию
+                tracks.add(0, track)
+                notifyItemInserted(0)
+                if (tracks.size > Constants.MAX_TRACKS) {
+                    tracks.remove(tracks[Constants.MAX_TRACKS])
+                    notifyItemRemoved(Constants.MAX_TRACKS)
+                }
+            }
+
+        }
+        // передаем трек на экран плеера
         val intent = Intent(this, PlayerActivity::class.java)
         intent.putExtra(
             Track.INTENT_EXTRA_ID,
-            if (fromHistory) tracksHistory[position] else tracks[position]
+            track
         )
         startActivity(intent)
     }
@@ -183,27 +205,19 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
     }
 
     private fun updateSearchHistory() {
-        if (history != null) {
-            tracksHistory = history!!.getTracks()
-            if (tracksHistory.isEmpty()) {
-                searchHistoryVisibility(false)
-            } else {
-                // здесь такая команда почему-то (???) не работает (список истории не меняется)
-                // adapterHistory.notifyDataSetChanged()
-                // поэтому полный перезагруз адаптера (так работает)
-                val searchHistoryTracksRecyclerView =
-                    findViewById<RecyclerView>(R.id.rvTracksHistory)
-                adapterHistory = TrackAdapter(this, tracksHistory, null)
-                searchHistoryTracksRecyclerView.adapter = adapterHistory
-            }
+        tracksHistoryList = getSearchHistoryUseCase.execute()
+        if (tracksHistoryList.isEmpty()) {
+            searchHistoryVisibility(false)
+        } else {
+            adapterHistory.notifyDataSetChanged()
         }
     }
 
     private fun showMessage(text: String) {
         if (text.isNotEmpty()) {
             placeholderMessage!!.isVisible = true
-            tracks.clear()
-            adapter!!.notifyDataSetChanged()
+            tracksList.clear()
+            adapter.notifyDataSetChanged()
             placeholderMessage!!.text = text
         } else {
             placeholderMessage!!.isVisible = false
@@ -239,9 +253,20 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
         showAlertIcon(ApiResultIcons.EMPTY)
         showMessage("")
         if (searchMask.isEmpty()) return
-        tracks.clear()
-        adapter!!.notifyDataSetChanged()
+        tracksList.clear()
+        adapter.notifyDataSetChanged()
         showProgressBar(true)
+        val found = findTracksUseCase.execute(searchMask)
+        showProgressBar(false)
+        if (found.isNotEmpty()) {
+            tracksList = found.toMutableList()
+            adapter.notifyDataSetChanged()
+        } else {
+            showMessage(getString(R.string.nothing_found))
+            showAlertIcon(ApiResultIcons.NOTHING_FOUND)
+        }
+
+        /*
         itunesService.findTracks(searchMask)
             .enqueue(object : Callback<FindTracksResponse> {
                 override fun onResponse(
@@ -252,10 +277,10 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
                     when (response.code()) {
                         200 -> {
                             showAlertIcon(ApiResultIcons.EMPTY)
-                            tracks.clear()
+                            tracksList.clear()
                             if (response.body()?.results?.isNotEmpty() == true) {
-                                tracks.addAll(response.body()?.results!!)
-                                adapter!!.notifyDataSetChanged()
+                                tracksList.addAll(response.body()?.results!!)
+                                adapter.notifyDataSetChanged()
                             } else {
                                 showMessage(getString(R.string.nothing_found))
                                 showAlertIcon(ApiResultIcons.NOTHING_FOUND)
@@ -272,7 +297,7 @@ class SearchActivity : AppCompatActivity(), TrackAdapter.ItemClickListener {
                     showProgressBar(false)
                     somethingWentWrong()
                 }
-            })
+            })*/
     }
 
     private fun hideKeyboard() {
