@@ -2,7 +2,7 @@ package com.example.playlistmaker.presentation.ui.player
 
 import android.os.Handler
 import android.os.Looper
-import com.example.playlistmaker.Creator
+import com.example.playlistmaker.util.Creator
 import com.example.playlistmaker.domain.api.PlayerConsumer
 import com.example.playlistmaker.domain.models.PlayerFeedback
 import com.example.playlistmaker.presentation.enums.PlayerCommand

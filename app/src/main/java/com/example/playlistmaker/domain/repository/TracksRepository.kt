@@ -1,8 +1,8 @@
 package com.example.playlistmaker.domain.repository
 
-import android.content.Intent
 import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.util.Resource
 
 interface TracksRepository {
-    fun findTracks(expression: String): List<Track>
+    fun findTracks(expression: String): Resource<List<Track>>
 }

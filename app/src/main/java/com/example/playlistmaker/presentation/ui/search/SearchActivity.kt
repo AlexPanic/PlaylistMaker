@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
@@ -16,15 +17,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.Creator
+import com.example.playlistmaker.util.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.core.Constants
-import com.example.playlistmaker.data.network.ItunesApi
-import com.example.playlistmaker.data.network.ItunesApiService
+import com.example.playlistmaker.domain.api.TracksInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.presentation.enums.ApiResultIcons
 import com.example.playlistmaker.presentation.ui.common.Helper
 import com.example.playlistmaker.presentation.ui.player.PlayerActivity
+import com.example.playlistmaker.util.Resource
 import com.google.android.material.textfield.TextInputLayout
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -39,14 +40,10 @@ class SearchActivity : AppCompatActivity(), TrackListAdapter.ItemClickListener {
     lateinit var searchTextLayout: TextInputLayout
     private lateinit var searchInteract: SearchInteract
 
-
-    // TODO: Ниже почистить ненужное
-    private val itunesBaseUrl = "https://itunes.apple.com"
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(itunesBaseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val itunesService = retrofit.create(ItunesApi::class.java)
+    private val getSearchHistoryUseCase by lazy { Creator.provideGetSearchHistoryUseCase() }
+    private val clearSearchHistoryUseCase by lazy { Creator.provideClearSearchHistoryUseCase() }
+    private val saveSearchHistoryUseCase by lazy { Creator.provideSaveSearchHistoryUseCase() }
+    private val tracksInteractor by lazy {Creator.provideTracksInteractor(this)}
 
     private var placeholderMessage: TextView? = null
     private var placeholderAlertIcon: ImageView? = null
@@ -55,10 +52,6 @@ class SearchActivity : AppCompatActivity(), TrackListAdapter.ItemClickListener {
     private var searchMask: String = ""
     private val searchRunnable = Runnable { searchRequest() }
     private var mainThreadHandler: Handler = Handler(Looper.getMainLooper())
-    private val getSearchHistoryUseCase by lazy { Creator.provideGetSearchHistoryUseCase() }
-    private val clearSearchHistoryUseCase by lazy { Creator.provideClearSearchHistoryUseCase() }
-    private val saveSearchHistoryUseCase by lazy { Creator.provideSaveSearchHistoryUseCase() }
-    private val findTracksUseCase by lazy { Creator.provideFindTracksUseCase(this) }
 
     private companion object {
         var SEARCH_STRING = "SEARCH_STRING"
@@ -256,48 +249,22 @@ class SearchActivity : AppCompatActivity(), TrackListAdapter.ItemClickListener {
         tracksList.clear()
         adapter.notifyDataSetChanged()
         showProgressBar(true)
-        val found = findTracksUseCase.execute(searchMask)
-        showProgressBar(false)
-        if (found.isNotEmpty()) {
-            tracksList = found.toMutableList()
-            adapter.notifyDataSetChanged()
-        } else {
-            showMessage(getString(R.string.nothing_found))
-            showAlertIcon(ApiResultIcons.NOTHING_FOUND)
-        }
 
-        /*
-        itunesService.findTracks(searchMask)
-            .enqueue(object : Callback<FindTracksResponse> {
-                override fun onResponse(
-                    call: Call<FindTracksResponse>,
-                    response: Response<FindTracksResponse>
-                ) {
-                    showProgressBar(false)
-                    when (response.code()) {
-                        200 -> {
-                            showAlertIcon(ApiResultIcons.EMPTY)
-                            tracksList.clear()
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                tracksList.addAll(response.body()?.results!!)
-                                adapter.notifyDataSetChanged()
-                            } else {
-                                showMessage(getString(R.string.nothing_found))
-                                showAlertIcon(ApiResultIcons.NOTHING_FOUND)
-                            }
+        tracksInteractor.findTracks(searchMask, object: TracksInteractor.TracksConsumer {
+            override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
+                mainThreadHandler.post {
+                    if (errorMessage!=null) {
+                        showMessage(errorMessage)
+                    } else {
+                        if (foundTracks != null) {
+                            tracksList.addAll(foundTracks)
                         }
-
-                        else -> {
-                            somethingWentWrong()
-                        }
+                        adapter.notifyDataSetChanged()
                     }
-                }
-
-                override fun onFailure(call: Call<FindTracksResponse>, t: Throwable) {
                     showProgressBar(false)
-                    somethingWentWrong()
                 }
-            })*/
+            }
+        })
     }
 
     private fun hideKeyboard() {
