@@ -1,10 +1,10 @@
 package com.example.playlistmaker.domain.usecases.impl
 
-import com.example.playlistmaker.domain.api.PlayerConsumer
-import com.example.playlistmaker.domain.repository.PlayerRepository
-import com.example.playlistmaker.domain.models.PlayerFeedback
+import com.example.playlistmaker.domain.player.model.PlayerConsumer
+import com.example.playlistmaker.data.player.PlayerRepository
+import com.example.playlistmaker.domain.player.model.PlayerFeedback
 import com.example.playlistmaker.domain.usecases.IControlPlayerUseCase
-import com.example.playlistmaker.presentation.enums.PlayerCommand
+import com.example.playlistmaker.ui.enums.PlayerCommand
 
 class ControlPlayerUseCase(private val playerRepository: PlayerRepository) : IControlPlayerUseCase {
     override fun execute(command: PlayerCommand, consumer: PlayerConsumer, data: String?) {

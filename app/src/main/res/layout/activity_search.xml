@@ -17,7 +17,7 @@
     <LinearLayout style="@style/screen">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/tilSearchMask"
+            android:id="@+id/tilSearchTracksField"
             style="@style/searchMaskBackground"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

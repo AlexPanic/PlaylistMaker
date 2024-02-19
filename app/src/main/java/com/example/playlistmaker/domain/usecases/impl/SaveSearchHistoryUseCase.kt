@@ -1,7 +1,7 @@
 package com.example.playlistmaker.domain.usecases.impl
 
-import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.domain.repository.SettingsRepository
+import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.data.settings.SettingsRepository
 import com.example.playlistmaker.domain.usecases.ISaveSearchHistoryUseCase
 
 class SaveSearchHistoryUseCase(

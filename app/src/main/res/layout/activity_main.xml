@@ -35,7 +35,7 @@
             android:layout_height="0dp"
             android:layout_marginBottom="@dimen/btn_margin"
             android:layout_weight="1"
-            android:text="@string/act_player"
+            android:text="@string/act_media"
             app:icon="@drawable/media"
             tools:ignore="Suspicious0dp" />
 
