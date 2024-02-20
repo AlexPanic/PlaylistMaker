@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.player
+package com.example.playlistmaker.domain.player
 
 import android.os.Handler
 import android.os.Looper
@@ -8,7 +8,7 @@ import com.example.playlistmaker.domain.player.model.PlayerFeedback
 import com.example.playlistmaker.ui.enums.PlayerCommand
 import com.example.playlistmaker.ui.enums.PlayerState
 
-class PlayerInteract(val playerUiUpdater: PlayerUiUpdater) {
+class PlayerInteract_(val playerUiUpdater: PlayerUiUpdater) {
 
     private var isClickAllowed = true
     private val player by lazy { Creator.provideControlPlayerUseCase() }

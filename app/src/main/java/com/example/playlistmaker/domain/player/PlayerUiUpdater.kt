@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.player
+package com.example.playlistmaker.domain.player
 
 interface PlayerUiUpdater {
     fun onPlayerDefault()

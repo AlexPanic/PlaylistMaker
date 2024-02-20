@@ -13,9 +13,11 @@ import com.example.playlistmaker.data.settings.SettingsRepository
 import com.example.playlistmaker.data.search.TracksRepository
 import com.example.playlistmaker.data.sharing.ExternalNavigator
 import com.example.playlistmaker.data.sharing.impl.ExternalNavigatorImpl
+import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.domain.search.usecase.IClearSearchHistoryUseCase
 import com.example.playlistmaker.domain.search.usecase.ISaveSearchHistoryUseCase
 import com.example.playlistmaker.domain.player.usecase.impl.ControlPlayerUseCase
+import com.example.playlistmaker.domain.player.usecase.impl.PlayerInteractorImpl
 import com.example.playlistmaker.domain.settings.usecase.impl.GetDarkModeUseCase
 import com.example.playlistmaker.domain.settings.usecase.IGetDarkModeUseCase
 import com.example.playlistmaker.domain.search.usecase.IGetSearchHistoryUseCase
@@ -80,6 +82,10 @@ object Creator {
 
     private fun providePlayerControl(): PlayerRepository {
         return PlayerRepositoryImpl()
+    }
+
+    fun providePlayerInteractor(context: Context): PlayerInteractor {
+        return PlayerInteractorImpl()
     }
 
     fun provideTracksInteractor(context: Context): TracksInteractor {

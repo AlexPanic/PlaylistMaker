@@ -15,8 +15,8 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.common.Helper
-import com.example.playlistmaker.ui.player.PlayerInteract
-import com.example.playlistmaker.ui.player.PlayerUiUpdater
+import com.example.playlistmaker.domain.player.PlayerInteract_
+import com.example.playlistmaker.domain.player.PlayerUiUpdater
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -25,7 +25,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private var trackIsPlaying = false
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-    private lateinit var playerInteract: PlayerInteract
+    private lateinit var playerInteract: PlayerInteract_
 
     private lateinit var viewModel: PlayerViewModel
     private lateinit var binding: ActivityPlayerBinding
@@ -91,7 +91,7 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         // интерактор плеера
-        playerInteract = PlayerInteract(playerUpdater)
+        playerInteract = PlayerInteract_(playerUpdater)
         playerInteract.init(track.previewUrl)
 
         btPlayControl.setOnClickListener {
