@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.usecases
+package com.example.playlistmaker.domain.player.usecase
 
 import com.example.playlistmaker.domain.player.model.PlayerConsumer
 import com.example.playlistmaker.ui.enums.PlayerCommand

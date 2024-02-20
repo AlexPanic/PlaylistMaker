@@ -1,7 +1,7 @@
-package com.example.playlistmaker.domain.usecases.impl
+package com.example.playlistmaker.domain.search.usecase.impl
 
 import com.example.playlistmaker.data.settings.SettingsRepository
-import com.example.playlistmaker.domain.usecases.IClearSearchHistoryUseCase
+import com.example.playlistmaker.domain.search.usecase.IClearSearchHistoryUseCase
 
 class ClearSearchHistoryUseCase(private val settingsRepository: SettingsRepository) :
     IClearSearchHistoryUseCase {

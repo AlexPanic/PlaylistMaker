@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.player
+package com.example.playlistmaker.ui.player.activity
 
 import android.os.Build
 import android.os.Bundle
@@ -12,8 +12,12 @@ import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivityPlayerBinding
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.common.Helper
+import com.example.playlistmaker.ui.player.PlayerInteract
+import com.example.playlistmaker.ui.player.PlayerUiUpdater
+import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -22,6 +26,10 @@ class PlayerActivity : AppCompatActivity() {
     private var trackIsPlaying = false
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private lateinit var playerInteract: PlayerInteract
+
+    private lateinit var viewModel: PlayerViewModel
+    private lateinit var binding: ActivityPlayerBinding
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {

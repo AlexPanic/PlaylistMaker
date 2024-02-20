@@ -18,7 +18,7 @@ import com.example.playlistmaker.domain.search.model.SearchState
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.common.Helper
 import com.example.playlistmaker.ui.enums.ApiResultIcons
-import com.example.playlistmaker.ui.player.PlayerActivity
+import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.TrackListAdapter
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 

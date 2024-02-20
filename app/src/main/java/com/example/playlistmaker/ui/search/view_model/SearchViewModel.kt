@@ -4,6 +4,7 @@ import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -48,6 +49,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun searchDebounce(changedText: String) {
+        Log.d("mine", "searchDebounce("+changedText+")")
+
         if (latestSearchText == changedText) {
             return
         }
