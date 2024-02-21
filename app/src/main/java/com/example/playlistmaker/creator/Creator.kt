@@ -85,7 +85,7 @@ object Creator {
     }
 
     fun providePlayerInteractor(context: Context): PlayerInteractor {
-        return PlayerInteractorImpl()
+        return PlayerInteractorImpl(providePlayerControl())
     }
 
     fun provideTracksInteractor(context: Context): TracksInteractor {

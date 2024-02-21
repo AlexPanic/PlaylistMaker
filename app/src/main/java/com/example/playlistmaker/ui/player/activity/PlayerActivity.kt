@@ -2,21 +2,23 @@ package com.example.playlistmaker.ui.player.activity
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
-import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.common.Helper
 import com.example.playlistmaker.domain.player.PlayerInteract_
 import com.example.playlistmaker.domain.player.PlayerUiUpdater
+import com.example.playlistmaker.domain.player.model.PlayerState
+import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.ui.common.Helper
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -31,16 +33,67 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
 
 
+    private fun setViewsData(track: Track) {
+        val coverUrl = track.getArtworkUrl512()
+        with(binding) {
+            with(track) {
+                Glide.with(applicationContext).load(coverUrl).fitCenter()
+                    .transform(RoundedCorners(Helper.dpToPx(COVER_CORNERS))).into(ivTrackCover)
+                tvTrackName.text = trackName
+                tvArtistName.text = artistName
+                tvTrackDuration.text = trackTime()
+                tvTrackYear.text =getYear()
+                tvTrackGenre.text = primaryGenreName
+                tvTrackCountry.text = country
+                tvTrackAlbum.text = collectionName
+                val hasAlbum = collectionName.isNotEmpty()
+                tvTrackAlbum.isVisible = hasAlbum
+                tvTrackAlbumTitle.isVisible = hasAlbum
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun render(state: PlayerState) {
+        when (state) {
+            PlayerState.Default -> {
+                val track = intent.getSerializableExtra(Track.INTENT_EXTRA_ID, Track::class.java) as Track
+                setViewsData(track)
+                viewModel.prepare(track.previewUrl)
+            }
+            PlayerState.Prepared -> {
+                binding.btPlayControl.setBackgroundTintList(this.resources.getColorStateList(R.color.filled_button_tint))
+            }
+
+            else -> {}
+        }
+    }
+
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_player)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         Helper.setToolbar(this)
 
-        // получаем модель трека
-        val track = intent.getSerializableExtra(Track.INTENT_EXTRA_ID, Track::class.java) as Track
+        viewModel = ViewModelProvider(
+            this,
+            PlayerViewModel.getViewModelFactory()
+        )[PlayerViewModel::class.java]
 
+        // подпишемся на модель
+        viewModel.observeState().observe(this) {
+            Log.d("mine", "PlayerState = " + it.toString())
+            render(it)
+        }
+
+        binding.btPlayControl.setOnClickListener{
+            viewModel.play()
+        }
+
+/*
         // элементы view для интеракций
         val tvTrackPlayPosition = findViewById<TextView>(R.id.tvTrackPlayPosition)
         val btPlayControl = findViewById<Button>(R.id.btPlayControl)
@@ -92,49 +145,27 @@ class PlayerActivity : AppCompatActivity() {
 
         // интерактор плеера
         playerInteract = PlayerInteract_(playerUpdater)
-        playerInteract.init(track.previewUrl)
+        //playerInteract.init(track.previewUrl)
 
         btPlayControl.setOnClickListener {
             playerInteract.playPauseToggle(trackIsPlaying)
         }
-
-        // задаем значения полей из модели
-        val trackCover = findViewById<ImageView>(R.id.ivTrackCover)
-        val coverUrl = track.getArtworkUrl512()
-        val cornersRadius = 8f
-        Glide.with(applicationContext).load(coverUrl).fitCenter()
-            .transform(RoundedCorners(Helper.dpToPx(cornersRadius))).into(trackCover)
-        // свойства трека
-        val trackName = findViewById<TextView>(R.id.tvTrackName)
-        trackName.text = track.trackName
-        val artistName = findViewById<TextView>(R.id.tvArtistName)
-        artistName.text = track.artistName
-        val trackTime = findViewById<TextView>(R.id.tvTrackDuration)
-        trackTime.text = track.trackTime()
-        val trackYear = findViewById<TextView>(R.id.tvTrackYear)
-        trackYear.text = track.getYear()
-        val trackGenre = findViewById<TextView>(R.id.tvTrackGenre)
-        trackGenre.text = track.primaryGenreName
-        val trackCountry = findViewById<TextView>(R.id.tvTrackCountry)
-        trackCountry.text = track.country
-        // альбом, если у трека он есть
-        val labelTrackAlbum = findViewById<TextView>(R.id.tvTrackAlbumTitle)
-        val trackAlbum = findViewById<TextView>(R.id.tvTrackAlbum)
-        val hasAlbum = track.collectionName.isNotEmpty()
-        trackAlbum.text = track.collectionName
-        trackAlbum.isVisible = hasAlbum
-        labelTrackAlbum.isVisible = hasAlbum
+*/
 
     }
 
     override fun onPause() {
         super.onPause()
-        playerInteract.onActivityPause()
+        //playerInteract.onActivityPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        playerInteract.onActivityDestroy()
+        //playerInteract.onActivityDestroy()
+    }
+
+    companion object {
+        private const val COVER_CORNERS = 8f
     }
 
 }

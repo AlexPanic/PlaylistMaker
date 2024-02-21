@@ -7,9 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.domain.settings.model.SettingsState
 import com.example.playlistmaker.creator.App
+import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.domain.search.model.SearchState
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -20,36 +20,33 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
+    private val stateLiveData = MutableLiveData<Boolean>()
+    fun observeState(): LiveData<Boolean> = stateLiveData
 
-    private val stateLiveData = MutableLiveData<SettingsState>()
-    init {
-        stateLiveData.value = SettingsState.Default
-    }
-
-    fun observeState(): LiveData<SettingsState> = stateLiveData
-
-    private val setDarkModeUseCase by lazy { Creator.provideSetDarkModeUseCase()}
+    private val getDarkModeUseCase by lazy { Creator.provideGetDarkModeUseCase() }
+    private val setDarkModeUseCase by lazy { Creator.provideSetDarkModeUseCase() }
     private val shareAppUseCase by lazy { Creator.provideShareAppUseCase() }
     private val messageSupportUseCase by lazy { Creator.provideMessageSupportUseCase() }
     private val userAgreementUseCase by lazy { Creator.provideUserAgreementUseCase() }
 
+    init {
+        stateLiveData.value = getDarkModeUseCase.execute(App.appDarkMode)
+    }
+
     fun switchDarkTheme(darkModeOn: Boolean) {
         setDarkModeUseCase.execute(darkModeOn)
-        App.appDarkMode = darkModeOn
-        renderState(SettingsState.Default)
+        stateLiveData.value = darkModeOn
     }
 
     fun shareApp() {
         shareAppUseCase.execute()
     }
+
     fun messageSupport() {
         messageSupportUseCase.execute()
     }
+
     fun showAgreement() {
         userAgreementUseCase.execute()
-    }
-
-    private fun renderState(state: SettingsState) {
-        stateLiveData.postValue(state)
     }
 }

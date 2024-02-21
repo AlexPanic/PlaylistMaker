@@ -2,6 +2,7 @@ package com.example.playlistmaker.creator
 
 import android.app.Application
 import android.content.res.Configuration
+import android.util.Log
 
 class App : Application() {
     companion object {
@@ -16,6 +17,7 @@ class App : Application() {
         // темная тема включена на устройстве
         val deviceDarkModeOn =
             resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        Log.d("mine", "deviceDarkModeOn = "+deviceDarkModeOn.toString())
         // текущая темная тема нашего приложения
         appDarkMode = getDarkModeUseCase.execute(deviceDarkModeOn)
         setDarkModeUseCase.execute(appDarkMode)

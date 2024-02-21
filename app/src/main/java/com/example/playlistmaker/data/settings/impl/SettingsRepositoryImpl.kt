@@ -1,6 +1,7 @@
 package com.example.playlistmaker.data.settings.impl
 
 import android.content.Context
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
 import com.example.playlistmaker.creator.Constants
 import com.example.playlistmaker.domain.search.model.Track
@@ -18,10 +19,13 @@ class SettingsRepositoryImpl(context: Context) : SettingsRepository {
         context.getSharedPreferences(Constants.SHARED_PREF_FILE, Context.MODE_PRIVATE)
 
     override fun getSavedDarkMode(deviceDarkModeOn: Boolean): Boolean {
-        return sharedPreferences.getBoolean(Constants.DARK_MODE_LAST_SWITCH, deviceDarkModeOn)
+        // апдейт тема приложения будет темной если установлен темный режим устройства
+        return sharedPreferences.getBoolean(Constants.DARK_MODE_LAST_SWITCH, false) || deviceDarkModeOn
     }
 
     override fun setDarkMode(darkModeOn: Boolean) {
+
+        Log.d("mine", "repo.setDakMode("+darkModeOn.toString()+")")
         sharedPreferences.edit()
             .putBoolean(Constants.DARK_MODE_LAST_SWITCH, darkModeOn)
             .apply()

@@ -6,7 +6,7 @@ import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.domain.player.model.PlayerConsumer
 import com.example.playlistmaker.domain.player.model.PlayerFeedback
 import com.example.playlistmaker.ui.enums.PlayerCommand
-import com.example.playlistmaker.ui.enums.PlayerState
+import com.example.playlistmaker.ui.enums.PlayerState_
 
 class PlayerInteract_(val playerUiUpdater: PlayerUiUpdater) {
 
@@ -66,14 +66,14 @@ class PlayerInteract_(val playerUiUpdater: PlayerUiUpdater) {
         if (playerUiUpdater.isTrackPlaying()) handler.postDelayed(runnable, DELAY_MILLIS)
     }
 
-    private fun onPlayerStateChange(state: PlayerState) {
+    private fun onPlayerStateChange(state: PlayerState_) {
         //Log.d("mine", "STATE = " + PlayerFeedback.State(state))
         when (state) {
-            PlayerState.DEFAULT -> playerUiUpdater.onPlayerDefault()
-            PlayerState.PREPARED -> playerUiUpdater.onPlayerPrepared()
-            PlayerState.PLAYING -> playerUiUpdater.onPlayerPlaying()
-            PlayerState.PAUSED -> playerUiUpdater.onPlayerPaused()
-            PlayerState.PLAYBACK_COMPLETE -> playerUiUpdater.onPlayerPlaybackCompleted()
+            PlayerState_.DEFAULT -> playerUiUpdater.onPlayerDefault()
+            PlayerState_.PREPARED -> playerUiUpdater.onPlayerPrepared()
+            PlayerState_.PLAYING -> playerUiUpdater.onPlayerPlaying()
+            PlayerState_.PAUSED -> playerUiUpdater.onPlayerPaused()
+            PlayerState_.PLAYBACK_COMPLETE -> playerUiUpdater.onPlayerPlaybackCompleted()
         }
     }
 

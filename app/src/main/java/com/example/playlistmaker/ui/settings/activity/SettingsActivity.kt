@@ -3,7 +3,6 @@ package com.example.playlistmaker.ui.settings.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.playlistmaker.creator.App
 import com.example.playlistmaker.databinding.ActivitySettingsBinding
 import com.example.playlistmaker.ui.common.Helper
 import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
@@ -23,9 +22,9 @@ class SettingsActivity : AppCompatActivity() {
             SettingsViewModel.getViewModelFactory()
         )[SettingsViewModel::class.java]
 
-        // подпишемся только на изменение переключателя в зависимости от сохраненной темы
+        // подпишемся на изменение темы [извне]
         viewModel.observeState().observe(this) {
-            setDarkModeChecked()
+            setDarkModeChecked(it)
         }
 
         // обработчики кнопок через modelView
@@ -46,7 +45,7 @@ class SettingsActivity : AppCompatActivity() {
 
     }
 
-    private fun setDarkModeChecked() {
-        binding.themeSwitcher.isChecked = App.appDarkMode
+    private fun setDarkModeChecked(darkModeOn: Boolean) {
+        binding.themeSwitcher.isChecked = darkModeOn
     }
 }

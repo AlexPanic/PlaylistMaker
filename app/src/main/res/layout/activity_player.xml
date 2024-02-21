@@ -103,7 +103,7 @@
         android:background="@drawable/play_btn"
         android:clickable="true"
         android:state_enabled="false"
-        app:backgroundTint="@color/filled_button_tint"
+        app:backgroundTint="@color/filled_button_tint_inactive"
         app:layout_constraintBottom_toBottomOf="@id/btCopy"
         app:layout_constraintEnd_toStartOf="@id/btLike"
         app:layout_constraintHorizontal_bias="0.5"
