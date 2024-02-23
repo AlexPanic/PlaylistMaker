@@ -1,11 +1,9 @@
 package com.example.playlistmaker.data.settings.impl
 
 import android.content.Context
-import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.creator.Constants
-import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.data.settings.SettingsRepository
+import com.example.playlistmaker.domain.search.model.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -13,21 +11,24 @@ class SettingsRepositoryImpl(context: Context) : SettingsRepository {
 
     companion object {
         private const val SEARCH_HISTORY_SHARED_PREF_KEY = "SearchHistoryKey"
+        private const val SHARED_PREF_FILE = "playlist_maker_pref"
+        private const val DARK_MODE_LAST_SWITCH = "darkmode_last_switch"
     }
 
     private val sharedPreferences =
-        context.getSharedPreferences(Constants.SHARED_PREF_FILE, Context.MODE_PRIVATE)
+        context.getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
 
     override fun getSavedDarkMode(deviceDarkModeOn: Boolean): Boolean {
         // апдейт тема приложения будет темной если установлен темный режим устройства
-        return sharedPreferences.getBoolean(Constants.DARK_MODE_LAST_SWITCH, false) || deviceDarkModeOn
+        return sharedPreferences.getBoolean(
+            DARK_MODE_LAST_SWITCH,
+            false
+        ) || deviceDarkModeOn
     }
 
     override fun setDarkMode(darkModeOn: Boolean) {
-
-        Log.d("mine", "repo.setDakMode("+darkModeOn.toString()+")")
         sharedPreferences.edit()
-            .putBoolean(Constants.DARK_MODE_LAST_SWITCH, darkModeOn)
+            .putBoolean(DARK_MODE_LAST_SWITCH, darkModeOn)
             .apply()
         AppCompatDelegate.setDefaultNightMode(
             if (darkModeOn) {
@@ -49,7 +50,7 @@ class SettingsRepositoryImpl(context: Context) : SettingsRepository {
     }
 
     override fun saveSearchHistory(tracks: List<Track>) {
-         sharedPreferences.edit()
+        sharedPreferences.edit()
             .putString(SEARCH_HISTORY_SHARED_PREF_KEY, Gson().toJson(tracks))
             .apply()
     }

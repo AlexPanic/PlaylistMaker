@@ -15,12 +15,15 @@ class PlayerInteractorImpl(private val repository: PlayerRepository) : PlayerInt
             PlayerCommand.PREPARE -> {
                 repository.prepare(params)
             }
+
             PlayerCommand.PLAY -> {
                 repository.start()
             }
-            else -> {
-                TODO("other player commands")
-            }
+
+            PlayerCommand.PAUSE -> repository.pause()
+            PlayerCommand.RELEASE -> repository.release()
+            PlayerCommand.GET_POSITION -> repository.getPosition()
+            PlayerCommand.GET_STATE -> repository.getState()
         }
         consumer.consume(feedback)
     }

@@ -1,6 +1,6 @@
 package com.example.playlistmaker.ui.enums
 
-enum class PlayerState_ {
+enum class PlayerState {
     DEFAULT,
     PREPARED,
     PLAYING,
