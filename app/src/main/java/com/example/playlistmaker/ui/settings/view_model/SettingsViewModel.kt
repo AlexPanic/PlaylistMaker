@@ -9,7 +9,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.creator.App
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.domain.search.model.SearchState
 
 class SettingsViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -20,8 +19,8 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
-    private val stateLiveData = MutableLiveData<Boolean>()
-    fun observeState(): LiveData<Boolean> = stateLiveData
+    private val _state = MutableLiveData<Boolean>()
+    fun observeState(): LiveData<Boolean> = _state
 
     private val getDarkModeUseCase by lazy { Creator.provideGetDarkModeUseCase() }
     private val setDarkModeUseCase by lazy { Creator.provideSetDarkModeUseCase() }
@@ -30,12 +29,12 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     private val userAgreementUseCase by lazy { Creator.provideUserAgreementUseCase() }
 
     init {
-        stateLiveData.value = getDarkModeUseCase.execute(App.appDarkMode)
+        _state.value = getDarkModeUseCase.execute(App.appDarkMode)
     }
 
     fun switchDarkTheme(darkModeOn: Boolean) {
         setDarkModeUseCase.execute(darkModeOn)
-        stateLiveData.value = darkModeOn
+        _state.value = darkModeOn
     }
 
     fun shareApp() {

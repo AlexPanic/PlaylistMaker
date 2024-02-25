@@ -2,11 +2,11 @@ package com.example.playlistmaker.domain.search.usecase.impl
 
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.data.settings.SettingsRepository
-import com.example.playlistmaker.domain.search.usecase.ISaveSearchHistoryUseCase
+import com.example.playlistmaker.domain.search.usecase.SaveSearchHistoryUseCase
 
-class SaveSearchHistoryUseCase(
+class SaveSearchHistoryUseCaseImpl(
     private val settingsRepository: SettingsRepository
-) : ISaveSearchHistoryUseCase {
+) : SaveSearchHistoryUseCase {
     override fun execute(tracks: List<Track>) {
         settingsRepository.saveSearchHistory(tracks)
     }

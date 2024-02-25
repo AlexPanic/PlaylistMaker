@@ -1,9 +1,9 @@
 package com.example.playlistmaker.domain.settings.usecase.impl
 
 import com.example.playlistmaker.data.settings.SettingsRepository
-import com.example.playlistmaker.domain.settings.usecase.ISetDarkModeUseCase
+import com.example.playlistmaker.domain.settings.usecase.SetDarkModeUseCase
 
-class SetDarkModeUseCase(private val settingsRepository: SettingsRepository) : ISetDarkModeUseCase {
+class SetDarkModeUseCaseImpl(private val settingsRepository: SettingsRepository) : SetDarkModeUseCase {
     override fun execute(darkModeOn: Boolean) {
         settingsRepository.setDarkMode(darkModeOn)
     }

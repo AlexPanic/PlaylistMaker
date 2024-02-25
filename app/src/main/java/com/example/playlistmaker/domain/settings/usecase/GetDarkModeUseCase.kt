@@ -1,5 +1,5 @@
 package com.example.playlistmaker.domain.settings.usecase
 
-interface IGetDarkModeUseCase {
+interface GetDarkModeUseCase {
     fun execute(darkModeOn: Boolean): Boolean
 }

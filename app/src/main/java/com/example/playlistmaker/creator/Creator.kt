@@ -14,18 +14,18 @@ import com.example.playlistmaker.domain.search.TracksRepository
 import com.example.playlistmaker.data.sharing.ExternalNavigator
 import com.example.playlistmaker.data.sharing.impl.ExternalNavigatorImpl
 import com.example.playlistmaker.domain.player.PlayerInteractor
-import com.example.playlistmaker.domain.search.usecase.IClearSearchHistoryUseCase
-import com.example.playlistmaker.domain.search.usecase.ISaveSearchHistoryUseCase
+import com.example.playlistmaker.domain.search.usecase.ClearSearchHistoryUseCase
+import com.example.playlistmaker.domain.search.usecase.SaveSearchHistoryUseCase
 import com.example.playlistmaker.domain.player.usecase.impl.PlayerInteractorImpl
-import com.example.playlistmaker.domain.settings.usecase.impl.GetDarkModeUseCase
-import com.example.playlistmaker.domain.settings.usecase.IGetDarkModeUseCase
-import com.example.playlistmaker.domain.search.usecase.IGetSearchHistoryUseCase
-import com.example.playlistmaker.domain.settings.usecase.ISetDarkModeUseCase
+import com.example.playlistmaker.domain.settings.usecase.impl.GetDarkModeUseCaseImpl
+import com.example.playlistmaker.domain.settings.usecase.GetDarkModeUseCase
+import com.example.playlistmaker.domain.search.usecase.GetSearchHistoryUseCase
+import com.example.playlistmaker.domain.settings.usecase.SetDarkModeUseCase
 import com.example.playlistmaker.domain.sharing.usecase.IShareAppUseCase
-import com.example.playlistmaker.domain.search.usecase.impl.SaveSearchHistoryUseCase
-import com.example.playlistmaker.domain.search.usecase.impl.ClearSearchHistoryUseCase
-import com.example.playlistmaker.domain.search.usecase.impl.GetSearchHistoryUseCase
-import com.example.playlistmaker.domain.settings.usecase.impl.SetDarkModeUseCase
+import com.example.playlistmaker.domain.search.usecase.impl.SaveSearchHistoryUseCaseImpl
+import com.example.playlistmaker.domain.search.usecase.impl.ClearSearchHistoryUseCaseImpl
+import com.example.playlistmaker.domain.search.usecase.impl.GetSearchHistoryUseCaseImpl
+import com.example.playlistmaker.domain.settings.usecase.impl.SetDarkModeUseCaseImpl
 import com.example.playlistmaker.domain.sharing.usecase.IMessageSupportUseCase
 import com.example.playlistmaker.domain.sharing.usecase.IUserAgreementUseCase
 import com.example.playlistmaker.domain.sharing.usecase.impl.MessageSupportUseCase
@@ -52,23 +52,23 @@ object Creator {
         return ExternalNavigatorImpl(app)
     }
 
-    fun provideSetDarkModeUseCase(): ISetDarkModeUseCase {
-        return SetDarkModeUseCase(provideSettingsRepository())
+    fun provideSetDarkModeUseCase(): SetDarkModeUseCase {
+        return SetDarkModeUseCaseImpl(provideSettingsRepository())
     }
 
-    fun provideGetDarkModeUseCase(): IGetDarkModeUseCase {
-        return GetDarkModeUseCase(provideSettingsRepository())
+    fun provideGetDarkModeUseCase(): GetDarkModeUseCase {
+        return GetDarkModeUseCaseImpl(provideSettingsRepository())
     }
 
-    fun provideGetSearchHistoryUseCase(): IGetSearchHistoryUseCase {
-        return GetSearchHistoryUseCase(provideSettingsRepository())
+    fun provideGetSearchHistoryUseCase(): GetSearchHistoryUseCase {
+        return GetSearchHistoryUseCaseImpl(provideSettingsRepository())
     }
-    fun provideClearSearchHistoryUseCase(): IClearSearchHistoryUseCase {
-        return ClearSearchHistoryUseCase(provideSettingsRepository())
+    fun provideClearSearchHistoryUseCase(): ClearSearchHistoryUseCase {
+        return ClearSearchHistoryUseCaseImpl(provideSettingsRepository())
     }
 
-    fun provideSaveSearchHistoryUseCase(): ISaveSearchHistoryUseCase {
-        return SaveSearchHistoryUseCase(provideSettingsRepository())
+    fun provideSaveSearchHistoryUseCase(): SaveSearchHistoryUseCase {
+        return SaveSearchHistoryUseCaseImpl(provideSettingsRepository())
     }
 
     private fun provideSettingsRepository(): SettingsRepository {

@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.creator.Creator
-import com.example.playlistmaker.domain.player.PlayerInteractor
+import com.example.playlistmaker.domain.player.PlayerConsumer
 import com.example.playlistmaker.domain.player.model.PlayerFeedback
 import com.example.playlistmaker.ui.enums.PlayerCommand
 import com.example.playlistmaker.ui.enums.PlayerState
@@ -38,16 +38,15 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     private val handler = Handler(Looper.getMainLooper())
     private var runnable = Runnable { updatePlayerPosition() }
 
-    private val stateLiveData = MutableLiveData<PlayerState>(PlayerState.DEFAULT)
-    private val positionLiveData = MutableLiveData<String>()
+    private val _state = MutableLiveData<PlayerState>(PlayerState.DEFAULT)
+    private val _position = MutableLiveData<String>()
 
-    private val playerConsumer = object : PlayerInteractor.PlayerConsumer {
+    private val playerConsumer = object : PlayerConsumer {
         override fun consume(feedback: PlayerFeedback) {
             when (feedback) {
                 is PlayerFeedback.State -> {
-                    stateLiveData.postValue(feedback.state)
+                    _state.postValue(feedback.state)
                     trackIsPlaying = feedback.state == PlayerState.PLAYING
-                    //Log.d("mine", "State = " + feedback.state)
                     when (feedback.state) {
                         PlayerState.PREPARED -> {
                             isPrepared = true
@@ -55,7 +54,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
 
                         PlayerState.DEFAULT,
                         PlayerState.PLAYBACK_COMPLETE -> {
-                            positionLiveData.postValue(DEFAULT_TIMER)
+                            _position.postValue(DEFAULT_TIMER)
                         }
 
                         else -> {}
@@ -63,14 +62,14 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
                 }
 
                 is PlayerFeedback.Position -> {
-                    positionLiveData.postValue(dateFormat.format(feedback.playPositionMillis))
+                    _position.postValue(dateFormat.format(feedback.playPositionMillis))
                 }
             }
         }
     }
 
-    fun observeState(): LiveData<PlayerState> = stateLiveData
-    fun observePosition(): LiveData<String> = positionLiveData
+    fun observeState(): LiveData<PlayerState> = _state
+    fun observePosition(): LiveData<String> = _position
 
     fun prepare(url: String) {
         playerInteractor.execute(
@@ -118,7 +117,10 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
 
     private fun updatePlayerPosition() {
         if (trackIsPlaying) {
-            playerInteractor.execute(command = PlayerCommand.GET_POSITION, consumer = playerConsumer)
+            playerInteractor.execute(
+                command = PlayerCommand.GET_POSITION,
+                consumer = playerConsumer
+            )
             playerInteractor.execute(command = PlayerCommand.GET_STATE, consumer = playerConsumer)
             handler.postDelayed(
                 runnable,

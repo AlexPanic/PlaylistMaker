@@ -1,10 +1,10 @@
 package com.example.playlistmaker.domain.search.usecase.impl
 
 import com.example.playlistmaker.data.settings.SettingsRepository
-import com.example.playlistmaker.domain.search.usecase.IClearSearchHistoryUseCase
+import com.example.playlistmaker.domain.search.usecase.ClearSearchHistoryUseCase
 
-class ClearSearchHistoryUseCase(private val settingsRepository: SettingsRepository) :
-    IClearSearchHistoryUseCase {
+class ClearSearchHistoryUseCaseImpl(private val settingsRepository: SettingsRepository) :
+    ClearSearchHistoryUseCase {
     override fun execute() {
         settingsRepository.clearSearchHistory()
     }

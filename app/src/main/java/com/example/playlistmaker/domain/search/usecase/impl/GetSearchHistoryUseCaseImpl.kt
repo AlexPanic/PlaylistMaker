@@ -2,9 +2,9 @@ package com.example.playlistmaker.domain.search.usecase.impl
 
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.data.settings.SettingsRepository
-import com.example.playlistmaker.domain.search.usecase.IGetSearchHistoryUseCase
+import com.example.playlistmaker.domain.search.usecase.GetSearchHistoryUseCase
 
-class GetSearchHistoryUseCase(private val settingsRepository: SettingsRepository) :
-    IGetSearchHistoryUseCase {
+class GetSearchHistoryUseCaseImpl(private val settingsRepository: SettingsRepository) :
+    GetSearchHistoryUseCase {
     override fun execute(): List<Track> = settingsRepository.getSearchHistory()
 }
