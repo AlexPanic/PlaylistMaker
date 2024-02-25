@@ -70,10 +70,12 @@
 
         <ProgressBar
             android:id="@+id/searchProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:visibility="gone" />
+            android:layout_width="@dimen/progress_bar_size"
+            android:layout_height="@dimen/progress_bar_size"
+            android:layout_gravity="center"
+            android:layout_marginVertical="@dimen/progress_bar_margin"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <RelativeLayout
             android:layout_width="match_parent"

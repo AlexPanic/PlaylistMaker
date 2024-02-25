@@ -181,7 +181,7 @@ class SearchActivity : AppCompatActivity() {
         adapterHistory.tracks = tracks as ArrayList<Track>
         adapterHistory.notifyDataSetChanged()
         hideAll()
-        binding.llSearchHistory.isVisible = true
+        binding.llSearchHistory.isVisible = tracks.isNotEmpty()
     }
 
     private fun hideAll() {

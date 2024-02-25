@@ -3,7 +3,6 @@ package com.example.playlistmaker.ui.player.view_model
 import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -39,9 +38,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     private val handler = Handler(Looper.getMainLooper())
     private var runnable = Runnable { updatePlayerPosition() }
 
-    private val stateLiveData = MutableLiveData<PlayerState>()/*.apply {
-        value = PlayerState.DEFAULT
-    }*/
+    private val stateLiveData = MutableLiveData<PlayerState>(PlayerState.DEFAULT)
     private val positionLiveData = MutableLiveData<String>()
 
     private val playerConsumer = object : PlayerInteractor.PlayerConsumer {
@@ -50,7 +47,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
                 is PlayerFeedback.State -> {
                     stateLiveData.postValue(feedback.state)
                     trackIsPlaying = feedback.state == PlayerState.PLAYING
-                    Log.d("mine", "State = " + feedback.state)
+                    //Log.d("mine", "State = " + feedback.state)
                     when (feedback.state) {
                         PlayerState.PREPARED -> {
                             isPrepared = true
@@ -122,6 +119,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     private fun updatePlayerPosition() {
         if (trackIsPlaying) {
             playerInteractor.execute(command = PlayerCommand.GET_POSITION, consumer = playerConsumer)
+            playerInteractor.execute(command = PlayerCommand.GET_STATE, consumer = playerConsumer)
             handler.postDelayed(
                 runnable,
                 PLAYER_POSITION_TOKEN,
