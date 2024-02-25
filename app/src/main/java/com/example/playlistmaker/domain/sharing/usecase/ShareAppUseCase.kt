@@ -1,5 +1,5 @@
 package com.example.playlistmaker.domain.sharing.usecase
 
-interface IUserAgreementUseCase {
+interface ShareAppUseCase {
     fun execute()
 }

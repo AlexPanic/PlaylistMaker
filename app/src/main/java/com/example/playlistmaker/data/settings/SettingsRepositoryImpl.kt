@@ -1,8 +1,8 @@
-package com.example.playlistmaker.data.settings.impl
+package com.example.playlistmaker.data.settings
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import com.example.playlistmaker.data.settings.SettingsRepository
+import com.example.playlistmaker.domain.settings.SettingsRepository
 import com.example.playlistmaker.domain.search.model.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

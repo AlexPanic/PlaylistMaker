@@ -1,11 +1,11 @@
-package com.example.playlistmaker.data.sharing.impl
+package com.example.playlistmaker.data.sharing
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.ContextCompat.getString
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.sharing.ExternalNavigator
+import com.example.playlistmaker.domain.settings.ExternalNavigator
 
 
 class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
