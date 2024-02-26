@@ -23,6 +23,7 @@
     <color name="player_chars_value">@color/yp_black</color>
 
     <color name="main_text_color">@color/yp_black</color>
+    <color name="filled_button_tint_inactive">#c5c0c8</color>
     <color name="filled_button_tint">@color/yp_black</color>
     <color name="filled_button_text">@color/yp_white</color>
 

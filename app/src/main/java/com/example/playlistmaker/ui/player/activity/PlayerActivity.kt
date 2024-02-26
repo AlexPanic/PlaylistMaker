@@ -1,0 +1,116 @@
+package com.example.playlistmaker.ui.player.activity
+
+import android.os.Build
+import android.os.Bundle
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.playlistmaker.R
+import com.example.playlistmaker.databinding.ActivityPlayerBinding
+import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.ui.common.Helper
+import com.example.playlistmaker.ui.enums.PlayerState
+import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
+
+class PlayerActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: PlayerViewModel
+    private lateinit var binding: ActivityPlayerBinding
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        super.onCreate(savedInstanceState)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        Helper.setToolbar(this)
+        viewModel = ViewModelProvider(
+            this,
+            PlayerViewModel.getViewModelFactory()
+        )[PlayerViewModel::class.java]
+
+        viewModel.observeState().observe(this) {
+            renderState(it)
+        }
+        viewModel.observePosition().observe(this) {
+            renderPosition(it)
+        }
+
+        val track =
+            intent.getSerializableExtra(Track.INTENT_EXTRA_ID, Track::class.java) as Track
+        setViewsData(track)
+        viewModel.prepare(track.previewUrl)
+
+        binding.btPlayControl.setOnClickListener {
+            viewModel.playPause()
+        }
+    }
+
+    private fun setViewsData(track: Track) {
+        val coverUrl = track.getArtworkUrl512()
+        with(binding) {
+            with(track) {
+                Glide.with(applicationContext).load(coverUrl).fitCenter()
+                    .transform(RoundedCorners(Helper.dpToPx(COVER_CORNERS))).into(ivTrackCover)
+                tvTrackName.text = trackName
+                tvArtistName.text = artistName
+                tvTrackDuration.text = trackTime()
+                tvTrackYear.text = getYear()
+                tvTrackGenre.text = primaryGenreName
+                tvTrackCountry.text = country
+                tvTrackAlbum.text = collectionName
+                val hasAlbum = collectionName.isNotEmpty()
+                tvTrackAlbum.isVisible = hasAlbum
+                tvTrackAlbumTitle.isVisible = hasAlbum
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun renderState(state: PlayerState) {
+        when (state) {
+            PlayerState.DEFAULT -> {}
+
+            PlayerState.PREPARED -> {}
+
+            PlayerState.PLAYING -> {
+                binding.btPlayControl.background =
+                    ContextCompat.getDrawable(applicationContext, R.drawable.pause_btn)
+            }
+
+            PlayerState.PAUSED,
+            PlayerState.PLAYBACK_COMPLETE -> {
+                binding.btPlayControl.background =
+                    ContextCompat.getDrawable(applicationContext, R.drawable.play_btn)
+
+            }
+        }
+    }
+
+    private fun renderPosition(position: String) {
+        binding.tvTrackPlayPosition.text = position
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.onActivityPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onActivityResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+    }
+
+    companion object {
+        private const val COVER_CORNERS = 8f
+    }
+
+}

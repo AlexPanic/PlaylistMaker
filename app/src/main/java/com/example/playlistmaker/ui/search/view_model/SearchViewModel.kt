@@ -35,8 +35,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     private val tracksInteractor = Creator.provideTracksInteractor(getApplication())
     private val handler = Handler(Looper.getMainLooper())
 
-    private val stateLiveData = MutableLiveData<SearchState>()
-    fun observeState(): LiveData<SearchState> = stateLiveData
+    private val _state = MutableLiveData<SearchState>()
+    fun observeState(): LiveData<SearchState> = _state
 
     private val showToast = SingleLiveEvent<String>()
     fun observeShowToast(): LiveData<String> = showToast
@@ -129,6 +129,6 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun renderState(state: SearchState) {
-        stateLiveData.postValue(state)
+        _state.postValue(state)
     }
 }
