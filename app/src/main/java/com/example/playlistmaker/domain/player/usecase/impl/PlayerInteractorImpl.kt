@@ -6,7 +6,9 @@ import com.example.playlistmaker.domain.player.PlayerRepository
 import com.example.playlistmaker.domain.player.model.PlayerFeedback
 import com.example.playlistmaker.ui.enums.PlayerCommand
 
-class PlayerInteractorImpl(private val repository: PlayerRepository) : PlayerInteractor {
+class PlayerInteractorImpl(
+    private val repository: PlayerRepository
+) : PlayerInteractor {
     override fun execute(
         command: PlayerCommand,
         consumer: PlayerConsumer,
@@ -14,7 +16,7 @@ class PlayerInteractorImpl(private val repository: PlayerRepository) : PlayerInt
     ) {
         val feedback: PlayerFeedback = when (command) {
             PlayerCommand.PREPARE -> {
-                repository.prepare(params)
+                repository.prepare(params!!)
             }
 
             PlayerCommand.PLAY -> {

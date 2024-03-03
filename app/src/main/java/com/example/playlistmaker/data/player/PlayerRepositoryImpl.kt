@@ -1,17 +1,27 @@
 package com.example.playlistmaker.data.player
 
 import android.media.MediaPlayer
+import android.util.Log
 import com.example.playlistmaker.domain.player.PlayerRepository
 import com.example.playlistmaker.domain.player.model.PlayerFeedback
 import com.example.playlistmaker.ui.enums.PlayerState
 
-class PlayerRepositoryImpl : PlayerRepository {
-    private var mediaPlayer = MediaPlayer()
+class PlayerRepositoryImpl(
+    private var mediaPlayer: MediaPlayer,
+) : PlayerRepository {
+
     private var playerState = PlayerState.DEFAULT
-    override fun prepare(url: String?): PlayerFeedback.State {
+    override fun prepare(url: String): PlayerFeedback.State {
         with(mediaPlayer) {
-            setDataSource(url)
-            prepareAsync()
+            try {
+                reset()
+                setDataSource(url)
+                prepare()
+            } catch (error: Throwable) {
+                playerState = PlayerState.ERROR
+                Log.d("mine", "Player Error: " + error.toString())
+                //Log.d("mine", error.printStackTrace().toString())
+            }
             setOnPreparedListener {
                 playerState = PlayerState.PREPARED
             }
@@ -35,7 +45,7 @@ class PlayerRepositoryImpl : PlayerRepository {
     }
 
     override fun release(): PlayerFeedback.State {
-        mediaPlayer.release()
+        mediaPlayer.stop()
         playerState = PlayerState.DEFAULT
         return PlayerFeedback.State(playerState)
     }

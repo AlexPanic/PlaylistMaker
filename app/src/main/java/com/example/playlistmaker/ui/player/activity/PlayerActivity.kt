@@ -6,7 +6,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
@@ -15,11 +14,12 @@ import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.common.Helper
 import com.example.playlistmaker.ui.enums.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlayerActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: PlayerViewModel
     private lateinit var binding: ActivityPlayerBinding
+    private val viewModel by viewModel<PlayerViewModel>()
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,10 +28,6 @@ class PlayerActivity : AppCompatActivity() {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         Helper.setToolbar(this)
-        viewModel = ViewModelProvider(
-            this,
-            PlayerViewModel.getViewModelFactory()
-        )[PlayerViewModel::class.java]
 
         viewModel.observeState().observe(this) {
             renderState(it)
@@ -74,8 +70,8 @@ class PlayerActivity : AppCompatActivity() {
     private fun renderState(state: PlayerState) {
         when (state) {
             PlayerState.DEFAULT -> {}
-
             PlayerState.PREPARED -> {}
+            PlayerState.ERROR -> {}
 
             PlayerState.PLAYING -> {
                 binding.btPlayControl.background =

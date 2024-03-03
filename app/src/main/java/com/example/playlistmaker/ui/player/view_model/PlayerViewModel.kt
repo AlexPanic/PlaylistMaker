@@ -1,40 +1,33 @@
 package com.example.playlistmaker.ui.player.view_model
 
-import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import androidx.lifecycle.AndroidViewModel
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.creator.Creator
+import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.domain.player.PlayerConsumer
+import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.domain.player.model.PlayerFeedback
 import com.example.playlistmaker.ui.enums.PlayerCommand
 import com.example.playlistmaker.ui.enums.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(application: Application) : AndroidViewModel(application) {
+class PlayerViewModel(
+    private val playerInteractor: PlayerInteractor,
+) : ViewModel() {
     companion object {
         private const val DEFAULT_TIMER = "00:00"
         private const val DELAY_MILLIS = 250L
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
         private val PLAYER_POSITION_TOKEN = Any()
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application)
-            }
-        }
     }
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private var trackIsPlaying = false
     private var isPrepared = false
     private var isClickAllowed = true
-    private val playerInteractor = Creator.providePlayerInteractor()
     private val handler = Handler(Looper.getMainLooper())
     private var runnable = Runnable { updatePlayerPosition() }
 
@@ -43,6 +36,9 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
 
     private val playerConsumer = object : PlayerConsumer {
         override fun consume(feedback: PlayerFeedback) {
+
+            Log.d("mine", feedback.toString())
+
             when (feedback) {
                 is PlayerFeedback.State -> {
                     _state.postValue(feedback.state)
@@ -72,11 +68,14 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     fun observePosition(): LiveData<String> = _position
 
     fun prepare(url: String) {
-        playerInteractor.execute(
-            command = PlayerCommand.PREPARE,
-            consumer = playerConsumer,
-            params = url
-        )
+        Log.d("mine", "prepare() isPrepared=" + isPrepared.toString())
+        if (!isPrepared) {
+            playerInteractor.execute(
+                command = PlayerCommand.PREPARE,
+                consumer = playerConsumer,
+                params = url
+            )
+        }
     }
 
     fun playPause() {
@@ -113,6 +112,7 @@ class PlayerViewModel(application: Application) : AndroidViewModel(application) 
     override fun onCleared() {
         handler.removeCallbacksAndMessages(PLAYER_POSITION_TOKEN)
         playerInteractor.execute(command = PlayerCommand.RELEASE, consumer = playerConsumer)
+        //Log.d("mine", "onCleared")
     }
 
     private fun updatePlayerPosition() {
