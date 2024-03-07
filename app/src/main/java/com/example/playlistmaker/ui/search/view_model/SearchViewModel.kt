@@ -1,38 +1,35 @@
 package com.example.playlistmaker.ui.search.view_model
 
-import android.app.Application
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.R
-import com.example.playlistmaker.creator.Creator
 import com.example.playlistmaker.creator.SingleLiveEvent
 import com.example.playlistmaker.domain.search.TracksInteractor
 import com.example.playlistmaker.domain.search.model.SearchState
 import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.domain.search.usecase.ClearSearchHistoryUseCase
+import com.example.playlistmaker.domain.search.usecase.GetSearchHistoryUseCase
+import com.example.playlistmaker.domain.search.usecase.SaveSearchHistoryUseCase
 
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
+class SearchViewModel(
+    private val tracksInteractor: TracksInteractor,
+    private val context: Context,
+    getSearchHistoryUseCase: GetSearchHistoryUseCase,
+    private val saveSearchHistoryUseCase: SaveSearchHistoryUseCase,
+    private val clearSearchHistoryUseCase: ClearSearchHistoryUseCase,
+) : ViewModel() {
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val HISTORY_MAX_SIZE = 10
         private val SEARCH_REQUEST_TOKEN = Any()
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application)
-            }
-        }
     }
 
-    private var history: MutableList<Track> =
-        Creator.provideGetSearchHistoryUseCase().execute().toMutableList()
-    private val tracksInteractor = Creator.provideTracksInteractor(getApplication())
+    private var history: MutableList<Track> = getSearchHistoryUseCase.execute().toMutableList()
     private val handler = Handler(Looper.getMainLooper())
 
     private val _state = MutableLiveData<SearchState>()
@@ -77,11 +74,11 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun saveHistory() {
-        Creator.provideSaveSearchHistoryUseCase().execute(history)
+        saveSearchHistoryUseCase.execute(history)
     }
 
     fun clearHistory() {
-        Creator.provideClearSearchHistoryUseCase().execute()
+        clearSearchHistoryUseCase.execute()
         history.clear()
         renderState(SearchState.HistoryClear)
     }
@@ -101,7 +98,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                             errorMessage != null -> {
                                 renderState(
                                     SearchState.Error(
-                                        errorMessage = getApplication<Application>().getString(R.string.something_went_wrong)
+                                        errorMessage = context.getString(R.string.something_went_wrong)
                                     )
                                 )
                             }
@@ -109,9 +106,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                             tracks.isEmpty() -> {
                                 renderState(
                                     SearchState.Empty(
-                                        message = getApplication<Application>().getString(
-                                            R.string.nothing_found
-                                        )
+                                        message = context.getString(R.string.nothing_found)
                                     )
                                 )
                             }

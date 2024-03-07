@@ -1,17 +1,26 @@
 package com.example.playlistmaker.data.player
 
 import android.media.MediaPlayer
+import android.util.Log
 import com.example.playlistmaker.domain.player.PlayerRepository
 import com.example.playlistmaker.domain.player.model.PlayerFeedback
 import com.example.playlistmaker.ui.enums.PlayerState
 
-class PlayerRepositoryImpl : PlayerRepository {
-    private var mediaPlayer = MediaPlayer()
+class PlayerRepositoryImpl(
+    private val mediaPlayer: MediaPlayer,
+) : PlayerRepository {
+
     private var playerState = PlayerState.DEFAULT
-    override fun prepare(url: String?): PlayerFeedback.State {
+    override fun prepare(url: String): PlayerFeedback.State {
         with(mediaPlayer) {
-            setDataSource(url)
-            prepareAsync()
+            try {
+                reset()
+                setDataSource(url)
+                prepareAsync()
+            } catch (error: Throwable) {
+                playerState = PlayerState.ERROR
+                Log.e("player prepare error", error.toString(), error)
+            }
             setOnPreparedListener {
                 playerState = PlayerState.PREPARED
             }

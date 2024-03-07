@@ -1,32 +1,26 @@
 package com.example.playlistmaker.ui.settings.view_model
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.creator.App
-import com.example.playlistmaker.creator.Creator
+import com.example.playlistmaker.domain.settings.usecase.GetDarkModeUseCase
+import com.example.playlistmaker.domain.settings.usecase.SetDarkModeUseCase
+import com.example.playlistmaker.domain.sharing.usecase.MessageSupportUseCase
+import com.example.playlistmaker.domain.sharing.usecase.ShareAppUseCase
+import com.example.playlistmaker.domain.sharing.usecase.UserAgreementUseCase
 
-class SettingsViewModel(application: Application) : AndroidViewModel(application) {
+class SettingsViewModel(
+    getDarkModeUseCase: GetDarkModeUseCase,
+    private val setDarkModeUseCase: SetDarkModeUseCase,
+    private val shareAppUseCase: ShareAppUseCase,
+    private val messageSupportUseCase: MessageSupportUseCase,
+    private val userAgreementUseCase: UserAgreementUseCase,
 
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application)
-            }
-        }
-    }
+    ) : ViewModel() {
+
     private val _state = MutableLiveData<Boolean>()
     fun observeState(): LiveData<Boolean> = _state
-
-    private val getDarkModeUseCase by lazy { Creator.provideGetDarkModeUseCase() }
-    private val setDarkModeUseCase by lazy { Creator.provideSetDarkModeUseCase() }
-    private val shareAppUseCase by lazy { Creator.provideShareAppUseCase() }
-    private val messageSupportUseCase by lazy { Creator.provideMessageSupportUseCase() }
-    private val userAgreementUseCase by lazy { Creator.provideUserAgreementUseCase() }
 
     init {
         _state.value = getDarkModeUseCase.execute(App.appDarkMode)
