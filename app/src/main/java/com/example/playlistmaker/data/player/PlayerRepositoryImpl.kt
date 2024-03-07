@@ -7,7 +7,7 @@ import com.example.playlistmaker.domain.player.model.PlayerFeedback
 import com.example.playlistmaker.ui.enums.PlayerState
 
 class PlayerRepositoryImpl(
-    private var mediaPlayer: MediaPlayer,
+    private val mediaPlayer: MediaPlayer,
 ) : PlayerRepository {
 
     private var playerState = PlayerState.DEFAULT
@@ -16,11 +16,10 @@ class PlayerRepositoryImpl(
             try {
                 reset()
                 setDataSource(url)
-                prepare()
+                prepareAsync()
             } catch (error: Throwable) {
                 playerState = PlayerState.ERROR
-                Log.d("mine", "Player Error: " + error.toString())
-                //Log.d("mine", error.printStackTrace().toString())
+                Log.e("player prepare error", error.toString(), error)
             }
             setOnPreparedListener {
                 playerState = PlayerState.PREPARED
@@ -45,7 +44,7 @@ class PlayerRepositoryImpl(
     }
 
     override fun release(): PlayerFeedback.State {
-        mediaPlayer.stop()
+        mediaPlayer.release()
         playerState = PlayerState.DEFAULT
         return PlayerFeedback.State(playerState)
     }

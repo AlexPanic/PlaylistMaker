@@ -2,7 +2,6 @@ package com.example.playlistmaker.ui.player.view_model
 
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,9 +35,6 @@ class PlayerViewModel(
 
     private val playerConsumer = object : PlayerConsumer {
         override fun consume(feedback: PlayerFeedback) {
-
-            Log.d("mine", feedback.toString())
-
             when (feedback) {
                 is PlayerFeedback.State -> {
                     _state.postValue(feedback.state)
@@ -68,7 +64,6 @@ class PlayerViewModel(
     fun observePosition(): LiveData<String> = _position
 
     fun prepare(url: String) {
-        Log.d("mine", "prepare() isPrepared=" + isPrepared.toString())
         if (!isPrepared) {
             playerInteractor.execute(
                 command = PlayerCommand.PREPARE,
@@ -112,7 +107,6 @@ class PlayerViewModel(
     override fun onCleared() {
         handler.removeCallbacksAndMessages(PLAYER_POSITION_TOKEN)
         playerInteractor.execute(command = PlayerCommand.RELEASE, consumer = playerConsumer)
-        //Log.d("mine", "onCleared")
     }
 
     private fun updatePlayerPosition() {

@@ -10,15 +10,15 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val interactorModule = module {
-    single<ExternalNavigator> {
+    factory<ExternalNavigator> {
         ExternalNavigatorImpl(androidContext())
     }
 
-    single<PlayerInteractor> {
+    factory<PlayerInteractor> {
         PlayerInteractorImpl(get())
     }
 
-    single<TracksInteractor> {
+    factory<TracksInteractor> {
         TracksInteractorImpl(get())
     }
 }

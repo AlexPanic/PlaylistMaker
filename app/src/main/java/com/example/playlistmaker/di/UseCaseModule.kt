@@ -21,32 +21,32 @@ import org.koin.dsl.module
 val useCaseModule = module {
 
     // История поиска
-    single<GetSearchHistoryUseCase> {
+    factory<GetSearchHistoryUseCase> {
         GetSearchHistoryUseCaseImpl(get())
     }
-    single<SaveSearchHistoryUseCase> {
+    factory<SaveSearchHistoryUseCase> {
         SaveSearchHistoryUseCaseImpl(get())
     }
-    single<ClearSearchHistoryUseCase> {
+    factory<ClearSearchHistoryUseCase> {
         ClearSearchHistoryUseCaseImpl(get())
     }
 
     // Темная тема
-    single<GetDarkModeUseCase> {
+    factory<GetDarkModeUseCase> {
         GetDarkModeUseCaseImpl(get())
     }
-    single<SetDarkModeUseCase> {
+    factory<SetDarkModeUseCase> {
         SetDarkModeUseCaseImpl(get())
     }
 
     // Интеракции в настройках
-    single<ShareAppUseCase> {
+    factory<ShareAppUseCase> {
         ShareAppUseCaseImpl(get())
     }
-    single<MessageSupportUseCase> {
+    factory<MessageSupportUseCase> {
         MessageSupportUseCaseImpl(get())
     }
-    single<UserAgreementUseCase> {
+    factory<UserAgreementUseCase> {
         UserAgreementUseCaseImpl(get())
     }
 }

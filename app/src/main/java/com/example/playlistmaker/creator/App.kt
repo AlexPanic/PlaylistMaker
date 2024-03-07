@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.res.Configuration
 import com.example.playlistmaker.di.dataModule
 import com.example.playlistmaker.di.interactorModule
-import com.example.playlistmaker.di.mediaPlayerModule
 import com.example.playlistmaker.di.repositoryModule
 import com.example.playlistmaker.di.useCaseModule
 import com.example.playlistmaker.di.viewModelModule
@@ -26,7 +25,7 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(dataModule, interactorModule, mediaPlayerModule, repositoryModule, useCaseModule, viewModelModule)
+            modules(dataModule, interactorModule, repositoryModule, useCaseModule, viewModelModule)
         }
 
 
