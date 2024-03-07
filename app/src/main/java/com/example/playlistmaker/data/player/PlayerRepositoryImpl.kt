@@ -7,7 +7,7 @@ import com.example.playlistmaker.domain.player.model.PlayerFeedback
 import com.example.playlistmaker.ui.enums.PlayerState
 
 class PlayerRepositoryImpl(
-    private var mediaPlayer: MediaPlayer,
+    private val mediaPlayer: MediaPlayer,
 ) : PlayerRepository {
 
     private var playerState = PlayerState.DEFAULT
