@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playlistmaker.databinding.ActivityMainBinding
-import com.example.playlistmaker.ui.media.activity.MediaActivity
+import com.example.playlistmaker.ui.mediateka.activity.MediatekaActivity
 import com.example.playlistmaker.ui.search.activity.SearchActivity
 import com.example.playlistmaker.ui.settings.activity.SettingsActivity
 
@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
         binding?.btnMedia?.setOnClickListener{
-            startActivity(Intent(this, MediaActivity::class.java))
+            startActivity(Intent(this, MediatekaActivity::class.java))
         }
 
     }

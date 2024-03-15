@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.domain.player.PlayerConsumer
 import com.example.playlistmaker.domain.player.PlayerInteractor
-import com.example.playlistmaker.domain.player.model.PlayerFeedback
+import com.example.playlistmaker.domain.player.PlayerFeedback
 import com.example.playlistmaker.ui.enums.PlayerCommand
 import com.example.playlistmaker.ui.enums.PlayerState
 import java.text.SimpleDateFormat

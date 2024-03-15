@@ -3,7 +3,7 @@ package com.example.playlistmaker.data.player
 import android.media.MediaPlayer
 import android.util.Log
 import com.example.playlistmaker.domain.player.PlayerRepository
-import com.example.playlistmaker.domain.player.model.PlayerFeedback
+import com.example.playlistmaker.domain.player.PlayerFeedback
 import com.example.playlistmaker.ui.enums.PlayerState
 
 class PlayerRepositoryImpl(

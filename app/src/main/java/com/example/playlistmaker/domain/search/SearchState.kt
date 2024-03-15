@@ -1,4 +1,6 @@
-package com.example.playlistmaker.domain.search.model
+package com.example.playlistmaker.domain.search
+
+import com.example.playlistmaker.domain.search.model.Track
 
 sealed interface SearchState {
     object HistoryClear : SearchState

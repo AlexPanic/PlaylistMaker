@@ -9,8 +9,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.SingleLiveEvent
+import com.example.playlistmaker.domain.search.SearchState
+import com.example.playlistmaker.domain.search.TracksConsumer
 import com.example.playlistmaker.domain.search.TracksInteractor
-import com.example.playlistmaker.domain.search.model.SearchState
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.search.usecase.ClearSearchHistoryUseCase
 import com.example.playlistmaker.domain.search.usecase.GetSearchHistoryUseCase
@@ -88,7 +89,7 @@ class SearchViewModel(
             renderState(SearchState.Loading)
             tracksInteractor.findTracks(
                 expression = newSearchText,
-                consumer = object : TracksInteractor.TracksConsumer {
+                consumer = object : TracksConsumer {
                     override fun consume(foundTracks: List<Track>?, errorMessage: String?) {
                         val tracks = mutableListOf<Track>()
                         if (foundTracks != null) {

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.player.model
+package com.example.playlistmaker.domain.player
 
 import com.example.playlistmaker.ui.enums.PlayerState
 
