@@ -5,9 +5,8 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.playlistmaker.domain.player.PlayerConsumer
-import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.domain.player.PlayerFeedback
+import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.ui.enums.PlayerCommand
 import com.example.playlistmaker.ui.enums.PlayerState
 import java.text.SimpleDateFormat
@@ -33,30 +32,29 @@ class PlayerViewModel(
     private val _state = MutableLiveData<PlayerState>(PlayerState.DEFAULT)
     private val _position = MutableLiveData<String>()
 
-    private val playerConsumer = object : PlayerConsumer {
-        override fun consume(feedback: PlayerFeedback) {
-            when (feedback) {
-                is PlayerFeedback.State -> {
-                    _state.postValue(feedback.state)
-                    trackIsPlaying = feedback.state == PlayerState.PLAYING
-                    when (feedback.state) {
-                        PlayerState.PREPARED -> {
-                            isPrepared = true
-                        }
-
-                        PlayerState.DEFAULT,
-                        PlayerState.PLAYBACK_COMPLETE -> {
-                            _position.postValue(DEFAULT_TIMER)
-                        }
-
-                        else -> {}
+    private val playerConsumer = { feedback: PlayerFeedback ->
+        when (feedback) {
+            is PlayerFeedback.State -> {
+                _state.postValue(feedback.state)
+                trackIsPlaying = feedback.state == PlayerState.PLAYING
+                when (feedback.state) {
+                    PlayerState.PREPARED -> {
+                        isPrepared = true
                     }
-                }
 
-                is PlayerFeedback.Position -> {
-                    _position.postValue(dateFormat.format(feedback.playPositionMillis))
+                    PlayerState.DEFAULT,
+                    PlayerState.PLAYBACK_COMPLETE -> {
+                        _position.postValue(DEFAULT_TIMER)
+                    }
+
+                    else -> {}
                 }
             }
+
+            is PlayerFeedback.Position -> {
+                _position.postValue(dateFormat.format(feedback.playPositionMillis))
+            }
+
         }
     }
 
