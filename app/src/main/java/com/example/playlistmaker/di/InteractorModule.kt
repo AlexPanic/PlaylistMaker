@@ -27,10 +27,10 @@ val interactorModule = module {
     }
 
     factory<FavoritesInteractor> {
-        FavoritesInteractorImpl()
+        FavoritesInteractorImpl(get())
     }
 
     factory<PlaylistsInteractor> {
-        PlaylistsInteractorImpl()
+        PlaylistsInteractorImpl(get())
     }
 }
