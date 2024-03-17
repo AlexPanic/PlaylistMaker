@@ -25,6 +25,13 @@
     <string name="nothing_found">Ничего не нашлось</string>
     <string name="something_went_wrong">Проблемы со связью\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="update">Обновить</string>
+
+    <string name="empty_favorites">Ваша медиатека пуста</string>
+    <string name="tab_favorites">Избранные треки</string>
+
+    <string name="tab_playlists">Плейлисты</string>
+    <string name="empty_playlists">Вы не создали\nни одного плейлиста</string>
+    <string name="new_playlist">Новый плейлист</string>
     <string name="img_alert_icon">Алерт в результатах поиска</string>
 
     <string name="search_history_header">Вы искали</string>

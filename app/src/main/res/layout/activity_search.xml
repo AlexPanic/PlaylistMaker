@@ -89,11 +89,12 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:contentDescription="@string/img_alert_icon"
+                android:layout_marginTop="@dimen/error_icon_margin_top"
                 tools:src="@drawable/something_went_wrong" />
 
             <TextView
                 android:id="@+id/tvApiResponseMessage"
-                style="@style/requestMessage"
+                style="@style/errorMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/ivApiResponseIcon"
