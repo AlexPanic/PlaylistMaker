@@ -37,17 +37,4 @@
         app:layout_constraintWidth_max="312dp"
         tools:text="Вы не создали ни одного плейлиста" />
 
-    <RelativeLayout
-        android:id="@+id/details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent" />
-    </RelativeLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
