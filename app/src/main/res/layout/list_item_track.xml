@@ -38,7 +38,7 @@
             <TextView
                 android:id="@+id/tvArtistName"
                 style="@style/track_info"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ellipsize="end"
