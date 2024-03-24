@@ -245,4 +245,16 @@
     </style>
 
 
+    <style name="bottomNav.itemText">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="bottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="itemBackground">@color/yp_white</item>
+        <item name="itemIconSize">24dp</item>
+        <item name="itemTextAppearanceInactive">@style/bottomNav.itemText</item>
+        <item name="itemTextAppearanceActive">@style/bottomNav.itemText</item>
+    </style>
+
+
 </resources>

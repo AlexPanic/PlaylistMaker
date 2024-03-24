@@ -15,4 +15,7 @@
     <color name="filled_button_tint">@color/yp_white</color>
     <color name="filled_button_text">@color/yp_black</color>
 
+    <color name="bottom_nav_top_border">@color/yp_white</color>
+    <color name="bottom_nav_background_color">@color/yp_black</color>
+
 </resources>

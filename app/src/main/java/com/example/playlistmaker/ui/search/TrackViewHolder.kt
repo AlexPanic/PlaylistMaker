@@ -15,7 +15,7 @@ class TrackViewHolder(
     parent: ViewGroup,
     private val clickListener: TrackListAdapter.TrackClickListener,
 ) : RecyclerView.ViewHolder(
-    LayoutInflater.from(parent.context).inflate(R.layout.track_view, parent, false)
+    LayoutInflater.from(parent.context).inflate(R.layout.list_item_track, parent, false)
 ) {
     private val cover: ImageView = itemView.findViewById(R.id.artworkUrl)
     private val track: TextView = itemView.findViewById(R.id.tvTrackName)
