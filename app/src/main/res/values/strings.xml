@@ -37,6 +37,10 @@
     <string name="search_history_header">Вы искали</string>
     <string name="search_history_clear">Очистить историю</string>
 
+    <string name="image_artwork">Обложка трека</string>
+    <string name="image_divider_point">Точка разделитель</string>
+    <string name="image_arrow_forward">Стрелка вперед</string>
+
     <string name="player_track_time">Длительность</string>
     <string name="player_track_album">Альбом</string>
     <string name="player_track_year">Год</string>
