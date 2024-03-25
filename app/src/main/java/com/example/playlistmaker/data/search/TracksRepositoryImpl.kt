@@ -1,20 +1,21 @@
 package com.example.playlistmaker.data.search
 
+import android.content.Context
+import com.example.playlistmaker.R
+import com.example.playlistmaker.creator.Resource
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.dto.TracksSearchRequest
 import com.example.playlistmaker.data.dto.TracksSearchResponse
-import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.domain.search.TracksRepository
-import com.example.playlistmaker.creator.Resource
+import com.example.playlistmaker.domain.search.model.Track
 
-class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRepository {
+class TracksRepositoryImpl(
+    private val networkClient: NetworkClient,
+    private val context: Context,
+) : TracksRepository {
     override fun findTracks(expression: String): Resource<List<Track>> {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         return when (response.resultCode) {
-            -1 -> {
-                Resource.Error("Проверьте подключение к интернету")
-            }
-
             200 -> {
                 Resource.Success((response as TracksSearchResponse).results.map {
                     Track(
@@ -32,8 +33,12 @@ class TracksRepositoryImpl(private val networkClient: NetworkClient) : TracksRep
                 })
             }
 
+            404 -> {
+                Resource.Error(context.getString(R.string.nothing_found))
+            }
+
             else -> {
-                Resource.Error("Ошибка сервера")
+                Resource.Error(context.getString(R.string.something_went_wrong))
             }
         }
     }

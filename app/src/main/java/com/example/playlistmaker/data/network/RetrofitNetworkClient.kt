@@ -29,13 +29,15 @@ class RetrofitNetworkClient(
     }
 
     override fun doRequest(dto: Any): Response {
-        if (isConnected() == false) {
+        if (!isConnected()) {
             return Response().apply { resultCode = -1 }
         }
-        if (dto !is TracksSearchRequest) {
-            return Response().apply { resultCode = 400 }
+        when (dto) {
+            is TracksSearchRequest -> {}
+            else -> {
+                return Response().apply { resultCode = 400 }
+            }
         }
-
         val response = apiService.findTracks(dto.expression).execute()
         val body = response.body()
         return if (body != null) {

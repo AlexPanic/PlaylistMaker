@@ -109,7 +109,7 @@ class SearchFragment : Fragment() {
             if (binding.tilSearchTracksField.hasFocus() && searchMask.isEmpty()) {
                 viewModel.showHistory()
             } else if (searchMask.isNotEmpty()) {
-                viewModel.searchDebounce(searchMask)
+                viewModel.searchDebounce(searchMask, false)
             }
         }
 
@@ -139,7 +139,7 @@ class SearchFragment : Fragment() {
         binding.btSearchReload.setOnClickListener {
             if (searchMask.isNotEmpty()) {
                 binding.tilSearchTracksField.editText?.setText(searchMask)
-                viewModel.searchDebounce(searchMask)
+                viewModel.searchDebounce(searchMask, force = true)
             }
         }
 
@@ -150,7 +150,7 @@ class SearchFragment : Fragment() {
             is SearchState.Loading -> showLoading()
             is SearchState.Content -> showContent(state.tracks)
             is SearchState.Empty -> showEmpty(state.message)
-            is SearchState.Error -> showEmpty(state.errorMessage)
+            is SearchState.Error -> showError(state.errorMessage)
             is SearchState.HistoryClear -> hideAll()
             is SearchState.HistoryList -> showSearchHistory(tracks = state.tracks)
         }
@@ -171,9 +171,13 @@ class SearchFragment : Fragment() {
     }
 
     private fun showEmpty(emptyMessage: String) {
-        showError(emptyMessage)
-        binding.ivApiResponseIcon.setImageResource(ApiResultIcons.NOTHING_FOUND.drawableId)
-        binding.ivApiResponseIcon.isVisible = true
+        hideAll()
+        with(binding) {
+            ivApiResponseIcon.setImageResource(ApiResultIcons.NOTHING_FOUND.drawableId)
+            ivApiResponseIcon.isVisible = true
+            tvApiResponseMessage.text = emptyMessage
+            tvApiResponseMessage.isVisible = true
+        }
     }
 
     private fun showError(errorMessage: String) {
