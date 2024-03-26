@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -21,6 +22,7 @@ class TrackViewHolder(
     private val track: TextView = itemView.findViewById(R.id.tvTrackName)
     private val artist: TextView = itemView.findViewById(R.id.tvArtistName)
     private val time: TextView = itemView.findViewById(R.id.tvTrackDuration)
+    private val ivPlayTheTrackArrow: ImageView = itemView.findViewById(R.id.ivPlayTheTrackArrow)
     private val cornerRadius = 2f
 
     fun bind(model: Track) {
@@ -34,6 +36,17 @@ class TrackViewHolder(
             .transform(RoundedCorners(Helper.dpToPx(this.cornerRadius)))
             .into(cover)
 
-        itemView.setOnClickListener {clickListener.onTrackClick(track = model)}
+
+        when (model.previewUrl) {
+            null -> {
+                ivPlayTheTrackArrow.isVisible = false
+                itemView.setOnClickListener {}
+            }
+
+            else -> {
+                itemView.setOnClickListener { clickListener.onTrackClick(track = model) }
+            }
+        }
+
     }
 }

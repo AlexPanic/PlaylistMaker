@@ -17,7 +17,10 @@ class TracksRepositoryImpl(
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         return when (response.resultCode) {
             200 -> {
-                Resource.Success((response as TracksSearchResponse).results.map {
+                if ((response as TracksSearchResponse).results.isEmpty())
+                    Resource.Error(context.getString(R.string.nothing_found))
+                else
+                Resource.Success(response.results.map {
                     Track(
                         trackId = it.trackId,
                         trackName = it.trackName,
@@ -28,7 +31,7 @@ class TracksRepositoryImpl(
                         collectionName = it.collectionName,
                         releaseDate = it.releaseDate,
                         primaryGenreName = it.primaryGenreName,
-                        country = it.country
+                        country = it.country,
                     )
                 })
             }
