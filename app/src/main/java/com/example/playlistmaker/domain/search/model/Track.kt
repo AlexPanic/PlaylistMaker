@@ -8,14 +8,14 @@ data class Track(
     val artistName: String,
     val trackTimeMillis: Int,
     val artworkUrl100: String,
-    val previewUrl: String?,
+    val previewUrl: String,
     val collectionName: String,
-    val releaseDate: String?,
+    val releaseDate: String,
     val primaryGenreName: String,
-    val country: String
+    var country: String
 ) : Serializable {
     fun getArtworkUrl512() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
-    fun getYear() = releaseDate?.substring(0, 4) ?: ""
+    fun getYear() = if (releaseDate.isNotEmpty()) {releaseDate.substring(0, 4)} else ""
     fun trackTime(): String {
         val sec = trackTimeMillis / 1000
         val mm = sec / 60

@@ -37,16 +37,13 @@ class TrackViewHolder(
             .into(cover)
 
 
-        when (model.previewUrl) {
-            null -> {
-                ivPlayTheTrackArrow.isVisible = false
-                itemView.setOnClickListener {}
-            }
-
-            else -> {
-                itemView.setOnClickListener { clickListener.onTrackClick(track = model) }
-            }
+        if (model.previewUrl.isEmpty()) {
+            ivPlayTheTrackArrow.isVisible = false
+            itemView.setOnClickListener {}
+        } else {
+            ivPlayTheTrackArrow.isVisible = true
+            itemView.setOnClickListener { clickListener.onTrackClick(track = model) }
         }
-
     }
+
 }

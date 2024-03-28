@@ -26,12 +26,12 @@ class TracksRepositoryImpl(
                         trackName = it.trackName,
                         artistName = it.artistName,
                         trackTimeMillis = it.trackTimeMillis,
-                        artworkUrl100 = it.artworkUrl100,
-                        previewUrl = it.previewUrl,
-                        collectionName = it.collectionName,
-                        releaseDate = it.releaseDate,
-                        primaryGenreName = it.primaryGenreName,
-                        country = it.country,
+                        artworkUrl100 = it.artworkUrl100.orEmpty(),
+                        previewUrl = it.previewUrl.orEmpty(),
+                        collectionName = it.collectionName.orEmpty(),
+                        releaseDate = it.releaseDate.orEmpty(),
+                        primaryGenreName = it.primaryGenreName.orEmpty(),
+                        country = it.country.orEmpty(),
                     )
                 })
             }

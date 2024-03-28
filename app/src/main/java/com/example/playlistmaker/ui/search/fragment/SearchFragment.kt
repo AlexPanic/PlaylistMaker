@@ -167,6 +167,7 @@ class SearchFragment : Fragment() {
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
+        binding.rvTracks.scrollToPosition(0)
         binding.rvTracks.isVisible = true
     }
 
