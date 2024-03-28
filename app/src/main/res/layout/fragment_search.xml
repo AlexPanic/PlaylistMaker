@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        app:title="@string/act_search"
+        app:title="@string/screen_search"
         app:titleTextAppearance="@style/toolbar" />
 
     <LinearLayout style="@style/screen">
@@ -26,7 +26,7 @@
                 style="@style/searchInput"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:hint="@string/act_search" />
+                android:hint="@string/screen_search" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout

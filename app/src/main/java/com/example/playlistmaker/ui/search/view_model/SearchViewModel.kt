@@ -44,8 +44,8 @@ class SearchViewModel(
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
-    fun searchDebounce(changedText: String) {
-        if (latestSearchText == changedText) {
+    fun searchDebounce(changedText: String, force: Boolean) {
+        if ((latestSearchText == changedText) && !force) {
             return
         }
         this.latestSearchText = changedText
@@ -94,28 +94,29 @@ class SearchViewModel(
                     if (foundTracks != null) {
                         tracks.addAll(foundTracks)
                     }
-                    when {
-                        errorMessage != null -> {
+                    when (errorMessage) {
+                        null -> {
                             renderState(
-                                SearchState.Error(
-                                    errorMessage = context.getString(R.string.something_went_wrong)
-                                )
+                                SearchState.Content(tracks = tracks)
                             )
                         }
 
-                        tracks.isEmpty() -> {
+                        context.getString(R.string.nothing_found) -> {
                             renderState(
                                 SearchState.Empty(
-                                    message = context.getString(R.string.nothing_found)
+                                    message = errorMessage
                                 )
                             )
                         }
 
                         else -> {
                             renderState(
-                                SearchState.Content(tracks = tracks)
+                                SearchState.Error(
+                                    errorMessage
+                                )
                             )
                         }
+
                     }
 
                 }

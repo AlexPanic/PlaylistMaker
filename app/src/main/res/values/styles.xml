@@ -128,7 +128,7 @@
         <item name="android:maxLength">100</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@color/yp_black</item>
-        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">@dimen/input_text</item>
         <item name="android:padding">8dp</item>
     </style>
@@ -242,6 +242,18 @@
         <item name="tabTextColor">@color/yp_black</item>
         <item name="tabIndicatorColor">@color/yp_black</item>
         <item name="tabBackground">?attr/colorOnPrimary</item>
+    </style>
+
+
+    <style name="bottomNav.itemText">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="bottomNav" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="itemBackground">@color/yp_white</item>
+        <item name="itemIconSize">24dp</item>
+        <item name="itemTextAppearanceInactive">@style/bottomNav.itemText</item>
+        <item name="itemTextAppearanceActive">@style/bottomNav.itemText</item>
     </style>
 
 

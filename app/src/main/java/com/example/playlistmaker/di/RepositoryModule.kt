@@ -21,6 +21,6 @@ val repositoryModule = module {
         SettingsRepositoryImpl(androidContext())
     }
     single<TracksRepository> {
-        TracksRepositoryImpl(get())
+        TracksRepositoryImpl(get(), androidContext())
     }
 }

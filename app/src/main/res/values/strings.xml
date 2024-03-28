@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">Playlist maker</string>
     <string name="lorem_ipsum">пока тут пусто</string>
-    <string name="act_search">Поиск</string>
-    <string name="act_settings">Настройки</string>
-    <string name="act_media">Медиатека</string>
-    <string name="act_player">Плеер</string>
+    <string name="screen_search">Поиск</string>
+    <string name="screen_settings">Настройки</string>
+    <string name="screen_mediateka">Медиатека</string>
+    <string name="screen_player">Плеер</string>
 
     <string name="settings_dark">Темная тема</string>
     <string name="settings_share">Поделиться приложением</string>
@@ -36,6 +36,10 @@
 
     <string name="search_history_header">Вы искали</string>
     <string name="search_history_clear">Очистить историю</string>
+
+    <string name="image_artwork">Обложка трека</string>
+    <string name="image_divider_point">Точка разделитель</string>
+    <string name="image_arrow_forward">Стрелка вперед</string>
 
     <string name="player_track_time">Длительность</string>
     <string name="player_track_album">Альбом</string>

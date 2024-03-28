@@ -39,7 +39,7 @@ class PlayerActivity : AppCompatActivity() {
         val track =
             intent.getSerializableExtra(Track.INTENT_EXTRA_ID, Track::class.java) as Track
         setViewsData(track)
-        viewModel.prepare(track.previewUrl)
+        viewModel.prepare(track.previewUrl!!)
 
         binding.btPlayControl.setOnClickListener {
             viewModel.playPause()

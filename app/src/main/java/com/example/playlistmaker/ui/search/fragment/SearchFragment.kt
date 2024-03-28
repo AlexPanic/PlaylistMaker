@@ -1,36 +1,48 @@
-package com.example.playlistmaker.ui.search.activity
+package com.example.playlistmaker.ui.search.fragment
 
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.SearchState
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.common.Helper
 import com.example.playlistmaker.ui.enums.ApiResultIcons
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.TrackListAdapter
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
+
     companion object {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
         private const val SEARCH_STRING = "SEARCH_STRING"
     }
 
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+    private val viewModel by viewModel<SearchViewModel>()
+    private var isClickAllowed = true
+    private var searchMask: String = ""
+    private val handler = Handler(Looper.getMainLooper())
+    private lateinit var tracksRv: RecyclerView
+    private lateinit var historyRv: RecyclerView
+
     private fun startPlayer(track: Track) {
         if (clickDebounce()) {
-            val intent = Intent(this@SearchActivity, PlayerActivity::class.java)
+            val intent = Intent(activity, PlayerActivity::class.java)
             intent.putExtra(
                 Track.INTENT_EXTRA_ID, track
             )
@@ -55,37 +67,37 @@ class SearchActivity : AppCompatActivity() {
         })
 
 
-    private var isClickAllowed = true
-    private var searchMask: String = ""
-    private val handler = Handler(Looper.getMainLooper())
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        searchMask = savedInstanceState?.getString(SEARCH_STRING, "").orEmpty()
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-    private lateinit var binding: ActivitySearchBinding
-    private lateinit var tracksRv: RecyclerView
-    private lateinit var historyRv: RecyclerView
-
-    private val viewModel by viewModel<SearchViewModel>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        Helper.setToolbar(this)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         // подпишемся на изменения
-        viewModel.observeState().observe(this) {
+        viewModel.observeState().observe(viewLifecycleOwner) {
             render(it)
         }
-        viewModel.observeShowToast().observe(this) {
+        viewModel.observeShowToast().observe(viewLifecycleOwner) {
             showToast(it)
         }
 
+        // адаптер поиска
         tracksRv = binding.rvTracks
-        tracksRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        tracksRv.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         tracksRv.adapter = adapter
 
-        // адаптер истории поиска
+        // адаптер истории
         historyRv = binding.rvTracksHistory
-        historyRv.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        historyRv.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         historyRv.adapter = adapterHistory
 
         // установим сохраненное значение маски
@@ -97,7 +109,7 @@ class SearchActivity : AppCompatActivity() {
             if (binding.tilSearchTracksField.hasFocus() && searchMask.isEmpty()) {
                 viewModel.showHistory()
             } else if (searchMask.isNotEmpty()) {
-                viewModel.searchDebounce(searchMask)
+                viewModel.searchDebounce(searchMask, false)
             }
         }
 
@@ -127,9 +139,10 @@ class SearchActivity : AppCompatActivity() {
         binding.btSearchReload.setOnClickListener {
             if (searchMask.isNotEmpty()) {
                 binding.tilSearchTracksField.editText?.setText(searchMask)
-                viewModel.searchDebounce(searchMask)
+                viewModel.searchDebounce(searchMask, force = true)
             }
         }
+
     }
 
     private fun render(state: SearchState) {
@@ -137,7 +150,7 @@ class SearchActivity : AppCompatActivity() {
             is SearchState.Loading -> showLoading()
             is SearchState.Content -> showContent(state.tracks)
             is SearchState.Empty -> showEmpty(state.message)
-            is SearchState.Error -> showEmpty(state.errorMessage)
+            is SearchState.Error -> showError(state.errorMessage)
             is SearchState.HistoryClear -> hideAll()
             is SearchState.HistoryList -> showSearchHistory(tracks = state.tracks)
         }
@@ -154,13 +167,18 @@ class SearchActivity : AppCompatActivity() {
         adapter.tracks.clear()
         adapter.tracks.addAll(tracks)
         adapter.notifyDataSetChanged()
+        binding.rvTracks.scrollToPosition(0)
         binding.rvTracks.isVisible = true
     }
 
     private fun showEmpty(emptyMessage: String) {
-        showError(emptyMessage)
-        binding.ivApiResponseIcon.setImageResource(ApiResultIcons.NOTHING_FOUND.drawableId)
-        binding.ivApiResponseIcon.isVisible = true
+        hideAll()
+        with(binding) {
+            ivApiResponseIcon.setImageResource(ApiResultIcons.NOTHING_FOUND.drawableId)
+            ivApiResponseIcon.isVisible = true
+            tvApiResponseMessage.text = emptyMessage
+            tvApiResponseMessage.isVisible = true
+        }
     }
 
     private fun showError(errorMessage: String) {
@@ -202,14 +220,14 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showToast(additionalMessage: String) {
-        Toast.makeText(this, additionalMessage, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), additionalMessage, Toast.LENGTH_LONG).show()
     }
 
     private fun hideKeyboard() {
-        val view: View? = this.currentFocus
+        val view: View? = activity?.currentFocus
         if (view != null) {
             val inputMethodManager =
-                getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                activity?.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
@@ -219,14 +237,13 @@ class SearchActivity : AppCompatActivity() {
         outState.putString(SEARCH_STRING, searchMask)
     }
 
-    override fun onRestoreInstanceState(outState: Bundle) {
-        super.onRestoreInstanceState(outState)
-        searchMask = outState.getString(SEARCH_STRING, "")
-    }
-
     override fun onStop() {
         viewModel.saveHistory()
         super.onStop()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
