@@ -2,7 +2,6 @@ package com.example.playlistmaker.ui.player.activity
 
 import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -21,7 +20,6 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPlayerBinding
     private val viewModel by viewModel<PlayerViewModel>()
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -37,9 +35,13 @@ class PlayerActivity : AppCompatActivity() {
         }
 
         val track =
-            intent.getSerializableExtra(Track.INTENT_EXTRA_ID, Track::class.java) as Track
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                intent.getSerializableExtra(Track.INTENT_EXTRA_ID, Track::class.java) as Track
+            } else {
+                intent.getSerializableExtra(Track.INTENT_EXTRA_ID) as Track
+            }
         setViewsData(track)
-        viewModel.prepare(track.previewUrl!!)
+        viewModel.prepare(track.previewUrl)
 
         binding.btPlayControl.setOnClickListener {
             viewModel.playPause()
@@ -66,7 +68,6 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun renderState(state: PlayerState) {
         when (state) {
             PlayerState.DEFAULT -> {}
