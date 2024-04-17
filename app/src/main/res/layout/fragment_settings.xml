@@ -10,7 +10,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        app:title="@string/act_settings"
+        app:title="@string/screen_settings"
         app:titleTextAppearance="@style/toolbar" />
 
     <LinearLayout style="@style/screen">

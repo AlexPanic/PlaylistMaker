@@ -11,7 +11,7 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/toolbar_height"
-        app:title="@string/act_media"
+        app:title="@string/screen_mediateka"
         app:titleTextAppearance="@style/toolbar" />
 
 

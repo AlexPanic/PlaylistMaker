@@ -83,5 +83,10 @@
         <item name="tabBackground">?attr/colorPrimaryVariant</item>
     </style>
 
+    <style name="bottomNav" parent="Theme.MaterialComponents.DayNight">
+        <item name="elevationOverlayEnabled">false</item>
+        <item name="colorSurface">@color/yp_black</item>
+    </style>
+
 
 </resources>

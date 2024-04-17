@@ -11,7 +11,9 @@ import com.example.playlistmaker.ui.mediateka.view_model.FavoritesViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoritesFragment : Fragment() {
-    private lateinit var binding: FragmentFavoritesBinding
+
+    private var _binding: FragmentFavoritesBinding? = null
+    private val binding get() = _binding!!
     private val favoritesViewModel by viewModel<FavoritesViewModel>()
 
     override fun onCreateView(
@@ -19,7 +21,7 @@ class FavoritesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFavoritesBinding.inflate(inflater, container, false)
+        _binding = FragmentFavoritesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -30,6 +32,11 @@ class FavoritesFragment : Fragment() {
                 is FavoritesState.Error -> showError(it.message)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun showError(message: String) {

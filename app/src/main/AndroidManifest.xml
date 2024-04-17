@@ -15,27 +15,21 @@
         android:theme="@style/Theme.MyApp"
         tools:targetApi="31">
         <activity
-            android:name=".ui.mediateka.activity.MediatekaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.search.activity.SearchActivity"
+            android:name=".ui.RootActivity"
+            android:windowSoftInputMode="adjustNothing"
+            android:clearTaskOnLaunch="true"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="false" />
-        <activity
-            android:name=".ui.settings.activity.SettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.player.activity.PlayerActivity"
-            android:exported="true">
-        </activity>
-        <activity
-            android:name=".ui.main.activity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.player.activity.PlayerActivity"
+            android:exported="true">
+        </activity>
+
     </application>
 
 </manifest>

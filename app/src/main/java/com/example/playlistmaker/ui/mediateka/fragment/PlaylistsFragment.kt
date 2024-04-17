@@ -11,7 +11,9 @@ import com.example.playlistmaker.ui.mediateka.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
-    private lateinit var binding: FragmentPlaylistsBinding
+
+    private var _binding: FragmentPlaylistsBinding? = null
+    private val binding get() = _binding!!
     private val playlistsViewModel by viewModel<PlaylistsViewModel>()
 
     override fun onCreateView(
@@ -19,7 +21,7 @@ class PlaylistsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
+        _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -32,6 +34,11 @@ class PlaylistsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun showError(message: String) {
