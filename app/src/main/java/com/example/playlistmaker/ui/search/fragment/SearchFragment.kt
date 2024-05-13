@@ -2,8 +2,6 @@ package com.example.playlistmaker.ui.search.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.creator.debounce
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.SearchState
 import com.example.playlistmaker.domain.search.model.Track
@@ -27,33 +27,22 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class SearchFragment : Fragment() {
 
     companion object {
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val CLICK_DEBOUNCE_DELAY = 300L
         private const val SEARCH_STRING = "SEARCH_STRING"
     }
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModel<SearchViewModel>()
-    private var isClickAllowed = true
     private var searchMask: String = ""
-    private val handler = Handler(Looper.getMainLooper())
     private lateinit var tracksRv: RecyclerView
     private lateinit var historyRv: RecyclerView
-
-    private fun startPlayer(track: Track) {
-        if (clickDebounce()) {
-            val intent = Intent(activity, PlayerActivity::class.java)
-            intent.putExtra(
-                Track.INTENT_EXTRA_ID, track
-            )
-            startActivity(intent)
-        }
-    }
+    private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     private val adapterHistory =
         TrackListAdapter(clickListener = object : TrackListAdapter.TrackClickListener {
             override fun onTrackClick(track: Track) {
-                startPlayer(track)
+                onTrackClickDebounce(track)
             }
 
         })
@@ -62,7 +51,7 @@ class SearchFragment : Fragment() {
         TrackListAdapter(clickListener = object : TrackListAdapter.TrackClickListener {
             override fun onTrackClick(track: Track) {
                 viewModel.addToHistory(track)
-                startPlayer(track)
+                onTrackClickDebounce(track)
             }
         })
 
@@ -79,6 +68,18 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        onTrackClickDebounce = debounce<Track>(
+            delayMillis = CLICK_DEBOUNCE_DELAY,
+            coroutineScope = viewLifecycleOwner.lifecycleScope,
+            useLastParam = true,
+        ) { track ->
+            val intent = Intent(activity, PlayerActivity::class.java)
+            intent.putExtra(
+                Track.INTENT_EXTRA_ID, track
+            )
+            startActivity(intent)
+        }
 
         // подпишемся на изменения
         viewModel.observeState().observe(viewLifecycleOwner) {
@@ -208,15 +209,6 @@ class SearchFragment : Fragment() {
             searchProgressBar.isVisible = false
             tvApiResponseMessage.isVisible = false
         }
-    }
-
-    private fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
-        }
-        return current
     }
 
     private fun showToast(additionalMessage: String) {
