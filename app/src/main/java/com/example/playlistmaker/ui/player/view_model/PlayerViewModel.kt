@@ -1,14 +1,16 @@
 package com.example.playlistmaker.ui.player.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.player.PlayerFeedback
 import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.ui.enums.PlayerCommand
 import com.example.playlistmaker.ui.enums.PlayerState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -17,18 +19,15 @@ class PlayerViewModel(
 ) : ViewModel() {
     companion object {
         private const val DEFAULT_TIMER = "00:00"
-        private const val DELAY_MILLIS = 250L
+        private const val TIMER_DELAY_MILLIS = 300L
         private const val CLICK_DEBOUNCE_DELAY_MILLIS = 1000L
-        private val PLAYER_POSITION_TOKEN = Any()
     }
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private var trackIsPlaying = false
     private var isPrepared = false
     private var isClickAllowed = true
-    private val handler = Handler(Looper.getMainLooper())
-    private var runnable = Runnable { updatePlayerPosition() }
-
+    private var timerJob: Job? = null
     private val _state = MutableLiveData<PlayerState>(PlayerState.DEFAULT)
     private val _position = MutableLiveData<String>()
 
@@ -79,12 +78,13 @@ class PlayerViewModel(
                     command = PlayerCommand.PAUSE,
                     consumer = playerConsumer
                 )
+                timerJob?.cancel()
             } else {
                 playerInteractor.execute(
                     command = PlayerCommand.PLAY,
                     consumer = playerConsumer
                 )
-                handler.post(runnable)
+                startTimer()
             }
         }
     }
@@ -93,7 +93,6 @@ class PlayerViewModel(
         if (isPrepared) {
             playerInteractor.execute(command = PlayerCommand.PAUSE, consumer = playerConsumer)
         }
-        handler.removeCallbacksAndMessages(PLAYER_POSITION_TOKEN)
     }
 
     fun onActivityResume() {
@@ -103,7 +102,6 @@ class PlayerViewModel(
     }
 
     override fun onCleared() {
-        handler.removeCallbacksAndMessages(PLAYER_POSITION_TOKEN)
         playerInteractor.execute(command = PlayerCommand.RELEASE, consumer = playerConsumer)
     }
 
@@ -114,11 +112,15 @@ class PlayerViewModel(
                 consumer = playerConsumer
             )
             playerInteractor.execute(command = PlayerCommand.GET_STATE, consumer = playerConsumer)
-            handler.postDelayed(
-                runnable,
-                PLAYER_POSITION_TOKEN,
-                DELAY_MILLIS
-            )
+        }
+    }
+
+    private fun startTimer() {
+        timerJob = viewModelScope.launch {
+            while (trackIsPlaying) {
+                delay(TIMER_DELAY_MILLIS)
+                updatePlayerPosition()
+            }
         }
     }
 
@@ -126,10 +128,10 @@ class PlayerViewModel(
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed(
-                { isClickAllowed = true },
-                CLICK_DEBOUNCE_DELAY_MILLIS
-            )
+            viewModelScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY_MILLIS)
+                isClickAllowed = true
+            }
         }
         return current
     }

@@ -47,6 +47,8 @@ dependencies {
     implementation("androidx.viewpager2:viewpager2:1.0.0")
     implementation("com.google.android.material:material:1.11.0")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
     implementation("io.insert-koin:koin-android:3.3.0")
 
     implementation("androidx.core:core-ktx:1.12.0")

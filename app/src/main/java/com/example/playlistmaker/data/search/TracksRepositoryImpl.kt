@@ -8,40 +8,42 @@ import com.example.playlistmaker.data.dto.TracksSearchRequest
 import com.example.playlistmaker.data.dto.TracksSearchResponse
 import com.example.playlistmaker.domain.search.TracksRepository
 import com.example.playlistmaker.domain.search.model.Track
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class TracksRepositoryImpl(
     private val networkClient: NetworkClient,
     private val context: Context,
 ) : TracksRepository {
-    override fun findTracks(expression: String): Resource<List<Track>> {
+    override fun findTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
-        return when (response.resultCode) {
+        when (response.resultCode) {
             200 -> {
                 if ((response as TracksSearchResponse).results.isEmpty())
-                    Resource.Error(context.getString(R.string.nothing_found))
+                    emit(Resource.Error(context.getString(R.string.nothing_found)))
                 else
-                Resource.Success(response.results.map {
-                    Track(
-                        trackId = it.trackId,
-                        trackName = it.trackName,
-                        artistName = it.artistName,
-                        trackTimeMillis = it.trackTimeMillis,
-                        artworkUrl100 = it.artworkUrl100.orEmpty(),
-                        previewUrl = it.previewUrl.orEmpty(),
-                        collectionName = it.collectionName.orEmpty(),
-                        releaseDate = it.releaseDate.orEmpty(),
-                        primaryGenreName = it.primaryGenreName.orEmpty(),
-                        country = it.country.orEmpty(),
-                    )
-                })
+                    emit(Resource.Success(response.results.map {
+                        Track(
+                            trackId = it.trackId,
+                            trackName = it.trackName,
+                            artistName = it.artistName,
+                            trackTimeMillis = it.trackTimeMillis,
+                            artworkUrl100 = it.artworkUrl100.orEmpty(),
+                            previewUrl = it.previewUrl.orEmpty(),
+                            collectionName = it.collectionName.orEmpty(),
+                            releaseDate = it.releaseDate.orEmpty(),
+                            primaryGenreName = it.primaryGenreName.orEmpty(),
+                            country = it.country.orEmpty(),
+                        )
+                    }))
             }
 
             404 -> {
-                Resource.Error(context.getString(R.string.nothing_found))
+                emit(Resource.Error(context.getString(R.string.nothing_found)))
             }
 
             else -> {
-                Resource.Error(context.getString(R.string.something_went_wrong))
+                emit(Resource.Error(context.getString(R.string.something_went_wrong)))
             }
         }
     }
