@@ -14,6 +14,6 @@
         android:label="SettingsFragment" />
     <fragment
         android:id="@+id/mediatekaFragment"
-        android:name="com.example.playlistmaker.ui.mediateka.fragment.MediatekaFragment"
+        android:name="com.example.playlistmaker.ui.mediateka.MediatekaFragment"
         android:label="MediatekaFragment" />
 </navigation>

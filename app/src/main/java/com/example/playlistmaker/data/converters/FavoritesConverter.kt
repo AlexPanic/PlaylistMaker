@@ -21,7 +21,7 @@ class FavoritesConverter {
         }
     }
 
-    fun map(track: Track): FavoritesEntity {
+    fun map(track: Track, maxId: Int?): FavoritesEntity {
         with(track) {
             return FavoritesEntity(
                 trackId,
@@ -33,8 +33,8 @@ class FavoritesConverter {
                 collectionName,
                 releaseDate,
                 primaryGenreName,
-                country/*,
-                1*/
+                country,
+                if (maxId==null) 1 else maxId+1
             )
         }
     }

@@ -34,5 +34,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/errorIcon" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favoritesList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:listitem="@layout/list_item_track"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

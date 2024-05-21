@@ -23,7 +23,8 @@ class FavoritesRepositoryImpl(
 
     override fun addToFavorites(track: Track): Flow<Boolean> = flow {
         withContext(Dispatchers.IO) {
-            val favTrack = favoritesConverter.map(track)
+            val maxId = appDatabase.favoritesDao().getMaxId()
+            val favTrack = favoritesConverter.map(track, maxId)
             appDatabase.favoritesDao().addToFavorites(favTrack)
         }
         emit(true)
@@ -31,7 +32,7 @@ class FavoritesRepositoryImpl(
 
     override fun removeFromFavorites(track: Track): Flow<Boolean> = flow {
         withContext(Dispatchers.IO) {
-            val favTrack = favoritesConverter.map(track)
+            val favTrack = favoritesConverter.map(track, null)
             appDatabase.favoritesDao().removeFromFavorites(favTrack)
         }
         emit(true)
