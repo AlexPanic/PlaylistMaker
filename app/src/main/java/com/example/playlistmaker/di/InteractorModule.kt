@@ -1,6 +1,6 @@
 package com.example.playlistmaker.di
 
-import com.example.playlistmaker.data.sharing.ExternalNavigatorImpl
+import com.example.playlistmaker.data.ExternalNavigatorImpl
 import com.example.playlistmaker.domain.mediateka.FavoritesInteractor
 import com.example.playlistmaker.domain.mediateka.PlaylistsInteractor
 import com.example.playlistmaker.domain.mediateka.impl.FavoritesInteractorImpl

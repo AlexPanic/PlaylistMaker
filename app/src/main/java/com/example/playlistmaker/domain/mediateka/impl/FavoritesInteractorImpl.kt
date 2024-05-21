@@ -1,18 +1,27 @@
 package com.example.playlistmaker.domain.mediateka.impl
 
-import android.content.Context
-import androidx.core.content.ContextCompat.getString
-import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.mediateka.FavoritesInteractor
-import com.example.playlistmaker.domain.mediateka.model.Favorites
-import java.util.concurrent.Executors
+import com.example.playlistmaker.domain.mediateka.FavoritesRepository
+import com.example.playlistmaker.domain.search.model.Track
+import kotlinx.coroutines.flow.Flow
 
-class FavoritesInteractorImpl(private val context: Context) : FavoritesInteractor {
-
-    private val executor = Executors.newCachedThreadPool()
-    override fun getFavorites(consumer: (Favorites?, String?) -> Unit) {
-        executor.execute {
-            consumer.invoke(null, getString(context, R.string.empty_favorites))
-        }
+class FavoritesInteractorImpl(
+    private val repository: FavoritesRepository,
+) : FavoritesInteractor {
+    override fun getFavorites(): Flow<List<Track>> {
+        return repository.getFavorites()
     }
+
+    override suspend fun addToFavorites(track: Track): Flow<Boolean> {
+        return repository.addToFavorites(track)
+    }
+
+    override suspend fun removeFromFavorites(track: Track): Flow<Boolean> {
+        return repository.removeFromFavorites(track)
+    }
+
+    override suspend fun isFavorite(trackID: Int): Flow<Boolean> {
+        return repository.isFavorite(trackID)
+    }
+
 }

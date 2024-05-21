@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.domain.mediateka.FavoritesInteractor
 import com.example.playlistmaker.domain.player.PlayerFeedback
 import com.example.playlistmaker.domain.player.PlayerInteractor
+import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.enums.PlayerCommand
 import com.example.playlistmaker.ui.enums.PlayerState
 import kotlinx.coroutines.Job
@@ -16,6 +18,7 @@ import java.util.Locale
 
 class PlayerViewModel(
     private val playerInteractor: PlayerInteractor,
+    private val favoritesInteractor: FavoritesInteractor,
 ) : ViewModel() {
     companion object {
         private const val DEFAULT_TIMER = "00:00"
@@ -30,6 +33,7 @@ class PlayerViewModel(
     private var timerJob: Job? = null
     private val _state = MutableLiveData<PlayerState>(PlayerState.DEFAULT)
     private val _position = MutableLiveData<String>()
+    private val _isFavorite = MutableLiveData<Boolean>(false)
 
     private val playerConsumer = { feedback: PlayerFeedback ->
         when (feedback) {
@@ -59,8 +63,41 @@ class PlayerViewModel(
 
     fun observeState(): LiveData<PlayerState> = _state
     fun observePosition(): LiveData<String> = _position
+    fun observeIsFavorite(): LiveData<Boolean> = _isFavorite
 
-    fun prepare(url: String) {
+    suspend fun toggleFavorite(isFavorite: Boolean, track: Track) {
+        viewModelScope.launch {
+            when (isFavorite) {
+                false -> {
+                    favoritesInteractor
+                        .addToFavorites(track)
+                        .collect {
+                            _isFavorite.postValue(true)
+                        }
+                }
+
+                true -> {
+                    favoritesInteractor
+                        .removeFromFavorites(track)
+                        .collect {
+                            _isFavorite.postValue(false)
+                        }
+
+                }
+            }
+        }
+    }
+
+    fun prepare(url: String, trackID: Int) {
+        viewModelScope.launch {
+            favoritesInteractor
+                .isFavorite(trackID)
+                .collect {
+                    if (it) {
+                        _isFavorite.postValue(it)
+                    }
+                }
+        }
         if (!isPrepared) {
             playerInteractor.execute(
                 command = PlayerCommand.PREPARE,

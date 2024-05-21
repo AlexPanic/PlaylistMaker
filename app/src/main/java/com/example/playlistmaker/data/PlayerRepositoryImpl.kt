@@ -1,4 +1,4 @@
-package com.example.playlistmaker.data.player
+package com.example.playlistmaker.data
 
 import android.media.MediaPlayer
 import android.util.Log

@@ -106,17 +106,18 @@
         android:state_enabled="false"
         app:backgroundTint="@color/filled_button_tint"
         app:layout_constraintBottom_toBottomOf="@id/btCopy"
-        app:layout_constraintEnd_toStartOf="@id/btLike"
+        app:layout_constraintEnd_toStartOf="@id/bt_favorite"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@id/btCopy"
         app:layout_constraintTop_toBottomOf="@id/tvArtistName" />
 
     <Button
-        android:id="@+id/btLike"
+        android:id="@+id/bt_favorite"
         android:layout_width="51dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="@drawable/btn3"
+        android:background="@drawable/btn_favorite"
+        android:enabled="false"
         android:clickable="true"
         app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="@id/btCopy"
