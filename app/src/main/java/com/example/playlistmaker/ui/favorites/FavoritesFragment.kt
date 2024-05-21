@@ -23,6 +23,7 @@ class FavoritesFragment : Fragment() {
     private val binding get() = _binding!!
     private val favoritesViewModel by viewModel<FavoritesViewModel>()
     private var adapter: FavoritesAdapter? = null
+    private var lastFavoritesState: FavoritesState? = null
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     override fun onCreateView(
@@ -59,12 +60,17 @@ class FavoritesFragment : Fragment() {
         binding.favoritesList.adapter = adapter
 
         favoritesViewModel.fillData()
-        favoritesViewModel.observeState().observe(viewLifecycleOwner) {
-            when (it) {
-                is FavoritesState.Loading -> showLoading()
-                is FavoritesState.Empty -> showEmpty(it.message)
-                is FavoritesState.Content -> showContent(it.tracks)
-            }
+        favoritesViewModel.observeState().observe(viewLifecycleOwner) { favoritesState ->
+            lastFavoritesState = favoritesState
+            renderResult(favoritesState)
+        }
+    }
+
+    private fun renderResult(state: FavoritesState) {
+        when (state) {
+            is FavoritesState.Loading -> showLoading()
+            is FavoritesState.Empty -> showEmpty(state.message)
+            is FavoritesState.Content -> showContent(state.tracks)
         }
     }
 
@@ -102,6 +108,11 @@ class FavoritesFragment : Fragment() {
             adapter?.tracks?.addAll(tracks)
             adapter?.notifyDataSetChanged()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        favoritesViewModel.fillData()
     }
 
     companion object {
