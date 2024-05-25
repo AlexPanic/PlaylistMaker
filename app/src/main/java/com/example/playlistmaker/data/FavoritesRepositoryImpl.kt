@@ -14,12 +14,17 @@ class FavoritesRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val favoritesConverter: FavoritesConverter,
 ) : FavoritesRepository {
-    override fun getFavorites(): Flow<List<Track>> = flow {
+    override fun getFavorites(): Flow<List<Track>> = flow{
+        appDatabase.favoritesDao().getFavorites().collect{
+            emit(convertFavoritesToTracks(it))
+        }
+    }
+    /*flow {
         val favorites = withContext(Dispatchers.IO) {
             appDatabase.favoritesDao().getFavorites()
         }
         emit(convertFavoritesToTracks(favorites))
-    }
+    }-*/
 
     override fun addToFavorites(track: Track): Flow<Boolean> = flow {
         withContext(Dispatchers.IO) {

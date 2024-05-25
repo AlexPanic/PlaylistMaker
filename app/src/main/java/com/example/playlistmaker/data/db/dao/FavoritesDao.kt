@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.playlistmaker.data.db.entity.FavoritesEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FavoritesDao {
@@ -16,7 +17,7 @@ interface FavoritesDao {
     fun removeFromFavorites(track: FavoritesEntity)
 
     @Query("SELECT * FROM favorites ORDER BY id DESC")
-    fun getFavorites(): List<FavoritesEntity>
+    fun getFavorites(): Flow<List<FavoritesEntity>>
 
     @Query("SELECT MAX(id) AS maxId FROM favorites")
     fun getMaxId(): Int?
