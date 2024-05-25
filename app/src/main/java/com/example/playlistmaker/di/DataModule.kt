@@ -1,7 +1,9 @@
 package com.example.playlistmaker.di
 
 import android.content.Context
+import androidx.room.Room
 import com.example.playlistmaker.data.NetworkClient
+import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.network.ItunesApiService
 import com.example.playlistmaker.data.network.RetrofitNetworkClient
 import com.google.gson.Gson
@@ -27,5 +29,11 @@ val dataModule = module {
 
     single<NetworkClient> {
         RetrofitNetworkClient(get(), androidContext())
+    }
+
+    single {
+        Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
+            .fallbackToDestructiveMigration()
+            .build()
     }
 }

@@ -1,9 +1,8 @@
-package com.example.playlistmaker.data.search
+package com.example.playlistmaker.data
 
 import android.content.Context
 import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.Resource
-import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.dto.TracksSearchRequest
 import com.example.playlistmaker.data.dto.TracksSearchResponse
 import com.example.playlistmaker.domain.search.TracksRepository

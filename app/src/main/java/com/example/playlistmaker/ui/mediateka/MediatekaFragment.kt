@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.mediateka.fragment
+package com.example.playlistmaker.ui.mediateka
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentMediatekaBinding
-import com.example.playlistmaker.ui.mediateka.MediatekaAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 
 class MediatekaFragment : Fragment() {
