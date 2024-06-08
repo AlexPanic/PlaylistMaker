@@ -21,7 +21,7 @@ class Helper {
             activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             activity.supportActionBar?.setDisplayShowHomeEnabled(true)
             toolbar.setNavigationOnClickListener{
-                activity.onBackPressed()
+                activity.onBackPressedDispatcher.onBackPressed()
             }
         }
     }

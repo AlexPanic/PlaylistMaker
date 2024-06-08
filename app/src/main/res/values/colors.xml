@@ -16,7 +16,7 @@
     <color name="switcher_track">#F0F1F3</color>
 
     <color name="input_background">@color/light_gray</color>
-    <color name="input_hint">#AEAFB4</color>
+    <color name="input_hint">@color/yp_gray</color>
 
     <color name="track_name">@color/black</color>
     <color name="track_info">@color/yp_gray</color>
