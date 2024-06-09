@@ -27,7 +27,7 @@ class RootActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.mediatekaFragment, R.id.playlistAddFragment -> {
+                R.id.playlistAddFragment -> {
                     bottomNavigationView.visibility = View.GONE
                 }
 

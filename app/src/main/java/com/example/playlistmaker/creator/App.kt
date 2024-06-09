@@ -9,6 +9,7 @@ import com.example.playlistmaker.di.useCaseModule
 import com.example.playlistmaker.di.viewModelModule
 import com.example.playlistmaker.domain.settings.usecase.GetDarkModeUseCase
 import com.example.playlistmaker.domain.settings.usecase.SetDarkModeUseCase
+import com.markodevcic.peko.PermissionRequester
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.java.KoinJavaComponent.inject
@@ -35,6 +36,8 @@ class App : Application() {
         // текущая темная тема нашего приложения
         appDarkMode = getDarkModeUseCase.execute(deviceDarkModeOn)
         setDarkModeUseCase.execute(appDarkMode)
+
+        PermissionRequester.initialize(applicationContext)
 
     }
 

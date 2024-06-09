@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.search.model.Track
@@ -32,10 +33,8 @@ class TrackViewHolder(
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .placeholder(R.drawable.cover_placeholder)
-            .fitCenter()
-            .transform(RoundedCorners(Helper.dpToPx(this.cornerRadius)))
+            .transform(FitCenter(), RoundedCorners(Helper.dpToPx(this.cornerRadius)))
             .into(cover)
-
 
         if (model.previewUrl.isEmpty()) {
             ivPlayTheTrackArrow.isVisible = false

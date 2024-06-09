@@ -58,6 +58,8 @@ dependencies {
     implementation("com.hannesdorfmann:adapterdelegates4-kotlin-dsl-viewbinding:4.3.2")
     implementation("io.insert-koin:koin-android:3.3.0")
 
+    implementation("com.markodevcic:peko:3.0.5")
+
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.activity:activity-ktx:1.8.2")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
@@ -75,8 +77,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    implementation("com.github.bumptech.glide:glide:4.14.2")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     implementation("com.google.code.gson:gson:2.10")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")

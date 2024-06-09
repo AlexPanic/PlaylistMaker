@@ -1,10 +1,10 @@
 package com.example.playlistmaker.di
 
 import com.example.playlistmaker.data.ExternalNavigatorImpl
-import com.example.playlistmaker.domain.mediateka.FavoritesInteractor
-import com.example.playlistmaker.domain.mediateka.PlaylistsInteractor
-import com.example.playlistmaker.domain.mediateka.impl.FavoritesInteractorImpl
-import com.example.playlistmaker.domain.mediateka.impl.PlaylistsInteractorImpl
+import com.example.playlistmaker.domain.favorites.FavoritesInteractor
+import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
+import com.example.playlistmaker.domain.favorites.impl.FavoritesInteractorImpl
+import com.example.playlistmaker.domain.playlists.impl.PlaylistsInteractorImpl
 import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.domain.player.usecase.impl.PlayerInteractorImpl
 import com.example.playlistmaker.domain.search.TracksInteractor

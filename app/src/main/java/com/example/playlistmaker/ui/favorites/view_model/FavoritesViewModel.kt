@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.mediateka.view_model
+package com.example.playlistmaker.ui.favorites.view_model
 
 import android.content.Context
 import androidx.lifecycle.LiveData
@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.mediateka.FavoritesInteractor
-import com.example.playlistmaker.domain.mediateka.FavoritesState
+import com.example.playlistmaker.domain.favorites.FavoritesInteractor
+import com.example.playlistmaker.domain.favorites.FavoritesState
 import com.example.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.launch
 

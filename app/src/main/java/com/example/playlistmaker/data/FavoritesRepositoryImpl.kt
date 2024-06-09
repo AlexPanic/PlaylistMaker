@@ -3,7 +3,7 @@ package com.example.playlistmaker.data
 import com.example.playlistmaker.data.converters.FavoritesConverter
 import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.db.entity.FavoritesEntity
-import com.example.playlistmaker.domain.mediateka.FavoritesRepository
+import com.example.playlistmaker.domain.favorites.FavoritesRepository
 import com.example.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -14,17 +14,11 @@ class FavoritesRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val favoritesConverter: FavoritesConverter,
 ) : FavoritesRepository {
-    override fun getFavorites(): Flow<List<Track>> = flow{
-        appDatabase.favoritesDao().getFavorites().collect{
+    override fun getFavorites(): Flow<List<Track>> = flow {
+        appDatabase.favoritesDao().getFavorites().collect {
             emit(convertFavoritesToTracks(it))
         }
     }
-    /*flow {
-        val favorites = withContext(Dispatchers.IO) {
-            appDatabase.favoritesDao().getFavorites()
-        }
-        emit(convertFavoritesToTracks(favorites))
-    }-*/
 
     override fun addToFavorites(track: Track): Flow<Boolean> = flow {
         withContext(Dispatchers.IO) {

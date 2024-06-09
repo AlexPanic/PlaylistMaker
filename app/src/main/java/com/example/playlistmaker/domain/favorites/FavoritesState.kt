@@ -1,4 +1,4 @@
-package com.example.playlistmaker.domain.mediateka
+package com.example.playlistmaker.domain.favorites
 
 import com.example.playlistmaker.domain.search.model.Track
 

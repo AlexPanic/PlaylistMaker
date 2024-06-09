@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityPlayerBinding
@@ -66,8 +67,10 @@ class PlayerActivity : AppCompatActivity() {
         val coverUrl = track.getArtworkUrl512()
         with(binding) {
             with(track) {
-                Glide.with(applicationContext).load(coverUrl).fitCenter()
-                    .transform(RoundedCorners(Helper.dpToPx(COVER_CORNERS))).into(ivTrackCover)
+                Glide.with(applicationContext)
+                    .load(coverUrl)
+                    .transform(FitCenter(), RoundedCorners(Helper.dpToPx(Helper.COVER_RADIUS)))
+                    .into(ivTrackCover)
                 tvTrackName.text = trackName
                 tvArtistName.text = artistName
                 tvTrackDuration.text = trackTime()
@@ -126,10 +129,6 @@ class PlayerActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-    }
-
-    companion object {
-        private const val COVER_CORNERS = 8f
     }
 
 }

@@ -17,5 +17,5 @@ data class FavoritesEntity(
     val releaseDate: String,
     val primaryGenreName: String,
     val country: String,
-    @ColumnInfo(name = "id") var id: Int = 1
+    @ColumnInfo(name = "id") var id: Int = 1,
 )

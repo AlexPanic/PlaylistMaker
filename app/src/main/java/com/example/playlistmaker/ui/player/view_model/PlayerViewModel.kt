@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.domain.mediateka.FavoritesInteractor
+import com.example.playlistmaker.domain.favorites.FavoritesInteractor
 import com.example.playlistmaker.domain.player.PlayerFeedback
 import com.example.playlistmaker.domain.player.PlayerInteractor
 import com.example.playlistmaker.domain.search.model.Track

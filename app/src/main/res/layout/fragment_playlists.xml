@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/btPlaylistNew"
+        android:id="@+id/btPlaylistAdd"
         style="@style/filledButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,7 +24,9 @@
         android:layout_marginTop="@dimen/error_icon_margin_top"
         android:contentDescription="@string/img_alert_icon"
         android:src="@drawable/nothing_found"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/errorMessage"
@@ -36,5 +38,16 @@
         app:layout_constraintTop_toBottomOf="@id/errorIcon"
         app:layout_constraintWidth_max="312dp"
         tools:text="Вы не создали ни одного плейлиста" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPlaylists"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/main_padding"
+        android:padding="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btPlaylistAdd" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

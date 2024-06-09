@@ -1,7 +1,7 @@
-package com.example.playlistmaker.domain.mediateka.impl
+package com.example.playlistmaker.domain.favorites.impl
 
-import com.example.playlistmaker.domain.mediateka.FavoritesInteractor
-import com.example.playlistmaker.domain.mediateka.FavoritesRepository
+import com.example.playlistmaker.domain.favorites.FavoritesInteractor
+import com.example.playlistmaker.domain.favorites.FavoritesRepository
 import com.example.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
