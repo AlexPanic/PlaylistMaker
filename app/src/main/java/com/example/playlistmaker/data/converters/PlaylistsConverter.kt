@@ -7,8 +7,8 @@ import com.google.gson.reflect.TypeToken
 
 class PlaylistsConverter {
     fun map(pl: PlaylistsEntity): Playlist {
-        val type = object: TypeToken<MutableList<Int?>?>() {}.type
-        with (pl) {
+        val type = object : TypeToken<MutableList<Int?>?>() {}.type
+        with(pl) {
             return Playlist(
                 playlistId,
                 playlistName,
@@ -21,7 +21,7 @@ class PlaylistsConverter {
     }
 
     fun map(pl: Playlist): PlaylistsEntity {
-        with (pl) {
+        with(pl) {
             return PlaylistsEntity(
                 id,
                 name,

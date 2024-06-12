@@ -11,7 +11,6 @@ class Helper {
     companion object {
 
         const val COVER_RADIUS = 8f
-
         fun dpToPx(dp: Float): Int {
             return TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
