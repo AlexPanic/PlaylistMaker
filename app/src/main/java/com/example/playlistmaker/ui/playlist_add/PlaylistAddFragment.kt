@@ -89,8 +89,19 @@ class PlaylistAddFragment : Fragment() {
         }
 
         playlistAddViewModel.observeState().observe(viewLifecycleOwner) {
-            when(it) {
-                is PlaylistAddState.Added -> backPressedPassed()
+            when (it) {
+                is PlaylistAddState.Added -> {
+                    showToast(
+                        getString(R.string.playlist) + " " + binding.newPlaylistName.text
+                                + " " + getString(R.string.created)
+                    )
+                    backPressedPassed()
+                }
+
+                is PlaylistAddState.Error -> {
+                    showToast(it.message)
+                }
+
                 else -> {}
             }
         }
@@ -144,11 +155,7 @@ class PlaylistAddFragment : Fragment() {
                         }
 
                         is PermissionResult.Denied.NeedsRationale -> {
-                            Toast.makeText(
-                                requireContext(),
-                                R.string.permission_images_rationale,
-                                Toast.LENGTH_LONG
-                            ).show()
+                            showToast(getString(R.string.permission_images_rationale))
                             binding.createPlaylistBtn.isEnabled = false
                         }
 
@@ -161,6 +168,10 @@ class PlaylistAddFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showToast(additionalMessage: String) {
+        Toast.makeText(requireContext(), additionalMessage, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

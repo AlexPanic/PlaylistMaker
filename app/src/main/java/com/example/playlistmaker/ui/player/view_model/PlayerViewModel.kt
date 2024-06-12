@@ -1,12 +1,18 @@
 package com.example.playlistmaker.ui.player.view_model
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.favorites.FavoritesInteractor
 import com.example.playlistmaker.domain.player.PlayerFeedback
 import com.example.playlistmaker.domain.player.PlayerInteractor
+import com.example.playlistmaker.domain.playlists.AddTrackToPlaylistState
+import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
+import com.example.playlistmaker.domain.playlists.PlaylistsState
+import com.example.playlistmaker.domain.playlists.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.enums.PlayerCommand
 import com.example.playlistmaker.ui.enums.PlayerState
@@ -17,8 +23,10 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(
+    private val context: Context,
     private val playerInteractor: PlayerInteractor,
     private val favoritesInteractor: FavoritesInteractor,
+    private val playlistsInteractor: PlaylistsInteractor,
 ) : ViewModel() {
     companion object {
         private const val DEFAULT_TIMER = "00:00"
@@ -34,6 +42,8 @@ class PlayerViewModel(
     private val _state = MutableLiveData<PlayerState>(PlayerState.DEFAULT)
     private val _position = MutableLiveData<String>()
     private val _isFavorite = MutableLiveData<Boolean>(false)
+    private val _playlists = MutableLiveData<PlaylistsState>()
+    private val _addResult = MutableLiveData<AddTrackToPlaylistState>()
 
     private val playerConsumer = { feedback: PlayerFeedback ->
         when (feedback) {
@@ -64,6 +74,8 @@ class PlayerViewModel(
     fun observeState(): LiveData<PlayerState> = _state
     fun observePosition(): LiveData<String> = _position
     fun observeIsFavorite(): LiveData<Boolean> = _isFavorite
+    fun observePlaylists(): LiveData<PlaylistsState> = _playlists
+    fun observeAddResult(): LiveData<AddTrackToPlaylistState> = _addResult
 
     suspend fun toggleFavorite(isFavorite: Boolean, track: Track) {
         viewModelScope.launch {
@@ -136,6 +148,39 @@ class PlayerViewModel(
         if (isPrepared) {
             playerInteractor.execute(command = PlayerCommand.PLAY, consumer = playerConsumer)
         }
+    }
+
+    fun addTrackToPlaylist(track: Track, playlist: Playlist) {
+        if (playlist.trackIDs.contains(track.trackId)) {
+            _addResult.postValue(AddTrackToPlaylistState.AlreadyContains(playlist.name))
+        } else {
+            viewModelScope.launch {
+                playlistsInteractor
+                    .addTrack(track, playlist)
+                    .collect {
+                        _addResult.postValue(AddTrackToPlaylistState.Added(playlist.name))
+                    }
+            }
+        }
+    }
+
+    fun loadPlaylists() {
+        renderPlaylistsState(PlaylistsState.Loading)
+        viewModelScope.launch {
+            playlistsInteractor
+                .getPlaylists()
+                .collect { playlists ->
+                    if (playlists.isEmpty()) {
+                        renderPlaylistsState(PlaylistsState.Empty(context.getString(R.string.empty_playlists)))
+                    } else {
+                        renderPlaylistsState(PlaylistsState.Content(playlists))
+                    }
+                }
+        }
+    }
+
+    private fun renderPlaylistsState(state: PlaylistsState) {
+        _playlists.postValue(state)
     }
 
     override fun onCleared() {

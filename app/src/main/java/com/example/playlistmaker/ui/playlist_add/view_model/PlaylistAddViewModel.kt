@@ -5,12 +5,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.playlists.PlaylistAddState
 import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
 import com.example.playlistmaker.domain.playlists.model.Playlist
@@ -40,22 +38,15 @@ class PlaylistAddViewModel(
             playlistsInteractor
                 .addPlaylist(playlist)
                 .collect { playlistID ->
-                    when (playlistID) {
-                        null -> renderState(PlaylistAddState.Error(context.getString(R.string.playlist_add_error)))
-                        else -> {
-                            if (uri != null) {
-
-                                Log.d("mine", "URI = $uri")
-                                val savedCover = saveImageToPrivateStorage(uri, playlistID)
-                                Log.d("mine", "savedCover = $savedCover")
-                                playlistsInteractor
-                                    .updateCover(savedCover, playlistID)
-                                    .collect {
-                                        Log.d("mine", "collected")
-                                        renderState(PlaylistAddState.Added)
-                                    }
+                    if (uri != null) {
+                        val savedCover = saveImageToPrivateStorage(uri, playlistID)
+                        playlistsInteractor
+                            .updateCover(savedCover, playlistID)
+                            .collect {
+                                renderState(PlaylistAddState.Added)
                             }
-                        }
+                    } else {
+                        renderState(PlaylistAddState.Added)
                     }
                 }
         }

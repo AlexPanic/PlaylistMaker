@@ -5,6 +5,6 @@ data class Playlist(
     val name: String,
     val description: String? = null,
     val cover: String? = null,
-    val trackIDs: MutableList<Int>? = null,
-    val tracksCount: Int,
+    val trackIDs: MutableList<Int> = mutableListOf(),
+    var tracksCount: Int,
 )

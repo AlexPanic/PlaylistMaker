@@ -18,8 +18,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    private val tracksInteractor: TracksInteractor,
     private val context: Context,
+    private val tracksInteractor: TracksInteractor,
     getSearchHistoryUseCase: GetSearchHistoryUseCase,
     private val saveSearchHistoryUseCase: SaveSearchHistoryUseCase,
     private val clearSearchHistoryUseCase: ClearSearchHistoryUseCase,

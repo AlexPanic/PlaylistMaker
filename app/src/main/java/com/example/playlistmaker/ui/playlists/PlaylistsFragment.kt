@@ -34,9 +34,11 @@ class PlaylistsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = PlaylistsAdapter(clickListener = object : PlaylistsAdapter.PlaylistClickListener {
+        adapter = PlaylistsAdapter(
+            layout = R.layout.list_item_playlist,
+            clickListener = object : PlaylistsAdapter.PlaylistClickListener {
             override fun onPlaylistClick(playlist: Playlist) {
-                TODO("Not yet implemented")
+                //
             }
         })
         binding.rvPlaylists.layoutManager = GridLayoutManager(requireContext(), COLUMNS)
@@ -52,7 +54,6 @@ class PlaylistsFragment : Fragment() {
                 is PlaylistsState.Empty -> showEmpty(it.message)
                 is PlaylistsState.Content -> showContent(it.playlists)
                 is PlaylistsState.Loading -> {}
-                else -> {}
             }
         }
     }
