@@ -32,16 +32,24 @@ class PlaylistsViewHolder(
                 .load(Uri.parse(item.cover))
                 .transform(CenterCrop(), RoundedCorners(Helper.dpToPx(Helper.COVER_RADIUS)))
                 .into(cover)
+        } else {
+            cover.setImageResource(R.drawable.cover_placeholder)
         }
         name.text = item.name
         with(itemView.context) {
             tracksCount.text =
-                item.tracksCount.toString() + " " + Helper.getWordFormDependingOnNumber(
-                    item.tracksCount,
-                    getString(R.string.wordFormForNumber1),
-                    getString(R.string.wordFormForNumber2),
-                    getString(R.string.wordFormForNumber5)
-                )
+                buildString {
+                    append(item.tracksCount)
+                    append(" ")
+                    append(
+                        Helper.getWordFormDependingOnNumber(
+                            item.tracksCount,
+                            getString(R.string.wordFormForNumber1),
+                            getString(R.string.wordFormForNumber2),
+                            getString(R.string.wordFormForNumber5)
+                        )
+                    )
+                }
         }
         itemView.setOnClickListener { clickListener.onPlaylistClick(playlist = item) }
     }
