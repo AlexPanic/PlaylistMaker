@@ -107,9 +107,12 @@ class SearchFragment : Fragment() {
         // следим за изменением в поисковой строке
         binding.tilSearchTracksField.editText?.doOnTextChanged { text, _, _, _ ->
             searchMask = text.toString()
-            if (binding.tilSearchTracksField.hasFocus() && searchMask.isEmpty()) {
-                viewModel.showHistory()
-            } else if (searchMask.isNotEmpty()) {
+            if (searchMask.isEmpty()) {
+                viewModel.stopSearch()
+                if (binding.tilSearchTracksField.hasFocus()) {
+                    viewModel.showHistory()
+                }
+            } else {
                 viewModel.searchDebounce(searchMask, false)
             }
         }
