@@ -257,7 +257,7 @@
     </style>
 
     <style name="create_form">
-        <item name="android:paddingBottom">36dp</item>
+        <item name="android:paddingBottom">@dimen/main_padding</item>
     </style>
 
     <style name="create_btn">
@@ -271,6 +271,7 @@
         <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textColor">@color/main_text_color</item>
         <item name="android:textSize">@dimen/text</item>
+        <item name="android:layout_marginTop">@dimen/btn_margin</item>
     </style>
 
     <style name="playlist_name">
