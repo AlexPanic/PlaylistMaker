@@ -19,11 +19,10 @@ class SettingsRepositoryImpl(context: Context) : SettingsRepository {
         context.getSharedPreferences(SHARED_PREF_FILE, Context.MODE_PRIVATE)
 
     override fun getSavedDarkMode(deviceDarkModeOn: Boolean): Boolean {
-        // апдейт тема приложения будет темной если установлен темный режим устройства
         return sharedPreferences.getBoolean(
             DARK_MODE_LAST_SWITCH,
             false
-        ) || deviceDarkModeOn
+        )
     }
 
     override fun setDarkMode(darkModeOn: Boolean) {
