@@ -187,8 +187,8 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun renderFavorite() {
         binding.btFavorite.background = when (trackIsFavorite) {
-            true -> ContextCompat.getDrawable(applicationContext, R.drawable.btn_favorite_checked)
-            false -> ContextCompat.getDrawable(applicationContext, R.drawable.btn_favorite)
+            true -> ContextCompat.getDrawable(this, R.drawable.btn_favorite_checked)
+            false -> ContextCompat.getDrawable(this, R.drawable.btn_favorite)
         }
         binding.btFavorite.isEnabled = true
     }
@@ -201,13 +201,13 @@ class PlayerActivity : AppCompatActivity() {
 
             PlayerState.PLAYING -> {
                 binding.btPlayControl.background =
-                    ContextCompat.getDrawable(applicationContext, R.drawable.pause_btn)
+                    ContextCompat.getDrawable(this, R.drawable.pause_btn)
             }
 
             PlayerState.PAUSED,
             PlayerState.PLAYBACK_COMPLETE -> {
                 binding.btPlayControl.background =
-                    ContextCompat.getDrawable(applicationContext, R.drawable.play_btn)
+                    ContextCompat.getDrawable(this, R.drawable.play_btn)
 
             }
         }

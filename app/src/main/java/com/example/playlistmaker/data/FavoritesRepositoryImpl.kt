@@ -8,17 +8,14 @@ import com.example.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class FavoritesRepositoryImpl(
     private val appDatabase: AppDatabase,
     private val favoritesConverter: FavoritesConverter,
 ) : FavoritesRepository {
-    override fun getFavorites(): Flow<List<Track>> = flow {
-        appDatabase.favoritesDao().getFavorites().collect {
-            emit(convertFavoritesToTracks(it))
-        }
-    }
+    override fun getFavorites(): Flow<List<Track>> = appDatabase.favoritesDao().getFavorites().map(::convertFavoritesToTracks)
 
     override fun addToFavorites(track: Track): Flow<Boolean> = flow {
         withContext(Dispatchers.IO) {

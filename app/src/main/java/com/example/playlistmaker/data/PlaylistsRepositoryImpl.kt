@@ -10,6 +10,7 @@ import com.example.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 class PlaylistsRepositoryImpl(
@@ -17,11 +18,8 @@ class PlaylistsRepositoryImpl(
     private val playlistsConverter: PlaylistsConverter,
     private val tracksConverter: TracksConverter,
 ) : PlaylistsRepository {
-    override fun getPlaylists(): Flow<List<Playlist>> = flow {
-        appDatabase.playlistsDao().getPlaylists().collect {
-            emit(convertPlaylists(it))
-        }
-    }
+    override fun getPlaylists(): Flow<List<Playlist>> =
+        appDatabase.playlistsDao().getPlaylists().map(::convertPlaylists)
 
     override fun addPlaylist(playlist: Playlist): Flow<Long> = flow {
         val playlistId = withContext(Dispatchers.IO) {
