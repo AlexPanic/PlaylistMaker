@@ -16,7 +16,8 @@
     <color name="switcher_track">#F0F1F3</color>
 
     <color name="input_background">@color/light_gray</color>
-    <color name="input_hint">#AEAFB4</color>
+    <color name="input_hint">@color/yp_gray</color>
+    <color name="forward_arrow">@color/yp_gray</color>
 
     <color name="track_name">@color/black</color>
     <color name="track_info">@color/yp_gray</color>
@@ -28,7 +29,8 @@
     <color name="filled_button_tint">@color/yp_black</color>
     <color name="filled_button_text">@color/yp_white</color>
 
-    <color name="inactive_button_background">#c5c6c7</color>
+    <color name="secondary_button_background">#c5c6c7</color>
+    <color name="favorite_checked_color">#F56B6C</color>
     <color name="bottom_nav_top_border">@color/light_gray</color>
     <color name="bottom_nav_background_color">@color/yp_white</color>
 

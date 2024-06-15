@@ -7,6 +7,7 @@
 
     <dimen name="header_margin">16dp</dimen>
     <dimen name="main_padding">16dp</dimen>
+    <dimen name="create_input_padding">18dp</dimen>
 
     <dimen name="progress_bar_size">48dp</dimen>
     <dimen name="progress_bar_margin">96dp</dimen>
@@ -15,9 +16,11 @@
     <dimen name="button_margin_top">24dp</dimen>
 
     <dimen name="btn_margin">8dp</dimen>
-    <dimen name="btn_radius">16dp</dimen>
+    <dimen name="corners_radius">16dp</dimen>
     <dimen name="icon_padding">8dp</dimen>
 
+    <dimen name="line_height">64dp</dimen>
+    <dimen name="cover_size_little">48dp</dimen>
     <dimen name="icon_size">24dp</dimen>
     <dimen name="list_padding">20dp</dimen>
     <dimen name="list_icon_margin_left">8dp</dimen>

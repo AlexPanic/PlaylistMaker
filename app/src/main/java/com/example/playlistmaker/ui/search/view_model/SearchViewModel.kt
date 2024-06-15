@@ -18,8 +18,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SearchViewModel(
-    private val tracksInteractor: TracksInteractor,
     private val context: Context,
+    private val tracksInteractor: TracksInteractor,
     getSearchHistoryUseCase: GetSearchHistoryUseCase,
     private val saveSearchHistoryUseCase: SaveSearchHistoryUseCase,
     private val clearSearchHistoryUseCase: ClearSearchHistoryUseCase,
@@ -40,7 +40,7 @@ class SearchViewModel(
     private var searchJob: Job? = null
 
     fun searchDebounce(changedText: String, force: Boolean) {
-        if ((latestSearchText == changedText) && !force) {
+        if (changedText.isEmpty() || ((latestSearchText == changedText) && !force)) {
             return
         }
         latestSearchText = changedText
@@ -77,6 +77,13 @@ class SearchViewModel(
 
         }
     }
+
+    // остановим задачу на поиск
+    // (если стерли строку поиска слишком быстро, шел поиск по одной букве)
+    fun stopSearch() {
+        searchJob?.cancel()
+    }
+
 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isNotEmpty()) {

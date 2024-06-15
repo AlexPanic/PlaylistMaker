@@ -29,9 +29,21 @@
     <string name="empty_favorites">Ваша медиатека пуста</string>
     <string name="tab_favorites">Избранные треки</string>
 
+    <string name="wordFormForNumber1">трек</string>
+    <string name="wordFormForNumber2">трека</string>
+    <string name="wordFormForNumber5">треков</string>
+
+    <string name="playlist">Плейлист</string>
+    <string name="created">создан</string>
     <string name="tab_playlists">Плейлисты</string>
     <string name="empty_playlists">Вы не создали\nни одного плейлиста</string>
     <string name="new_playlist">Новый плейлист</string>
+    <string name="add_to_playlist">Добавить в плейлист</string>
+    <string name="added_to_playlist">Добавлено в плейлист</string>
+    <string name="already_in_playlist">Трек уже добавлен в плейлист</string>
+    <string name="playlist_add_error">Ошибка сохранения плейлиста</string>
+    <string name="playlist_add_backpressed_title">Завершить создание плейлиста?</string>
+    <string name="playlist_add_backpressed_message">Все несохраненные данные будут потеряны</string>
     <string name="img_alert_icon">Алерт в результатах поиска</string>
 
     <string name="search_history_header">Вы искали</string>
@@ -46,7 +58,16 @@
     <string name="player_track_year">Год</string>
     <string name="player_track_genre">Жанр</string>
     <string name="player_track_country">Страна</string>
-
     <string name="player_track_stop_position">00:00</string>
+
+    <string name="create_btn_label">Создать</string>
+    <string name="label_name_required">Название*</string>
+    <string name="label_description">Описание</string>
+    <string name="label_cancel">Отмена</string>
+    <string name="label_finish">Завершить</string>
+
+
+    <string name="permission_images_rationale">Разрешение на использование картинок для обложек плейлиста, хранящихся только на устройстве</string>
+
 
 </resources>

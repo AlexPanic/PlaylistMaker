@@ -2,6 +2,7 @@
 <resources>
     <color name="input_background">@color/yp_white</color>
     <color name="input_hint">@color/yp_black</color>
+    <color name="forward_arrow">@color/yp_white</color>
 
     <color name="switcher_thumb">@color/blue</color>
     <color name="switcher_track">#5A6887</color>
@@ -15,6 +16,7 @@
     <color name="filled_button_tint">@color/yp_white</color>
     <color name="filled_button_text">@color/yp_black</color>
 
+    <color name="secondary_button_background">#535459</color>
     <color name="bottom_nav_top_border">@color/yp_white</color>
     <color name="bottom_nav_background_color">@color/yp_black</color>
 

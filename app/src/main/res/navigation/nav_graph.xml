@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/mediatekaFragment">
 
@@ -15,5 +16,14 @@
     <fragment
         android:id="@+id/mediatekaFragment"
         android:name="com.example.playlistmaker.ui.mediateka.MediatekaFragment"
-        android:label="MediatekaFragment" />
+        android:label="MediatekaFragment" >
+        <action
+            android:id="@+id/action_mediatekaFragment_to_playlistAddFragment"
+            app:destination="@id/playlistAddFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/playlistAddFragment"
+        android:name="com.example.playlistmaker.ui.playlist_add.PlaylistAddFragment"
+        android:label="fragment_playlist_add"
+        tools:layout="@layout/fragment_playlist_add" />
 </navigation>

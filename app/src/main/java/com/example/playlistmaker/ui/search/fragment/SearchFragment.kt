@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.debounce
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.domain.search.SearchState
@@ -22,6 +23,7 @@ import com.example.playlistmaker.ui.enums.ApiResultIcons
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import com.example.playlistmaker.ui.search.TrackListAdapter
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
+import com.google.android.material.textfield.TextInputLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -101,15 +103,23 @@ class SearchFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         historyRv.adapter = adapterHistory
 
+        binding.tilSearchTracksField.isEndIconVisible = false
         // установим сохраненное значение маски
-        binding.tilSearchTracksField.editText?.setText(searchMask)
+        if (searchMask.isNotEmpty()) {
+            binding.tietSearchMask.setText(searchMask)
+        }
 
         // следим за изменением в поисковой строке
         binding.tilSearchTracksField.editText?.doOnTextChanged { text, _, _, _ ->
             searchMask = text.toString()
-            if (binding.tilSearchTracksField.hasFocus() && searchMask.isEmpty()) {
-                viewModel.showHistory()
-            } else if (searchMask.isNotEmpty()) {
+            if (searchMask.isEmpty()) {
+                viewModel.stopSearch()
+                binding.tilSearchTracksField.isEndIconVisible = false
+                    if (binding.tilSearchTracksField.hasFocus()) {
+                    viewModel.showHistory()
+                }
+            } else {
+                binding.tilSearchTracksField.isEndIconVisible = true
                 viewModel.searchDebounce(searchMask, false)
             }
         }

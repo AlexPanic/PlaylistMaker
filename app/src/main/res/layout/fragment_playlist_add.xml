@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.playlist_add.PlaylistAddFragment">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        app:title="@string/new_playlist"
+        app:titleTextAppearance="@style/toolbar" />
+
+
+    <LinearLayout
+        style="@style/screen"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/create_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/ivPlaylistCover"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/lorem_ipsum"
+                android:src="@drawable/cover_playlist_placeholder"
+                app:layout_constraintDimensionRatio="h,1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilNewPlaylistName"
+                style="@style/create_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusedByDefault="true"
+                android:hint="@string/label_name_required"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivPlaylistCover">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/newPlaylistName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:text="Playlist 1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/tilNewPlaylistDescription"
+                app:layout_constraintVertical_chainStyle="spread_inside"
+                style="@style/create_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/label_description"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilNewPlaylistName"
+                app:layout_constraintBottom_toTopOf="@id/create_playlist_btn"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/newPlaylistDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:text="Description" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/create_playlist_btn"
+                style="@style/create_btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_create"
+                android:enabled="false"
+                android:text="@string/create_btn_label"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tilNewPlaylistDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

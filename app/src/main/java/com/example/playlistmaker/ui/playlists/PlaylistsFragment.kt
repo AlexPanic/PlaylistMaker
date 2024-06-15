@@ -4,10 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
-import com.example.playlistmaker.domain.mediateka.PlaylistsState
-import com.example.playlistmaker.ui.mediateka.view_model.PlaylistsViewModel
+import com.example.playlistmaker.domain.playlists.PlaylistsState
+import com.example.playlistmaker.domain.playlists.model.Playlist
+import com.example.playlistmaker.ui.playlists.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : Fragment() {
@@ -15,6 +20,7 @@ class PlaylistsFragment : Fragment() {
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
     private val playlistsViewModel by viewModel<PlaylistsViewModel>()
+    private var adapter: PlaylistsAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,11 +33,27 @@ class PlaylistsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        adapter = PlaylistsAdapter(
+            layout = R.layout.list_item_playlist,
+            clickListener = object : PlaylistsAdapter.PlaylistClickListener {
+            override fun onPlaylistClick(playlist: Playlist) {
+                //
+            }
+        })
+        binding.rvPlaylists.layoutManager = GridLayoutManager(requireContext(), COLUMNS)
+        binding.rvPlaylists.adapter = adapter
+
+        binding.btPlaylistAdd.setOnClickListener {
+            findNavController()
+                .navigate(R.id.action_mediatekaFragment_to_playlistAddFragment)
+        }
+        playlistsViewModel.fillData()
         playlistsViewModel.observeState().observe(viewLifecycleOwner) {
             when (it) {
-                is PlaylistsState.Error -> showError(it.message)
-                is PlaylistsState.Content -> {
-                }
+                is PlaylistsState.Empty -> showEmpty(it.message)
+                is PlaylistsState.Content -> showContent(it.playlists)
+                is PlaylistsState.Loading -> {}
             }
         }
     }
@@ -41,14 +63,33 @@ class PlaylistsFragment : Fragment() {
         _binding = null
     }
 
-    private fun showError(message: String) {
-        binding.apply {
+    private fun showContent(playlists: List<Playlist>) {
+        with(binding) {
+            //progressBar.isVisible = false
+            errorIcon.isVisible = false
+            errorMessage.text = ""
+            errorMessage.isVisible = true
+            //playlistsList.isVisible = false
+        }
+        adapter?.playlists?.clear()
+        adapter?.playlists?.addAll(playlists)
+        adapter?.notifyDataSetChanged()
+    }
+
+    private fun showEmpty(message: String) {
+        with(binding) {
+            //progressBar.isVisible = false
+            errorIcon.isVisible = true
             errorMessage.text = message
+            errorMessage.isVisible = true
+            rvPlaylists
+            //playlistsList.isVisible = false
         }
     }
 
     companion object {
         fun newInstance() = PlaylistsFragment()
+        const val COLUMNS = 2
     }
 
 }

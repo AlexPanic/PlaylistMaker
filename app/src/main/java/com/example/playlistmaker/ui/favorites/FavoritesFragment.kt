@@ -11,9 +11,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.playlistmaker.creator.debounce
 import com.example.playlistmaker.databinding.FragmentFavoritesBinding
-import com.example.playlistmaker.domain.mediateka.FavoritesState
+import com.example.playlistmaker.domain.favorites.FavoritesState
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.ui.mediateka.view_model.FavoritesViewModel
+import com.example.playlistmaker.ui.favorites.view_model.FavoritesViewModel
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -23,7 +23,6 @@ class FavoritesFragment : Fragment() {
     private val binding get() = _binding!!
     private val favoritesViewModel by viewModel<FavoritesViewModel>()
     private var adapter: FavoritesAdapter? = null
-    private var lastFavoritesState: FavoritesState? = null
     private lateinit var onTrackClickDebounce: (Track) -> Unit
 
     override fun onCreateView(
@@ -60,17 +59,12 @@ class FavoritesFragment : Fragment() {
         binding.favoritesList.adapter = adapter
 
         favoritesViewModel.fillData()
-        favoritesViewModel.observeState().observe(viewLifecycleOwner) { favoritesState ->
-            lastFavoritesState = favoritesState
-            renderResult(favoritesState)
-        }
-    }
-
-    private fun renderResult(state: FavoritesState) {
-        when (state) {
-            is FavoritesState.Loading -> showLoading()
-            is FavoritesState.Empty -> showEmpty(state.message)
-            is FavoritesState.Content -> showContent(state.tracks)
+        favoritesViewModel.observeState().observe(viewLifecycleOwner) {
+            when (it) {
+                is FavoritesState.Loading -> showLoading()
+                is FavoritesState.Empty -> showEmpty(it.message)
+                is FavoritesState.Content -> showContent(it.tracks)
+            }
         }
     }
 
@@ -104,10 +98,10 @@ class FavoritesFragment : Fragment() {
             errorMessage.isVisible = false
             progressBar.isVisible = false
             favoritesList.isVisible = true
-            adapter?.tracks?.clear()
-            adapter?.tracks?.addAll(tracks)
-            adapter?.notifyDataSetChanged()
         }
+        adapter?.tracks?.clear()
+        adapter?.tracks?.addAll(tracks)
+        adapter?.notifyDataSetChanged()
     }
 
     override fun onResume() {

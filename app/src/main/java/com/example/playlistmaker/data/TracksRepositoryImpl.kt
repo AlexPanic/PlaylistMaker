@@ -17,6 +17,7 @@ class TracksRepositoryImpl(
     override fun findTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         when (response.resultCode) {
+
             200 -> {
                 if ((response as TracksSearchResponse).results.isEmpty())
                     emit(Resource.Error(context.getString(R.string.nothing_found)))
@@ -37,7 +38,7 @@ class TracksRepositoryImpl(
                     }))
             }
 
-            404 -> {
+            404, 500 -> {
                 emit(Resource.Error(context.getString(R.string.nothing_found)))
             }
 
