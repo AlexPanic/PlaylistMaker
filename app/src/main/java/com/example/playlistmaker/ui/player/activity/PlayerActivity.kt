@@ -86,16 +86,7 @@ class PlayerActivity : AppCompatActivity() {
             BottomSheetBehavior.BottomSheetCallback() {
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
-
-                when (newState) {
-                    BottomSheetBehavior.STATE_HIDDEN -> {
-                        overlay.visibility = View.GONE
-                    }
-
-                    else -> {
-                        overlay.visibility = View.VISIBLE
-                    }
-                }
+                overlay.isVisible = newState != BottomSheetBehavior.STATE_HIDDEN
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
