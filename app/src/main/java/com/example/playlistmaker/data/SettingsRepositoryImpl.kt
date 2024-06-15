@@ -21,7 +21,7 @@ class SettingsRepositoryImpl(context: Context) : SettingsRepository {
     override fun getSavedDarkMode(deviceDarkModeOn: Boolean): Boolean {
         return sharedPreferences.getBoolean(
             DARK_MODE_LAST_SWITCH,
-            false
+            deviceDarkModeOn
         )
     }
 

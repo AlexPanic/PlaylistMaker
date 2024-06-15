@@ -29,7 +29,6 @@ class App : Application() {
             modules(dataModule, interactorModule, repositoryModule, useCaseModule, viewModelModule)
         }
 
-
         // темная тема включена на устройстве
         val deviceDarkModeOn =
             resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
