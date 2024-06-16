@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.playlist_add.view_model
+package com.example.playlistmaker.ui.playlists.playlist_add.view_model
 
 import android.content.Context
 import android.graphics.Bitmap

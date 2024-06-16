@@ -2,8 +2,9 @@ package com.example.playlistmaker.di
 
 import com.example.playlistmaker.ui.favorites.view_model.FavoritesViewModel
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
-import com.example.playlistmaker.ui.playlist_add.view_model.PlaylistAddViewModel
-import com.example.playlistmaker.ui.playlists.view_model.PlaylistsViewModel
+import com.example.playlistmaker.ui.playlists.playlist_add.view_model.PlaylistAddViewModel
+import com.example.playlistmaker.ui.playlists.playlist_detail.view_model.PlaylistDetailViewModel
+import com.example.playlistmaker.ui.playlists.playlists_list.view_model.PlaylistsViewModel
 import com.example.playlistmaker.ui.search.view_model.SearchViewModel
 import com.example.playlistmaker.ui.settings.view_model.SettingsViewModel
 import org.koin.android.ext.koin.androidContext
@@ -31,5 +32,9 @@ val viewModelModule = module {
 
     viewModel {
         PlaylistAddViewModel(androidContext(), get())
+    }
+
+    viewModel {
+        PlaylistDetailViewModel(androidContext(), get())
     }
 }

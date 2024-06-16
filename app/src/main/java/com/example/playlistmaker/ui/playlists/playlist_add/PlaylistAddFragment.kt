@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.playlist_add
+package com.example.playlistmaker.ui.playlists.playlist_add
 
 import android.Manifest
 import android.content.Intent
@@ -23,7 +23,7 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistAddBinding
 import com.example.playlistmaker.domain.playlists.PlaylistAddState
 import com.example.playlistmaker.ui.common.Helper
-import com.example.playlistmaker.ui.playlist_add.view_model.PlaylistAddViewModel
+import com.example.playlistmaker.ui.playlists.playlist_add.view_model.PlaylistAddViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.markodevcic.peko.PermissionRequester
 import com.markodevcic.peko.PermissionResult

@@ -24,8 +24,8 @@ import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.common.Helper
 import com.example.playlistmaker.ui.enums.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
-import com.example.playlistmaker.ui.playlist_add.PlaylistAddFragment
-import com.example.playlistmaker.ui.playlists.PlaylistsAdapter
+import com.example.playlistmaker.ui.playlists.playlist_add.PlaylistAddFragment
+import com.example.playlistmaker.ui.playlists.playlists_list.PlaylistsAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel

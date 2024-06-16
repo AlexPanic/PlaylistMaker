@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.playlists
+package com.example.playlistmaker.ui.playlists.playlists_list
 
 import android.net.Uri
 import android.view.LayoutInflater

@@ -21,6 +21,14 @@ class PlaylistsRepositoryImpl(
     override fun getPlaylists(): Flow<List<Playlist>> =
         appDatabase.playlistsDao().getPlaylists().map(::convertPlaylists)
 
+    override fun getPlaylist(id: Long): Flow<Playlist> =
+        appDatabase.playlistsDao().getPlaylist(id).map {
+            playlistsConverter.map(it)
+        }
+
+    override fun getTrackTimeMillisTotal(trackIDs: List<Int>): Flow<Int> =
+        appDatabase.tracksDao().getTimeMillisTotal(trackIDs)
+
     override fun addPlaylist(playlist: Playlist): Flow<Long> = flow {
         val playlistId = withContext(Dispatchers.IO) {
             appDatabase.playlistsDao().addPlaylist(playlistsConverter.map(playlist))

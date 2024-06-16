@@ -11,10 +11,16 @@ import kotlinx.coroutines.withContext
 class PlaylistsInteractorImpl(
     private val repository: PlaylistsRepository,
 ) : PlaylistsInteractor {
-    override suspend fun getPlaylists(): Flow<List<Playlist>> {
-        return withContext(Dispatchers.IO) {
-            repository.getPlaylists()
-        }
+    override suspend fun getPlaylists(): Flow<List<Playlist>> = withContext(Dispatchers.IO) {
+        repository.getPlaylists()
+    }
+
+    override suspend fun getPlaylist(id: Long): Flow<Playlist> = withContext(Dispatchers.IO) {
+        repository.getPlaylist(id)
+    }
+
+    override suspend fun getTrackTimeMillisTotal(trackIDs: List<Int>): Flow<Int> = withContext(Dispatchers.IO) {
+        repository.getTrackTimeMillisTotal(trackIDs)
     }
 
     override suspend fun addPlaylist(playlist: Playlist): Flow<Long> {

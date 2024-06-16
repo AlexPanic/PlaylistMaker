@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.playlists.view_model
+package com.example.playlistmaker.ui.playlists.playlists_list.view_model
 
 import android.content.Context
 import androidx.lifecycle.LiveData

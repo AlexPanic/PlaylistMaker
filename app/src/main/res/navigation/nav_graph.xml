@@ -20,10 +20,18 @@
         <action
             android:id="@+id/action_mediatekaFragment_to_playlistAddFragment"
             app:destination="@id/playlistAddFragment" />
+        <action
+            android:id="@+id/action_mediatekaFragment_to_playlistFragment"
+            app:destination="@id/playlistFragment" />
     </fragment>
     <fragment
         android:id="@+id/playlistAddFragment"
-        android:name="com.example.playlistmaker.ui.playlist_add.PlaylistAddFragment"
+        android:name="com.example.playlistmaker.ui.playlists.playlist_add.PlaylistAddFragment"
         android:label="fragment_playlist_add"
         tools:layout="@layout/fragment_playlist_add" />
+    <fragment
+        android:id="@+id/playlistFragment"
+        android:name="com.example.playlistmaker.ui.playlists.playlist_detail.PlaylistDetailFragment"
+        android:label="fragment_playlist"
+        tools:layout="@layout/fragment_playlist_detail" />
 </navigation>

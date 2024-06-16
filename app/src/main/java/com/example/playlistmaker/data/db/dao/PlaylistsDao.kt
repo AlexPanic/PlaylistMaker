@@ -22,6 +22,9 @@ interface PlaylistsDao {
     @Update
     fun updatePlaylist(playlist: PlaylistsEntity)
 
+    @Query("SELECT * FROM playlists WHERE playlistId=:id LIMIT 1")
+    fun getPlaylist(id: Long): Flow<PlaylistsEntity>
+
     @Query("SELECT * FROM playlists ORDER BY playlistId DESC")
     fun getPlaylists(): Flow<List<PlaylistsEntity>>
 }

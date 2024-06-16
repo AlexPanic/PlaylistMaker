@@ -15,6 +15,7 @@
     <dimen name="error_icon_margin_top">106dp</dimen>
     <dimen name="button_margin_top">24dp</dimen>
 
+    <dimen name="text_block_margin_top">8dp</dimen>
     <dimen name="btn_margin">8dp</dimen>
     <dimen name="corners_radius">16dp</dimen>
     <dimen name="icon_padding">8dp</dimen>

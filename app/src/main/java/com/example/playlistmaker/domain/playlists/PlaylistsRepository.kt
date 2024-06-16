@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface PlaylistsRepository {
     fun getPlaylists(): Flow<List<Playlist>>
+    fun getPlaylist(id: Long): Flow<Playlist>
+    fun getTrackTimeMillisTotal(trackIDs: List<Int>): Flow<Int>
     fun addPlaylist(playlist: Playlist): Flow<Long>
     fun updateCover(cover: String, id: Long): Flow<Boolean>
     fun addTrack(track: Track, playlist: Playlist): Flow<Boolean>

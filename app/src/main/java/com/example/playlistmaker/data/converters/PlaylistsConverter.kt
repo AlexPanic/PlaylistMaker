@@ -6,6 +6,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class PlaylistsConverter {
+
     fun map(pl: PlaylistsEntity): Playlist {
         val type = object : TypeToken<MutableList<Int?>?>() {}.type
         with(pl) {
