@@ -47,16 +47,23 @@ class PlaylistDetailFragment : Fragment() {
                 is PlaylistDetailState.Content -> {
                     showPlaylistDetails(it.playlist, it.trackTimeTotalMinutes)
                 }
+
+                else -> {}
             }
         }
     }
 
-    private fun showPlaylistDetails(playlist: Playlist, trackTimeTotalMinutes: String) {
+    private fun showPlaylistDetails(playlist: Playlist, trackTimeTotalMinutes: Int) {
         binding.tvPlaylistName.text = playlist.name
         binding.tvPlaylistDescription.text = playlist.description
         binding.tvPlaylistDescription.isVisible = !playlist.description.isNullOrBlank()
-        binding.tvPlaylistSummary.text =
-            trackTimeTotalMinutes + " минут • ${playlist.tracksCount} треков"
+        binding.tvPlaylistSummary.text = getString(
+            R.string.playlist_summary,
+            trackTimeTotalMinutes,
+            resources.getQuantityString(R.plurals.minutes, trackTimeTotalMinutes),
+            playlist.tracksCount,
+            resources.getQuantityString(R.plurals.tracks, playlist.tracksCount)
+        )
         if (playlist.cover != null) {
             Glide.with(this)
                 .load(playlist.cover)

@@ -30,7 +30,7 @@ class PlaylistDetailViewModel(
                         _data.postValue(
                             PlaylistDetailState.Content(
                                 playlist,
-                                "0"
+                                0
                             )
                         )
                     } else {
@@ -39,7 +39,7 @@ class PlaylistDetailViewModel(
                                 _data.postValue(
                                     PlaylistDetailState.Content(
                                         playlist,
-                                        dateFormat.format(trackTimeMillisTotal)
+                                        dateFormat.format(trackTimeMillisTotal).toInt()
                                     )
                                 )
                             }

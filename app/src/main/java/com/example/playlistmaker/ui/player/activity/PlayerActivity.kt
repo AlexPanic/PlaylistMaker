@@ -42,7 +42,12 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Helper.setToolbar(this)
+        this.setSupportActionBar(binding.toolbar)
+        this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        this.supportActionBar?.setDisplayShowHomeEnabled(true)
+        binding.toolbar.setNavigationOnClickListener{
+            this.onBackPressedDispatcher.onBackPressed()
+        }
 
         val track =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

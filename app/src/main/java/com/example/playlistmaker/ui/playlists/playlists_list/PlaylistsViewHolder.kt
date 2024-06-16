@@ -37,19 +37,11 @@ class PlaylistsViewHolder(
         }
         name.text = item.name
         with(itemView.context) {
-            tracksCount.text =
-                buildString {
-                    append(item.tracksCount)
-                    append(" ")
-                    append(
-                        Helper.getWordFormDependingOnNumber(
-                            item.tracksCount,
-                            getString(R.string.wordFormForNumber1),
-                            getString(R.string.wordFormForNumber2),
-                            getString(R.string.wordFormForNumber5)
-                        )
-                    )
-                }
+            tracksCount.text = getString(
+                R.string.playlist_tracks_count,
+                item.tracksCount,
+                resources.getQuantityString(R.plurals.tracks, item.tracksCount)
+            )
         }
         itemView.setOnClickListener { clickListener.onPlaylistClick(playlist = item) }
     }

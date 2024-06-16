@@ -2,6 +2,8 @@ package com.example.playlistmaker.creator
 
 import android.app.Application
 import android.content.res.Configuration
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import com.example.playlistmaker.di.dataModule
 import com.example.playlistmaker.di.interactorModule
 import com.example.playlistmaker.di.repositoryModule
@@ -23,6 +25,10 @@ class App : Application() {
     private val setDarkModeUseCase: SetDarkModeUseCase by inject(SetDarkModeUseCase::class.java)
     override fun onCreate() {
         super.onCreate()
+
+        // установил локаль, чтобы plurals правильно показывались
+        val appLocale: LocaleListCompat = LocaleListCompat.forLanguageTags("ru-RU")
+        AppCompatDelegate.setApplicationLocales(appLocale)
 
         startKoin {
             androidContext(this@App)

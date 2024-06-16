@@ -17,6 +17,7 @@ import com.example.playlistmaker.ui.favorites.view_model.FavoritesViewModel
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
+
 class FavoritesFragment : Fragment() {
 
     private var _binding: FragmentFavoritesBinding? = null
