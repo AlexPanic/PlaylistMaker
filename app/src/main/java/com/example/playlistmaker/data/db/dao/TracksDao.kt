@@ -11,8 +11,10 @@ import kotlinx.coroutines.flow.Flow
 interface TracksDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addTrack(track: TracksEntity)
-    @Query("SELECT * FROM tracks WHERE trackId IN (:trackIdsJoinedString)")
-    fun getTracks(trackIdsJoinedString: String): Flow<List<TracksEntity>>
+
+    @Query("SELECT * FROM tracks WHERE trackId IN (:trackIDs)")
+    fun getTracks(trackIDs: List<Int>): Flow<List<TracksEntity>>
+
     @Query("SELECT SUM(trackTimeMillis) AS trackTimeMillisTotal FROM tracks WHERE trackId IN (:trackIDs)")
     fun getTimeMillisTotal(trackIDs: List<Int>): Flow<Int>
 }

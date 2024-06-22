@@ -57,6 +57,9 @@ class PlaylistAddFragment : Fragment() {
     }
 
     private fun backPressedPassed() {
+        val toolbar =
+            requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        toolbar.title = ""
         callback.isEnabled = false
         requireActivity().onBackPressedDispatcher.onBackPressed()
     }
@@ -82,12 +85,6 @@ class PlaylistAddFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val toolbar = binding.toolbar
-        toolbar.setNavigationIcon(R.drawable.arrow_back)
-        toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
-
         playlistAddViewModel.observeState().observe(viewLifecycleOwner) {
             when (it) {
                 is PlaylistAddState.Added -> {

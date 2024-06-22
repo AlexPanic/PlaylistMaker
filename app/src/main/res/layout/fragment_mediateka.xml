@@ -7,14 +7,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        app:title="@string/screen_mediateka"
-        app:titleTextAppearance="@style/toolbar" />
-
-
     <LinearLayout
         style="@style/screen"
         android:layout_height="match_parent">

@@ -121,6 +121,7 @@ class PlayerActivity : AppCompatActivity() {
                 .add(R.id.playerFragmentContainerView, PlaylistAddFragment())
                 .addToBackStack(getString(R.string.new_playlist))
                 .commit()
+            binding.toolbar.setTitle(getString(R.string.new_playlist))
         }
 
         // кнопка добавить трек в плейлист

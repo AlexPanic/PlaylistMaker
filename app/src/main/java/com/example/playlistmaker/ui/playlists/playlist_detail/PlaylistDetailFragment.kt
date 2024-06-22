@@ -16,6 +16,7 @@ import com.example.playlistmaker.domain.playlists.PlaylistDetailState
 import com.example.playlistmaker.domain.playlists.model.Playlist
 import com.example.playlistmaker.ui.common.Helper
 import com.example.playlistmaker.ui.playlists.playlist_detail.view_model.PlaylistDetailViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistDetailFragment : Fragment() {
@@ -34,11 +35,6 @@ class PlaylistDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val toolbar = binding.toolbar
-        toolbar.setNavigationIcon(R.drawable.arrow_back)
-        toolbar.setNavigationOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
         val playlistId = requireArguments().getLong(PLAYLIST_ID)
         viewModel.loadPlaylist(playlistId)
         viewModel.observeState().observe(viewLifecycleOwner) {
@@ -51,6 +47,23 @@ class PlaylistDetailFragment : Fragment() {
                 else -> {}
             }
         }
+
+        val bottomSheetContainer = binding.playlistBottomSheet
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
+            state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+        val overlay = requireActivity().findViewById<View>(R.id.overlay)
+
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                overlay.isVisible = newState != BottomSheetBehavior.STATE_HIDDEN
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        })
     }
 
     private fun showPlaylistDetails(playlist: Playlist, trackTimeTotalMinutes: Int) {

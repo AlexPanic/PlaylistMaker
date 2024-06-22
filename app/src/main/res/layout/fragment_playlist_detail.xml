@@ -1,78 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/light_gray"
     tools:context=".ui.playlists.playlist_detail.PlaylistDetailFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        app:title=""
-        app:titleTextAppearance="@style/toolbar" />
-
     <LinearLayout
-        style="@style/screen"
-        android:background="@color/light_gray"
-        android:layout_height="match_parent"
+        style="@style/main"
         android:layout_width="match_parent"
-        >
+        android:layout_height="match_parent"
+        android:background="@color/light_gray"
+        android:orientation="vertical">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            style="@style/screen"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/light_gray">
 
-            <ImageView
-                android:id="@+id/ivPlaylistCover"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:contentDescription="@string/lorem_ipsum"
-                android:src="@drawable/cover_placeholder"
-                app:layout_constraintDimensionRatio="h,1:1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <TextView
-                style="@style/playlist_detail_name"
-                android:id="@+id/tvPlaylistName"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:text="Best songs 2021"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ivPlaylistCover"
-                />
+                android:layout_height="match_parent">
 
-            <TextView
-                style="@style/playlist_detail_description"
-                android:id="@+id/tvPlaylistDescription"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                tools:text="2022"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvPlaylistName"
-                />
+                <ImageView
+                    android:id="@+id/ivPlaylistCover"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:contentDescription="@string/lorem_ipsum"
+                    android:src="@drawable/cover_placeholder"
+                    app:layout_constraintDimensionRatio="h,1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0" />
 
-            <TextView
-                style="@style/playlist_detail_description"
-                android:id="@+id/tvPlaylistSummary"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                tools:text="300 минут • 98 треков"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tvPlaylistDescription"
-                />
+                <TextView
+                    android:id="@+id/tvPlaylistName"
+                    style="@style/playlist_detail_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ivPlaylistCover"
+                    tools:text="Best songs 2021" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tvPlaylistDescription"
+                    style="@style/playlist_detail_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvPlaylistName"
+                    tools:text="2022" />
+
+                <TextView
+                    android:id="@+id/tvPlaylistSummary"
+                    style="@style/playlist_detail_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvPlaylistDescription"
+                    tools:text="300 минут • 98 треков" />
+
+
+                <ImageView
+                    android:id="@+id/btPlaylistShare"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_marginVertical="@dimen/main_padding"
+                    android:background="@drawable/share"
+                    android:backgroundTint="@color/yp_black"
+                    app:layout_constraintEnd_toStartOf="@id/btPlaylistMenu"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tvPlaylistSummary" />
+
+                <ImageView
+                    android:id="@+id/btPlaylistMenu"
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:layout_marginVertical="@dimen/main_padding"
+                    android:layout_marginStart="@dimen/main_padding"
+                    android:background="@drawable/menu_dots"
+                    android:backgroundTint="@color/yp_black"
+                    app:layout_constraintStart_toEndOf="@id/btPlaylistShare"
+                    app:layout_constraintTop_toBottomOf="@id/tvPlaylistSummary" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:id="@+id/playlist_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottomsheet_background"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/main_padding"
+        android:paddingTop="@dimen/sheet_margin_top"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="160dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

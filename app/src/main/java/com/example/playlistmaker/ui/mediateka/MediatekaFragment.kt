@@ -19,12 +19,30 @@ class MediatekaFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         _binding = FragmentMediatekaBinding.inflate(inflater, container, false)
         return binding.root
+
+
+        //requireActivity().setSupportActionBar(binding.toolbar)
+        /*this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        this.supportActionBar?.setDisplayShowHomeEnabled(true)
+        binding.toolbar.setNavigationOnClickListener{
+            this.onBackPressedDispatcher.onBackPressed()
+        }*/
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        /*val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
+        (activity as AppCompatActivity).setSupportActionBar(toolbar)
+
+        // Enable the back button
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)*/
+
+
         binding.viewPager.adapter = MediatekaAdapter(
             fragmentManager = childFragmentManager,
             lifecycle = lifecycle,
