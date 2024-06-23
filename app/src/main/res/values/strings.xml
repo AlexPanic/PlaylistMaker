@@ -44,6 +44,11 @@
     <string name="playlist_add_error">Ошибка сохранения плейлиста</string>
     <string name="playlist_add_backpressed_title">Завершить создание плейлиста?</string>
     <string name="playlist_add_backpressed_message">Все несохраненные данные будут потеряны</string>
+    <string name="playlist_remove_track_title">Удалить трек</string>
+    <string name="playlist_remove_track_message">Вы уверены, что хотите удалить трек из плейлиста?</string>
+
+
+
     <string name="img_alert_icon">Алерт в результатах поиска</string>
 
     <string name="search_history_header">Вы искали</string>
@@ -65,6 +70,8 @@
     <string name="label_description">Описание</string>
     <string name="label_cancel">Отмена</string>
     <string name="label_finish">Завершить</string>
+    <string name="label_yes">Да</string>
+    <string name="label_no">Нет</string>
 
 
     <string name="permission_images_rationale">Разрешение на использование картинок для обложек плейлиста, хранящихся только на устройстве</string>

@@ -93,16 +93,4 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/playlist_bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bottomsheet_background"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/main_padding"
-        android:paddingTop="@dimen/sheet_margin_top"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="160dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior" />
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

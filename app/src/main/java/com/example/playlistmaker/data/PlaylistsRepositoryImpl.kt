@@ -4,6 +4,7 @@ import com.example.playlistmaker.data.converters.PlaylistsConverter
 import com.example.playlistmaker.data.converters.TracksConverter
 import com.example.playlistmaker.data.db.AppDatabase
 import com.example.playlistmaker.data.db.entity.PlaylistsEntity
+import com.example.playlistmaker.data.db.entity.TracksEntity
 import com.example.playlistmaker.domain.playlists.PlaylistsRepository
 import com.example.playlistmaker.domain.playlists.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
@@ -21,8 +22,11 @@ class PlaylistsRepositoryImpl(
     override fun getPlaylists(): Flow<List<Playlist>> =
         appDatabase.playlistsDao().getPlaylists().map(::convertPlaylists)
 
-    override fun getPlaylist(id: Long): Flow<Playlist> =
-        appDatabase.playlistsDao().getPlaylist(id).map {
+    override fun getTracks(trackIDs: List<Int>): Flow<List<Track>> =
+        appDatabase.tracksDao().getTracks(trackIDs).map(::convertTracks)
+
+    override fun getPlaylist(playlistId: Long): Flow<Playlist> =
+        appDatabase.playlistsDao().getPlaylist(playlistId).map {
             playlistsConverter.map(it)
         }
 
@@ -55,7 +59,26 @@ class PlaylistsRepositoryImpl(
         emit(true)
     }
 
-    private fun convertPlaylists(playlistEntities: List<PlaylistsEntity>): List<Playlist> {
-        return playlistEntities.map { playlistEntity -> playlistsConverter.map(playlistEntity) }
+    override fun removeTrack(trackId: Int, playlistId: Long): Flow<List<Int>> = flow {
+
+        getPlaylist(playlistId).collect { playlist ->
+            playlist.trackIDs.remove(trackId)
+            playlist.tracksCount = playlist.trackIDs.size
+            withContext(Dispatchers.IO) {
+                appDatabase.playlistsDao().updatePlaylist(playlistsConverter.map(playlist))
+                val matches = appDatabase.playlistsDao().getPlaylistsMatchByTrack(trackId)
+                if (matches == 0) {
+                    appDatabase.tracksDao().deleteTrack(trackId)
+                }
+            }
+            emit(playlist.trackIDs)
+        }
     }
+
+    private fun convertPlaylists(playlistEntities: List<PlaylistsEntity>): List<Playlist> =
+        playlistEntities.map { playlistEntity -> playlistsConverter.map(playlistEntity) }
+
+
+    private fun convertTracks(trackEntities: List<TracksEntity>): List<Track> =
+        trackEntities.map { trackEntity -> tracksConverter.map(trackEntity) }
 }

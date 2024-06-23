@@ -32,9 +32,18 @@
         android:id="@+id/playlistFragment"
         android:name="com.example.playlistmaker.ui.playlists.playlist_detail.PlaylistDetailFragment"
         android:label=""
-        tools:layout="@layout/fragment_playlist_detail" />
+        tools:layout="@layout/fragment_playlist_detail" >
+        <action
+            android:id="@+id/action_playlistFragment_to_playerActivity"
+            app:destination="@id/playerActivity" />
+    </fragment>
     <fragment
         android:id="@+id/favoritesFragment"
         android:name="com.example.playlistmaker.ui.favorites.FavoritesFragment"
         android:label="@string/tab_favorites" />
+    <activity
+        android:id="@+id/playerActivity"
+        android:name="com.example.playlistmaker.ui.player.activity.PlayerActivity"
+        android:label="activity_player"
+        tools:layout="@layout/activity_player" />
 </navigation>

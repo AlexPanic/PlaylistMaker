@@ -20,6 +20,7 @@ class TrackListAdapter(
     }
 
     interface TrackClickListener {
-        fun onTrackClick(track: Track)
+        fun onClick(track: Track)
+        fun onLongClick(track: Track): Boolean
     }
 }

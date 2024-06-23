@@ -15,7 +15,7 @@ import com.example.playlistmaker.ui.common.Helper
 
 class TrackViewHolder(
     parent: ViewGroup,
-    private val clickListener: TrackListAdapter.TrackClickListener,
+    private val clickListener: TrackListAdapter.TrackClickListener
 ) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(R.layout.list_item_track, parent, false)
 ) {
@@ -41,7 +41,8 @@ class TrackViewHolder(
             itemView.setOnClickListener {}
         } else {
             ivPlayTheTrackArrow.isVisible = true
-            itemView.setOnClickListener { clickListener.onTrackClick(track = model) }
+            itemView.setOnClickListener { clickListener.onClick(track = model) }
+            itemView.setOnLongClickListener { clickListener.onLongClick(track = model) }
         }
     }
 

@@ -17,4 +17,7 @@ interface TracksDao {
 
     @Query("SELECT SUM(trackTimeMillis) AS trackTimeMillisTotal FROM tracks WHERE trackId IN (:trackIDs)")
     fun getTimeMillisTotal(trackIDs: List<Int>): Flow<Int>
+
+    @Query("DELETE FROM tracks WHERE trackId=:trackId")
+    fun deleteTrack(trackId: Int)
 }

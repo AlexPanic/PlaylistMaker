@@ -27,4 +27,11 @@ interface PlaylistsDao {
 
     @Query("SELECT * FROM playlists ORDER BY playlistId DESC")
     fun getPlaylists(): Flow<List<PlaylistsEntity>>
+
+    @Query("SELECT COUNT(*) FROM playlists WHERE (playlistTrackIDs like '%[' || :trackId || ']%')"
+            + " OR (playlistTrackIDs like '%[' || :trackId || ',%')"
+            + " OR (playlistTrackIDs like '%,' || :trackId || ',%')"
+            + " OR (playlistTrackIDs like '%,' || :trackId || ']%')")
+    fun getPlaylistsMatchByTrack(trackId: Int): Int
+
 }

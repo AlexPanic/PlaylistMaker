@@ -32,7 +32,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistAddFragment : Fragment() {
 
-    lateinit var confirmDialog: MaterialAlertDialogBuilder
+    private lateinit var confirmDialog: MaterialAlertDialogBuilder
 
     private var _binding: FragmentPlaylistAddBinding? = null
     private val binding get() = _binding!!
