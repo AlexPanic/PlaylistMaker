@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.playlists.playlist_detail.view_model
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +9,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.domain.playlists.PlaylistDetailState
 import com.example.playlistmaker.domain.playlists.PlaylistTracksState
 import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
+import com.example.playlistmaker.domain.playlists.model.Playlist
+import com.example.playlistmaker.domain.search.model.Track
+import com.example.playlistmaker.domain.sharing.usecase.ShareAppUseCase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -15,6 +19,7 @@ import java.util.Locale
 
 class PlaylistDetailViewModel(
     private val context: Context,
+    private val shareAppUseCase: ShareAppUseCase,
     private val playlistsInteractor: PlaylistsInteractor,
 ) : ViewModel() {
 
@@ -44,7 +49,6 @@ class PlaylistDetailViewModel(
                                 _tracks.postValue(
                                     PlaylistTracksState.Content(tracks)
                                 )
-
                                 playlistsInteractor.getTrackTimeMillisTotal(playlist.trackIDs)
                                     .collect { timeTotal ->
                                         _data.postValue(
@@ -71,5 +75,9 @@ class PlaylistDetailViewModel(
                 .removeTrack(trackId, playlistId).first()
             loadPlaylist(playlistId)
         }
+    }
+
+    fun sharePlaylist(playlist: Playlist, tracks: List<Track>) {
+        playlistsInteractor.sharePlaylist(playlist, tracks)
     }
 }

@@ -2,10 +2,12 @@ package com.example.playlistmaker.ui.playlists.playlist_detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -35,6 +37,7 @@ class PlaylistDetailFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModel<PlaylistDetailViewModel>()
     private var playlistId: Long = 0
+    private var playlist: Playlist? = null
     private lateinit var bottomSheetContainer: LinearLayout
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
     private lateinit var onTrackClickDebounce: (Track) -> Unit
@@ -88,6 +91,7 @@ class PlaylistDetailFragment : Fragment() {
             viewModel.observeState().observe(viewLifecycleOwner) {
                 when (it) {
                     is PlaylistDetailState.Content -> {
+                        playlist = it.playlist
                         showPlaylistDetails(it.playlist, it.trackTimeTotalMinutes)
                     }
 
@@ -100,6 +104,8 @@ class PlaylistDetailFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             tracksRv.adapter = adapter
             viewModel.observeTracks().observe(viewLifecycleOwner) {
+
+                Log.d("mine", "observeTracks = $it")
                 when (it) {
                     is PlaylistTracksState.Content -> {
                         showTracks(it.tracks)
@@ -111,6 +117,13 @@ class PlaylistDetailFragment : Fragment() {
 
         }
 
+        binding.btPlaylistShare.setOnClickListener {
+            if (adapter.tracks.isEmpty()) {
+                showToast(getString(R.string.no_tracks_for_share_playlist))
+            } else if (playlist != null) {
+                viewModel.sharePlaylist(playlist!!, adapter.tracks)
+            }
+        }
 
         bottomSheetContainer = requireActivity().findViewById(R.id.bottom_sheet)
         bottomSheetContainer.isVisible = true
@@ -155,6 +168,10 @@ class PlaylistDetailFragment : Fragment() {
     private fun showTracks(tracks: List<Track>) {
         adapter.tracks = tracks as ArrayList<Track>
         adapter.notifyDataSetChanged()
+    }
+
+    private fun showToast(additionalMessage: String) {
+        Toast.makeText(requireContext(), additionalMessage, Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {

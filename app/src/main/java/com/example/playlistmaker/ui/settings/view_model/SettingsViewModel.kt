@@ -1,8 +1,10 @@
 package com.example.playlistmaker.ui.settings.view_model
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.App
 import com.example.playlistmaker.domain.settings.usecase.GetDarkModeUseCase
 import com.example.playlistmaker.domain.settings.usecase.SetDarkModeUseCase
@@ -16,8 +18,7 @@ class SettingsViewModel(
     private val shareAppUseCase: ShareAppUseCase,
     private val messageSupportUseCase: MessageSupportUseCase,
     private val userAgreementUseCase: UserAgreementUseCase,
-
-    ) : ViewModel() {
+) : ViewModel() {
 
     private val _state = MutableLiveData<Boolean>()
     fun observeState(): LiveData<Boolean> = _state

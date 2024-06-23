@@ -86,5 +86,21 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/bottom_sheet2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bottomsheet_background"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/main_padding"
+        android:paddingTop="@dimen/sheet_margin_top"
+        android:visibility="gone"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="160dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+
+    </LinearLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

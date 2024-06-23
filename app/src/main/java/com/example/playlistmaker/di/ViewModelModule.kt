@@ -35,6 +35,6 @@ val viewModelModule = module {
     }
 
     viewModel {
-        PlaylistDetailViewModel(androidContext(), get())
+        PlaylistDetailViewModel(androidContext(), get(), get())
     }
 }
