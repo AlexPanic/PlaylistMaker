@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.playlistmaker.R
 import com.example.playlistmaker.creator.debounce
 import com.example.playlistmaker.databinding.FragmentFavoritesBinding
 import com.example.playlistmaker.domain.favorites.FavoritesState
@@ -59,14 +60,24 @@ class FavoritesFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.favoritesList.adapter = adapter
 
-        favoritesViewModel.fillData()
+
+
+        var debug = ""
+        for (k in intArrayOf(0,1,2,3,4,5,21,22,23,24,25)) {
+            debug += resources.getQuantityString(R.plurals.minutes,k,k) +
+                    " (" + resources.getQuantityString(R.plurals.check,k) + ")\n"
+        }
+
+        showEmpty(debug)
+
+        /*favoritesViewModel.fillData()
         favoritesViewModel.observeState().observe(viewLifecycleOwner) {
             when (it) {
                 is FavoritesState.Loading -> showLoading()
                 is FavoritesState.Empty -> showEmpty(it.message)
                 is FavoritesState.Content -> showContent(it.tracks)
             }
-        }
+        }*/
     }
 
     override fun onDestroyView() {

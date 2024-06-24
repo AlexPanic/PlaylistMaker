@@ -78,13 +78,22 @@
 
     <string name="permission_images_rationale">Разрешение на использование картинок для обложек плейлиста, хранящихся только на устройстве</string>
 
+    <plurals name="check">
+        <item quantity="zero">zero</item>
+        <item quantity="one">one</item>
+        <item quantity="two">two</item>
+        <item quantity="few">few</item>
+        <item quantity="other">other</item>
+        <item quantity="many">many</item>
+    </plurals>
+
     <plurals name="minutes">
-        <item quantity="zero">минут</item>
-        <item quantity="one">минута</item>
-        <item quantity="two">минуты</item>
-        <item quantity="few">минуты</item>
-        <item quantity="other">минут</item>
-        <item quantity="many">минут</item>
+        <item quantity="zero">%d минут</item>
+        <item quantity="one">%d минута</item>
+        <item quantity="two">%d минуты</item>
+        <item quantity="few">%d минуты</item>
+        <item quantity="other">%d минут</item>
+        <item quantity="many">%d минут</item>
     </plurals>
 
     <plurals name="tracks">
