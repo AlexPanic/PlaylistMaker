@@ -237,6 +237,15 @@
         <item name="android:textColor">@color/yp_black</item>
     </style>
 
+    <style name="playlist_detail_option">
+        <item name="android:paddingVertical">@dimen/playlist_option_padding</item>
+        <item name="android:layout_marginTop">@dimen/text_block_margin_top</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">@dimen/text</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textColor">@color/main_text_color</item>
+    </style>
+
     <style name="bottomSheetHeader">
         <item name="android:paddingVertical">18dp</item>
         <item name="android:fontFamily">@font/ys_display_medium</item>

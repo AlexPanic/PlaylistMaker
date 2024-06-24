@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -32,6 +33,7 @@ import com.example.playlistmaker.ui.search.TrackListAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.w3c.dom.Text
 
 class PlaylistDetailFragment : Fragment() {
     private var _binding: FragmentPlaylistDetailBinding? = null
@@ -39,9 +41,11 @@ class PlaylistDetailFragment : Fragment() {
     private val viewModel by viewModel<PlaylistDetailViewModel>()
     private var playlistId: Long = 0
     private var playlist: Playlist? = null
-    private lateinit var bottomSheetContainer: LinearLayout
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
     private lateinit var onTrackClickDebounce: (Track) -> Unit
+    private lateinit var bsTracksContainer: LinearLayout
+    private lateinit var bsPlaylistOptionsContainer: LinearLayout
+    private lateinit var overlay: View
     private val adapter =
         TrackListAdapter(clickListener = object : TrackListAdapter.TrackClickListener {
             override fun onClick(track: Track) {
@@ -105,44 +109,37 @@ class PlaylistDetailFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             tracksRv.adapter = adapter
             viewModel.observeTracks().observe(viewLifecycleOwner) {
+
+                Log.d("mine", "observe tracks")
+
                 when (it) {
                     is PlaylistTracksState.Content -> {
                         showTracks(it.tracks)
                     }
+
                     is PlaylistTracksState.Empty -> {
                         showEmpty(getString(R.string.no_tracks_in_playlist))
                     }
+
                     else -> {}
                 }
             }
 
         }
 
-        binding.btPlaylistShare.setOnClickListener {
-            if (adapter.tracks.isEmpty()) {
-                showToast(getString(R.string.no_tracks_for_share_playlist))
-            } else if (playlist != null) {
-                viewModel.sharePlaylist(playlist!!, adapter.tracks)
-            }
-        }
+        // затенение
+        overlay = requireActivity().findViewById<View>(R.id.overlay)
 
-        bottomSheetContainer = requireActivity().findViewById(R.id.bottom_sheet)
-        bottomSheetContainer.isVisible = true
-
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
+        // контейнер треков
+        bsTracksContainer = requireActivity().findViewById<LinearLayout>(R.id.bottom_sheet)
+        bsTracksContainer.isVisible = true
+        val bsTracksBehavior = BottomSheetBehavior.from(bsTracksContainer).apply {
             state = BottomSheetBehavior.STATE_COLLAPSED
-            val btShare = requireActivity().findViewById<TextView>(R.id.btPlaylistShare)
-            val y = btShare.measuredHeight
-
-            Log.d("mine", "heightPixels = ${resources.displayMetrics.heightPixels} " +
-                    " bottom=$y")
-            //peekHeight = resources.displayMetrics.heightPixels - binding.btPlaylistShare.bottom
+            //peekHeight = BottomSheetBehavior.PEEK_HEIGHT_AUTO
         }
-        val overlay = requireActivity().findViewById<View>(R.id.overlay)
-
-        bottomSheetBehavior.addBottomSheetCallback(object :
+        // затенение на растягивание списка треков в плейлисте
+        bsTracksBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
-
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 overlay.isVisible = newState != BottomSheetBehavior.STATE_COLLAPSED
             }
@@ -150,13 +147,69 @@ class PlaylistDetailFragment : Fragment() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
             }
         })
+
+        // контейнер управления плейлистом
+        bsPlaylistOptionsContainer =
+            requireActivity().findViewById<LinearLayout>(R.id.bottom_sheet2)
+        bsPlaylistOptionsContainer.isVisible = true
+        val bsPlaylistOptionsBehavior = BottomSheetBehavior.from(bsPlaylistOptionsContainer).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+            //peekHeight = BottomSheetBehavior.PEEK_HEIGHT_AUTO
+        }
+        // затенение на растягивание списка треков в плейлисте
+        bsPlaylistOptionsBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                overlay.isVisible = newState != BottomSheetBehavior.STATE_HIDDEN
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+            }
+        })
+
+        // кнопка поделиться
+        binding.btPlaylistShare.setOnClickListener {
+            sharePlaylist()
+        }
+
+        val optionPlaylistShare = requireActivity().findViewById<TextView>(R.id.playlist_option_share)
+        optionPlaylistShare.setOnClickListener{
+            sharePlaylist()
+        }
+
+        // кнопка управления плейлистом
+        binding.btPlaylistMenu.setOnClickListener {
+            bsPlaylistOptionsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            overlay.isVisible = true
+        }
+
+    }
+
+    private fun sharePlaylist() {
+        if (adapter.tracks.isEmpty()) {
+            showToast(getString(R.string.no_tracks_for_share_playlist))
+        } else if (playlist != null) {
+            viewModel.sharePlaylist(playlist!!, adapter.tracks)
+        }
     }
 
     private fun showPlaylistDetails(playlist: Playlist, trackTimeTotalMinutes: Int) {
-        binding.tvPlaylistName.text = playlist.name
-        binding.tvPlaylistDescription.text = playlist.description
-        binding.tvPlaylistDescription.isVisible = !playlist.description.isNullOrBlank()
-        binding.tvPlaylistSummary.text = getString(
+
+        val optPlaylistCover = requireActivity().findViewById<ImageView>(R.id.ivPlaylistCover)
+        val optPlaylistName = requireActivity().findViewById<TextView>(R.id.tvPlaylistName)
+        val optPlaylistSummary = requireActivity().findViewById<TextView>(R.id.tvTracksCount)
+
+        optPlaylistName.text = playlist.name
+        optPlaylistSummary.text = getString(
+            R.string.playlist_tracks_count,
+            playlist.tracksCount,
+            resources.getQuantityString(R.plurals.tracks, playlist.tracksCount)
+        )
+
+        binding.tvPlaylistDetailName.text = playlist.name
+        binding.tvPlaylistDetailDescription.text = playlist.description
+        binding.tvPlaylistDetailDescription.isVisible = !playlist.description.isNullOrBlank()
+        binding.tvPlaylistDetailSummary.text = getString(
             R.string.playlist_summary,
             trackTimeTotalMinutes,
             resources.getQuantityString(R.plurals.minutes, trackTimeTotalMinutes),
@@ -164,18 +217,22 @@ class PlaylistDetailFragment : Fragment() {
             resources.getQuantityString(R.plurals.tracks, playlist.tracksCount)
         )
         if (playlist.cover != null) {
-            Glide.with(this)
-                .load(playlist.cover)
-                .transform(CenterCrop(), RoundedCorners(Helper.dpToPx(Helper.COVER_RADIUS)))
-                .into(binding.ivPlaylistCover)
+            val glideCover =
+                Glide.with(this)
+                    .load(playlist.cover)
+                    .transform(CenterCrop(), RoundedCorners(Helper.dpToPx(Helper.COVER_RADIUS)))
+            glideCover.into(optPlaylistCover)
+            glideCover.into(binding.ivPlaylistDetailCover)
         } else {
-            binding.ivPlaylistCover.setImageResource(R.drawable.cover_placeholder)
+            binding.ivPlaylistDetailCover.setImageResource(R.drawable.cover_placeholder)
+            optPlaylistCover.setImageResource(R.drawable.cover_placeholder)
         }
-   }
+    }
 
     private fun showEmpty(message: String) {
         val errorTv = requireActivity().findViewById<TextView>(R.id.bottomSheetErrorMessage)
         errorTv.text = message
+        errorTv.isVisible = true
         adapter.tracks.clear()
         adapter.notifyDataSetChanged()
     }
@@ -183,6 +240,7 @@ class PlaylistDetailFragment : Fragment() {
     private fun showTracks(tracks: List<Track>) {
         val errorTv = requireActivity().findViewById<TextView>(R.id.bottomSheetErrorMessage)
         errorTv.text = ""
+        errorTv.isVisible = false
         adapter.tracks = tracks as ArrayList<Track>
         adapter.notifyDataSetChanged()
     }
@@ -193,7 +251,9 @@ class PlaylistDetailFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        bottomSheetContainer.isVisible = false
+        bsTracksContainer.isVisible = false
+        bsPlaylistOptionsContainer.isVisible = false
+        overlay.isVisible = false
         adapter.tracks.clear()
         adapter.notifyDataSetChanged()
         _binding = null

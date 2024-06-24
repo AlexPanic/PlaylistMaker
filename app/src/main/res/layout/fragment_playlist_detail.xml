@@ -24,7 +24,7 @@
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/ivPlaylistCover"
+                    android:id="@+id/ivPlaylistDetailCover"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:contentDescription="@string/lorem_ipsum"
@@ -36,33 +36,33 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
-                    android:id="@+id/tvPlaylistName"
+                    android:id="@+id/tvPlaylistDetailName"
                     style="@style/playlist_detail_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ivPlaylistCover"
+                    app:layout_constraintTop_toBottomOf="@id/ivPlaylistDetailCover"
                     tools:text="Best songs 2021" />
 
                 <TextView
-                    android:id="@+id/tvPlaylistDescription"
+                    android:id="@+id/tvPlaylistDetailDescription"
                     style="@style/playlist_detail_description"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvPlaylistName"
+                    app:layout_constraintTop_toBottomOf="@id/tvPlaylistDetailName"
                     tools:text="2022" />
 
                 <TextView
-                    android:id="@+id/tvPlaylistSummary"
+                    android:id="@+id/tvPlaylistDetailSummary"
                     style="@style/playlist_detail_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvPlaylistDescription"
+                    app:layout_constraintTop_toBottomOf="@id/tvPlaylistDetailDescription"
                     tools:text="300 минут • 98 треков" />
 
 
@@ -75,7 +75,7 @@
                     android:backgroundTint="@color/yp_black"
                     app:layout_constraintEnd_toStartOf="@id/btPlaylistMenu"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvPlaylistSummary" />
+                    app:layout_constraintTop_toBottomOf="@id/tvPlaylistDetailSummary" />
 
                 <ImageView
                     android:id="@+id/btPlaylistMenu"
@@ -86,7 +86,7 @@
                     android:background="@drawable/menu_dots"
                     android:backgroundTint="@color/yp_black"
                     app:layout_constraintStart_toEndOf="@id/btPlaylistShare"
-                    app:layout_constraintTop_toBottomOf="@id/tvPlaylistSummary" />
+                    app:layout_constraintTop_toBottomOf="@id/tvPlaylistDetailSummary" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

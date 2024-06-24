@@ -49,8 +49,8 @@
     <string name="playlist_remove_track_title">Удалить трек</string>
     <string name="playlist_remove_track_message">Вы уверены, что хотите удалить трек из плейлиста?</string>
     <string name="playlist_share_title">Поделиться плейлистом</string>
-
-
+    <string name="playlist_option_edit">Редактировать информацию</string>
+    <string name="playlist_option_delete">Удалить плейлист</string>
 
     <string name="img_alert_icon">Алерт в результатах поиска</string>
 

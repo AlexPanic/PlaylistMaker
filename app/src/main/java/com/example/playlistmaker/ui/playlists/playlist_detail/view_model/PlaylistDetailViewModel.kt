@@ -13,6 +13,7 @@ import com.example.playlistmaker.domain.playlists.PlaylistTracksState
 import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
 import com.example.playlistmaker.domain.playlists.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -25,7 +26,7 @@ class PlaylistDetailViewModel(
 ) : ViewModel() {
 
     private val dateFormat by lazy { SimpleDateFormat("m", Locale.getDefault()) }
-
+    private var totalTimeInMillis: Int = 0
     private val _data = MutableLiveData<PlaylistDetailState>()
     private val _tracks = MutableLiveData<PlaylistTracksState>()
     fun observeState(): LiveData<PlaylistDetailState> = _data
@@ -34,42 +35,44 @@ class PlaylistDetailViewModel(
     fun loadPlaylist(playlistId: Long) {
         viewModelScope.launch {
             playlistsInteractor.getPlaylist(playlistId).collect { playlist ->
+                loadTracks(playlist)
+            }
+        }
+    }
 
-                Log.d("mine", "trackids = ${playlist.trackIDs}")
+    // сортируем треки в порядке добавления в плейлист (отраженном в trackIDs)
+    private fun sortByAdded(tracks: List<Track>, trackIDs: List<Int>): List<Track> {
+        return if (tracks.size>1) {
+            val tracksA = tracks.associateBy { it.trackId }
+            // в обратном порядке
+            trackIDs.reversed().mapNotNull { tracksA[it] }.toList()
+        } else tracks
+    }
 
-                if (playlist.trackIDs.isEmpty()) {
-                    _data.postValue(
-                        PlaylistDetailState.Content(
-                            playlist, 0
-                        )
+    private suspend fun loadTracks(playlist: Playlist) {
+        viewModelScope.launch {
+            playlistsInteractor.getTracks(playlist.trackIDs).collect { tracks ->
+                if (tracks.isEmpty()) {
+                    totalTimeInMillis = 0
+                    _tracks.postValue(
+                        PlaylistTracksState.Empty
                     )
-                    _tracks.postValue(PlaylistTracksState.Empty)
                 } else {
-
-                    playlistsInteractor.getTracks(playlist.trackIDs).collect { tracks ->
-                        _tracks.postValue(
-                            PlaylistTracksState.Content(tracks)
-                        )
-                        if (playlist.trackIDs.isNotEmpty()) {
-                            playlistsInteractor.getTrackTimeMillisTotal(playlist.trackIDs)
-                                .collect { timeTotal ->
-                                    _data.postValue(
-                                        PlaylistDetailState.Content(
-                                            playlist, dateFormat.format(timeTotal).toInt()
-                                        )
-                                    )
-
-                                }
-                        }
-                    }
-
-
+                    totalTimeInMillis = tracks.sumOf { it.trackTimeMillis }
+                    _tracks.postValue(
+                        PlaylistTracksState.Content(sortByAdded(tracks, playlist.trackIDs))
+                    )
                 }
+                _data.postValue(
+                    PlaylistDetailState.Content(
+                        playlist, dateFormat.format(totalTimeInMillis).toInt()
+                    )
+                )
 
             }
         }
-
     }
+
 
     fun removeTrackFromPlaylist(trackId: Int, playlistId: Long) {
         viewModelScope.launch {

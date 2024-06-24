@@ -66,48 +66,10 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bottomsheet_background"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/main_padding"
-        android:paddingTop="@dimen/sheet_margin_top"
-        android:visibility="gone"
-        app:behavior_hideable="false"
-        app:behavior_peekHeight="160dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTracks"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
-        <TextView
-            android:id="@+id/bottomSheetErrorMessage"
-            style="@style/errorMessage"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/bottom_sheet2"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bottomsheet_background"
-        android:orientation="vertical"
-        android:paddingHorizontal="@dimen/main_padding"
-        android:paddingTop="@dimen/sheet_margin_top"
-        android:visibility="gone"
-        app:behavior_hideable="false"
-        app:behavior_peekHeight="160dp"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
 
-    </LinearLayout>
+    <include layout="@layout/bottom_sheet_playlist_tracks" />
+    <include layout="@layout/bottom_sheet_playlist_options" />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

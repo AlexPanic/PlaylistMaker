@@ -8,7 +8,6 @@ import com.example.playlistmaker.data.db.entity.TracksEntity
 import com.example.playlistmaker.domain.playlists.PlaylistsRepository
 import com.example.playlistmaker.domain.playlists.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.domain.ExternalNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
