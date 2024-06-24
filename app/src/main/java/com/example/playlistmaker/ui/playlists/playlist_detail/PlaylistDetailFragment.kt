@@ -127,8 +127,10 @@ class PlaylistDetailFragment : Fragment() {
 
         bottomSheetContainer = requireActivity().findViewById(R.id.bottom_sheet)
         bottomSheetContainer.isVisible = true
+
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
             state = BottomSheetBehavior.STATE_COLLAPSED
+            peekHeight = resources.displayMetrics.heightPixels - binding.btPlaylistShare.bottom
         }
         val overlay = requireActivity().findViewById<View>(R.id.overlay)
 

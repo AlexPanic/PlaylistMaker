@@ -47,6 +47,7 @@
     <string name="playlist_add_backpressed_message">Все несохраненные данные будут потеряны</string>
     <string name="playlist_remove_track_title">Удалить трек</string>
     <string name="playlist_remove_track_message">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="playlist_share_title">Поделиться плейлистом</string>
 
 
 

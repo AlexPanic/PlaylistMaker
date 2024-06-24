@@ -1,5 +1,6 @@
 package com.example.playlistmaker.domain.playlists.impl
 
+import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
 import com.example.playlistmaker.domain.playlists.PlaylistsRepository
 import com.example.playlistmaker.domain.playlists.model.Playlist
@@ -11,7 +12,6 @@ import kotlinx.coroutines.withContext
 
 class PlaylistsInteractorImpl(
     private val repository: PlaylistsRepository,
-    private val externalNavigator: ExternalNavigator,
 ) : PlaylistsInteractor {
     override suspend fun getPlaylists(): Flow<List<Playlist>> =
         withContext(Dispatchers.IO)
@@ -51,9 +51,5 @@ class PlaylistsInteractorImpl(
         withContext(Dispatchers.IO) {
             repository.removeTrack(trackId, playlistId)
         }
-
-    override fun sharePlaylist(playlist: Playlist, tracks: List<Track>) {
-        externalNavigator.shareThis("Title", "${playlist.name}\n${playlist.description}")
-    }
 
 }
