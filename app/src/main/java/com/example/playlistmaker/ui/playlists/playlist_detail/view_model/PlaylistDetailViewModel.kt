@@ -1,6 +1,7 @@
 package com.example.playlistmaker.ui.playlists.playlist_detail.view_model
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -33,27 +34,33 @@ class PlaylistDetailViewModel(
     fun loadPlaylist(playlistId: Long) {
         viewModelScope.launch {
             playlistsInteractor.getPlaylist(playlistId).collect { playlist ->
+
+                Log.d("mine", "trackids = ${playlist.trackIDs}")
+
                 if (playlist.trackIDs.isEmpty()) {
                     _data.postValue(
                         PlaylistDetailState.Content(
                             playlist, 0
                         )
                     )
+                    _tracks.postValue(PlaylistTracksState.Empty)
                 } else {
 
                     playlistsInteractor.getTracks(playlist.trackIDs).collect { tracks ->
                         _tracks.postValue(
                             PlaylistTracksState.Content(tracks)
                         )
-                        playlistsInteractor.getTrackTimeMillisTotal(playlist.trackIDs)
-                            .collect { timeTotal ->
-                                _data.postValue(
-                                    PlaylistDetailState.Content(
-                                        playlist, dateFormat.format(timeTotal).toInt()
+                        if (playlist.trackIDs.isNotEmpty()) {
+                            playlistsInteractor.getTrackTimeMillisTotal(playlist.trackIDs)
+                                .collect { timeTotal ->
+                                    _data.postValue(
+                                        PlaylistDetailState.Content(
+                                            playlist, dateFormat.format(timeTotal).toInt()
+                                        )
                                     )
-                                )
 
-                            }
+                                }
+                        }
                     }
 
 

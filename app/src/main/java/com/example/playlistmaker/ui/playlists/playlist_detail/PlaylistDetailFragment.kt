@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -104,13 +105,13 @@ class PlaylistDetailFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             tracksRv.adapter = adapter
             viewModel.observeTracks().observe(viewLifecycleOwner) {
-
-                Log.d("mine", "observeTracks = $it")
                 when (it) {
                     is PlaylistTracksState.Content -> {
                         showTracks(it.tracks)
                     }
-
+                    is PlaylistTracksState.Empty -> {
+                        showEmpty(getString(R.string.no_tracks_in_playlist))
+                    }
                     else -> {}
                 }
             }
@@ -130,7 +131,12 @@ class PlaylistDetailFragment : Fragment() {
 
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer).apply {
             state = BottomSheetBehavior.STATE_COLLAPSED
-            peekHeight = resources.displayMetrics.heightPixels - binding.btPlaylistShare.bottom
+            val btShare = requireActivity().findViewById<TextView>(R.id.btPlaylistShare)
+            val y = btShare.measuredHeight
+
+            Log.d("mine", "heightPixels = ${resources.displayMetrics.heightPixels} " +
+                    " bottom=$y")
+            //peekHeight = resources.displayMetrics.heightPixels - binding.btPlaylistShare.bottom
         }
         val overlay = requireActivity().findViewById<View>(R.id.overlay)
 
@@ -165,9 +171,18 @@ class PlaylistDetailFragment : Fragment() {
         } else {
             binding.ivPlaylistCover.setImageResource(R.drawable.cover_placeholder)
         }
+   }
+
+    private fun showEmpty(message: String) {
+        val errorTv = requireActivity().findViewById<TextView>(R.id.bottomSheetErrorMessage)
+        errorTv.text = message
+        adapter.tracks.clear()
+        adapter.notifyDataSetChanged()
     }
 
     private fun showTracks(tracks: List<Track>) {
+        val errorTv = requireActivity().findViewById<TextView>(R.id.bottomSheetErrorMessage)
+        errorTv.text = ""
         adapter.tracks = tracks as ArrayList<Track>
         adapter.notifyDataSetChanged()
     }
