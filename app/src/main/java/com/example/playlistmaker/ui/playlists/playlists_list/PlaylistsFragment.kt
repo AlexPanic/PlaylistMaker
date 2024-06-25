@@ -14,6 +14,7 @@ import com.example.playlistmaker.creator.debounce
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.domain.playlists.PlaylistsState
 import com.example.playlistmaker.domain.playlists.model.Playlist
+import com.example.playlistmaker.ui.playlists.playlist_add.PlaylistAddFragment
 import com.example.playlistmaker.ui.playlists.playlist_detail.PlaylistDetailFragment
 import com.example.playlistmaker.ui.playlists.playlists_list.view_model.PlaylistsViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -63,7 +64,10 @@ class PlaylistsFragment : Fragment() {
 
         binding.btPlaylistAdd.setOnClickListener {
             findNavController()
-                .navigate(R.id.action_mediatekaFragment_to_playlistAddFragment)
+                .navigate(
+                    R.id.action_mediatekaFragment_to_playlistAddFragment,
+                    PlaylistAddFragment.createArgs(null)
+                )
         }
         playlistsViewModel.fillData()
         playlistsViewModel.observeState().observe(viewLifecycleOwner) {

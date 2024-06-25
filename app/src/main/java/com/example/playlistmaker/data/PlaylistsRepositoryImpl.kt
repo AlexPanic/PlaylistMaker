@@ -40,6 +40,13 @@ class PlaylistsRepositoryImpl(
         emit(playlistId)
     }
 
+    override fun updatePlaylist(playlist: Playlist): Flow<Boolean> = flow {
+        withContext(Dispatchers.IO) {
+            appDatabase.playlistsDao().updatePlaylist(playlistsConverter.map(playlist))
+        }
+        emit(true)
+    }
+
     override fun updateCover(cover: String, id: Long): Flow<Boolean> = flow {
         withContext(Dispatchers.IO) {
             appDatabase.playlistsDao().updatePlaylistCover(cover, id)
@@ -73,6 +80,13 @@ class PlaylistsRepositoryImpl(
             }
             emit(playlist.trackIDs)
         }
+    }
+
+    override fun deletePlaylist(playlistId: Long): Flow<Boolean> = flow {
+        // взять треки
+        // удалить лист
+        // удалить треки
+        emit(true)
     }
 
     private fun convertPlaylists(playlistEntities: List<PlaylistsEntity>): List<Playlist> =

@@ -5,11 +5,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import androidx.core.net.toUri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.domain.playlists.PlaylistAddState
+import com.example.playlistmaker.domain.playlists.PlaylistSubmitState
 import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
 import com.example.playlistmaker.domain.playlists.model.Playlist
 import kotlinx.coroutines.launch
@@ -20,33 +21,69 @@ class PlaylistAddViewModel(
     private val context: Context,
     private val playlistsInteractor: PlaylistsInteractor,
 ) : ViewModel() {
-    private val _data = MutableLiveData<PlaylistAddState>()
-    fun observeState(): LiveData<PlaylistAddState> = _data
-    fun addPlaylist(
+    private val _data = MutableLiveData<PlaylistSubmitState>()
+    fun observeState(): LiveData<PlaylistSubmitState> = _data
+
+
+    fun submitPlaylist(
+        playlistId: Long = 0,
         playlistName: String,
         playlistDescription: String?,
         uri: Uri?,
     ) {
-        renderState(PlaylistAddState.Loading)
+        renderState(PlaylistSubmitState.Loading)
+        val playlist = Playlist(
+            id = playlistId,
+            name = playlistName,
+            description = playlistDescription,
+            tracksCount = 0,
+            cover = uri.toString()
+        )
+        if (playlistId > 0) {
+            updatePlaylist(playlist)
+        } else {
+            addPlaylist(playlist)
+        }
+
+    }
+
+    private fun addPlaylist(playlist: Playlist) {
         viewModelScope.launch {
-            val playlist = Playlist(
-                id = 0,
-                name = playlistName,
-                description = playlistDescription,
-                tracksCount = 0,
-            )
             playlistsInteractor
                 .addPlaylist(playlist)
                 .collect { playlistID ->
-                    if (uri != null) {
-                        val savedCover = saveImageToPrivateStorage(uri, playlistID)
+                    if (playlist.cover != null) {
+                        val savedCover =
+                            saveImageToPrivateStorage(playlist.cover.toUri(), playlistID)
                         playlistsInteractor
                             .updateCover(savedCover, playlistID)
                             .collect {
-                                renderState(PlaylistAddState.Added)
+                                renderState(PlaylistSubmitState.Added)
                             }
                     } else {
-                        renderState(PlaylistAddState.Added)
+                        renderState(PlaylistSubmitState.Added)
+                    }
+                }
+        }
+    }
+
+    private fun updatePlaylist(playlist: Playlist) {
+        renderState(PlaylistSubmitState.Loading)
+        viewModelScope.launch {
+            playlistsInteractor
+                .updatePlaylist(playlist)
+                .collect {
+                    if (playlist.cover != null) {
+                        val savedCover =
+                            saveImageToPrivateStorage(playlist.cover.toUri(), playlist.id)
+                        playlistsInteractor
+                            .updateCover(savedCover, playlist.id)
+                            .collect {
+                                renderState(PlaylistSubmitState.Updated)
+                            }
+
+                    } else {
+                        renderState(PlaylistSubmitState.Updated)
                     }
                 }
         }
@@ -66,7 +103,7 @@ class PlaylistAddViewModel(
         return file.toURI().toString()
     }
 
-    private fun renderState(state: PlaylistAddState) {
+    private fun renderState(state: PlaylistSubmitState) {
         _data.postValue(state)
     }
 

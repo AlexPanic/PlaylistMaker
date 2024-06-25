@@ -10,7 +10,9 @@ interface PlaylistsRepository {
     fun getPlaylist(playlistId: Long): Flow<Playlist>
     fun getTrackTimeMillisTotal(trackIDs: List<Int>): Flow<Int>
     fun addPlaylist(playlist: Playlist): Flow<Long>
+    fun updatePlaylist(playlist: Playlist): Flow<Boolean>
     fun updateCover(cover: String, id: Long): Flow<Boolean>
     fun addTrack(track: Track, playlist: Playlist): Flow<Boolean>
     fun removeTrack(trackId: Int, playlistId: Long): Flow<List<Int>>
+    fun deletePlaylist(playlistId: Long): Flow<Boolean>
 }

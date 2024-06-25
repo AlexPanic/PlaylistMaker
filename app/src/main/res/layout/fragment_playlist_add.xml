@@ -54,7 +54,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/label_description"
-                app:layout_constraintBottom_toTopOf="@id/create_playlist_btn"
+                app:layout_constraintBottom_toTopOf="@id/bt_playlist_submit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tilNewPlaylistName"
@@ -69,13 +69,13 @@
 
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/create_playlist_btn"
+                android:id="@+id/bt_playlist_submit"
                 style="@style/create_btn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@drawable/btn_create"
                 android:enabled="false"
-                android:text="@string/create_btn_label"
+                android:text="@string/label_create"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

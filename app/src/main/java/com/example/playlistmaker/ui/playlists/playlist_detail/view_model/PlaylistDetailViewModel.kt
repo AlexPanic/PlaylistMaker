@@ -81,6 +81,12 @@ class PlaylistDetailViewModel(
         }
     }
 
+    fun deletePlaylist(playlistId: Long) {
+        viewModelScope.launch {
+            playlistsInteractor.deletePlaylist(playlistId)
+        }
+    }
+
     fun sharePlaylist(playlist: Playlist, tracks: List<Track>) {
 
         var message = playlist.name

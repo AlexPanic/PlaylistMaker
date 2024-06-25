@@ -34,4 +34,6 @@ interface PlaylistsDao {
             + " OR (playlistTrackIDs like '%,' || :trackId || ']%')")
     fun getPlaylistsMatchByTrack(trackId: Int): Int
 
+    @Query("DELETE FROM playlists WHERE playlistId=:playlistId")
+    fun deletePlaylist(playlistId: Long): Flow<Boolean>
 }

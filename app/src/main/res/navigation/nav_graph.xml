@@ -36,6 +36,9 @@
         <action
             android:id="@+id/action_playlistFragment_to_playerActivity"
             app:destination="@id/playerActivity" />
+        <action
+            android:id="@+id/action_playlistFragment_to_playlistAddFragment"
+            app:destination="@id/playlistAddFragment" />
     </fragment>
     <fragment
         android:id="@+id/favoritesFragment"

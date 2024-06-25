@@ -1,11 +1,9 @@
 package com.example.playlistmaker.domain.playlists.impl
 
-import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
 import com.example.playlistmaker.domain.playlists.PlaylistsRepository
 import com.example.playlistmaker.domain.playlists.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
-import com.example.playlistmaker.domain.ExternalNavigator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -41,6 +39,11 @@ class PlaylistsInteractorImpl(
     override suspend fun addPlaylist(playlist: Playlist): Flow<Long> =
         repository.addPlaylist(playlist)
 
+
+    override suspend fun updatePlaylist(playlist: Playlist): Flow<Boolean> =
+        repository.updatePlaylist(playlist)
+
+
     override suspend fun updateCover(cover: String, id: Long): Flow<Boolean> =
         repository.updateCover(cover, id)
 
@@ -50,6 +53,11 @@ class PlaylistsInteractorImpl(
     override suspend fun removeTrack(trackId: Int, playlistId: Long): Flow<List<Int>> =
         withContext(Dispatchers.IO) {
             repository.removeTrack(trackId, playlistId)
+        }
+
+    override suspend fun deletePlaylist(playlistId: Long): Flow<Boolean> =
+        withContext(Dispatchers.IO) {
+            repository.deletePlaylist(playlistId)
         }
 
 }

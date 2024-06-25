@@ -2,6 +2,7 @@ package com.example.playlistmaker.ui.playlists.playlist_detail
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -28,12 +30,14 @@ import com.example.playlistmaker.domain.playlists.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.common.Helper
 import com.example.playlistmaker.ui.player.activity.PlayerActivity
+import com.example.playlistmaker.ui.playlists.playlist_add.PlaylistAddFragment
 import com.example.playlistmaker.ui.playlists.playlist_detail.view_model.PlaylistDetailViewModel
 import com.example.playlistmaker.ui.search.TrackListAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.Gson
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.w3c.dom.Text
+
 
 class PlaylistDetailFragment : Fragment() {
     private var _binding: FragmentPlaylistDetailBinding? = null
@@ -130,12 +134,17 @@ class PlaylistDetailFragment : Fragment() {
         // затенение
         overlay = requireActivity().findViewById<View>(R.id.overlay)
 
+        val screenHeight = requireActivity().resources.displayMetrics.heightPixels
+        Log.d("mine", "height = $screenHeight")
+
         // контейнер треков
         bsTracksContainer = requireActivity().findViewById<LinearLayout>(R.id.bottom_sheet)
         bsTracksContainer.isVisible = true
         val bsTracksBehavior = BottomSheetBehavior.from(bsTracksContainer).apply {
             state = BottomSheetBehavior.STATE_COLLAPSED
-            //peekHeight = BottomSheetBehavior.PEEK_HEIGHT_AUTO
+            if (screenHeight<1920) {
+                peekHeight = 320
+            }
         }
         // затенение на растягивание списка треков в плейлисте
         bsTracksBehavior.addBottomSheetCallback(object :
@@ -154,7 +163,7 @@ class PlaylistDetailFragment : Fragment() {
         bsPlaylistOptionsContainer.isVisible = true
         val bsPlaylistOptionsBehavior = BottomSheetBehavior.from(bsPlaylistOptionsContainer).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
-            //peekHeight = BottomSheetBehavior.PEEK_HEIGHT_AUTO
+            //peekHeight = 100
         }
         // затенение на растягивание списка треков в плейлисте
         bsPlaylistOptionsBehavior.addBottomSheetCallback(object :
@@ -172,16 +181,42 @@ class PlaylistDetailFragment : Fragment() {
             sharePlaylist()
         }
 
+        // меню управления плейлистом
+        binding.btPlaylistMenu.setOnClickListener {
+            bsPlaylistOptionsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            overlay.isVisible = true
+        }
+
+        // ссылка поделиться в опциях
         val optionPlaylistShare = requireActivity().findViewById<TextView>(R.id.playlist_option_share)
         optionPlaylistShare.setOnClickListener{
             sharePlaylist()
         }
 
-        // кнопка управления плейлистом
-        binding.btPlaylistMenu.setOnClickListener {
-            bsPlaylistOptionsBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            overlay.isVisible = true
+        // ссылка на редактирование в опциях
+        val optionPlaylistEdit = requireActivity().findViewById<TextView>(R.id.playlist_option_edit)
+        optionPlaylistEdit.setOnClickListener{
+            findNavController()
+                .navigate(
+                    R.id.action_playlistFragment_to_playlistAddFragment,
+                    PlaylistAddFragment.createArgs(Gson().toJson(playlist))
+                )
         }
+
+        // ссылка удаление в опциях
+        val optionPlaylistDelete = requireActivity().findViewById<TextView>(R.id.playlist_option_delete)
+        optionPlaylistDelete.setOnClickListener{
+            confirmDialog = MaterialAlertDialogBuilder(requireActivity())
+                .setMessage(getString(R.string.playlist_delete_title, playlist!!.name))
+                .setNeutralButton(getString(R.string.label_no)) { _, _ ->
+
+                }.setPositiveButton(getString(R.string.label_yes)) { _, _ ->
+                    //viewModel.removeTrackFromPlaylist(track.trackId, playlistId)
+                }
+            confirmDialog.show()
+        }
+
+
 
     }
 

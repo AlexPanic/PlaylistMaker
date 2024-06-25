@@ -10,7 +10,9 @@ interface PlaylistsInteractor {
     suspend fun getPlaylist(id: Long): Flow<Playlist>
     suspend fun getTrackTimeMillisTotal(trackIDs: List<Int>): Flow<Int>
     suspend fun addPlaylist(playlist: Playlist): Flow<Long>
+    suspend fun updatePlaylist(playlist: Playlist): Flow<Boolean>
     suspend fun updateCover(cover: String, id: Long): Flow<Boolean>
     suspend fun addTrack(track: Track, playlist: Playlist): Flow<Boolean>
     suspend fun removeTrack(trackId: Int, playlistId: Long): Flow<List<Int>>
+    suspend fun deletePlaylist(playlistId: Long): Flow<Boolean>
 }
