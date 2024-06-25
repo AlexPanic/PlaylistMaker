@@ -19,21 +19,26 @@ interface PlaylistsDao {
     @Query("UPDATE playlists SET playlistTrackIDs=:trackIDs WHERE playlistId=:id")
     fun updateTrackIDs(trackIDs: String, id: Long)
 
-    @Update
-    fun updatePlaylist(playlist: PlaylistsEntity)
-
     @Query("SELECT * FROM playlists WHERE playlistId=:id LIMIT 1")
     fun getPlaylist(id: Long): Flow<PlaylistsEntity>
 
     @Query("SELECT * FROM playlists ORDER BY playlistId DESC")
     fun getPlaylists(): Flow<List<PlaylistsEntity>>
 
-    @Query("SELECT COUNT(*) FROM playlists WHERE (playlistTrackIDs like '%[' || :trackId || ']%')"
-            + " OR (playlistTrackIDs like '%[' || :trackId || ',%')"
-            + " OR (playlistTrackIDs like '%,' || :trackId || ',%')"
-            + " OR (playlistTrackIDs like '%,' || :trackId || ']%')")
+    @Query(
+        "SELECT COUNT(*) FROM playlists WHERE (playlistTrackIDs like '%[' || :trackId || ']%')"
+                + " OR (playlistTrackIDs like '%[' || :trackId || ',%')"
+                + " OR (playlistTrackIDs like '%,' || :trackId || ',%')"
+                + " OR (playlistTrackIDs like '%,' || :trackId || ']%')"
+    )
     fun getPlaylistsMatchByTrack(trackId: Int): Int
 
+    @Update
+    fun updatePlaylist(playlist: PlaylistsEntity)
+
     @Query("DELETE FROM playlists WHERE playlistId=:playlistId")
-    fun deletePlaylist(playlistId: Long): Flow<Boolean>
+    fun deletePlaylist(playlistId: Long): Int
+
+    /*@Delete(PlaylistsEntity::class)
+    fun deletePlaylist(playlist: PlaylistsEntity)*/
 }

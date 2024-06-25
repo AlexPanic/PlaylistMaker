@@ -73,6 +73,11 @@ class PlaylistAddFragment : Fragment() {
     }
 
     private fun backPressedDialog() {
+        // кнопка назад при редактировании плейлиста не спрашивает ничего
+        if (playlistId > 0) {
+            return backPressedPassed()
+        }
+
         if ((coverUri != null)
             || binding.newPlaylistName.text.toString().isNotEmpty()
             || binding.newPlaylistDescription.text.toString().isNotEmpty()
@@ -87,7 +92,7 @@ class PlaylistAddFragment : Fragment() {
                 }
             confirmDialog.show()
         } else {
-            backPressedPassed()
+            return backPressedPassed()
         }
     }
 
@@ -122,6 +127,10 @@ class PlaylistAddFragment : Fragment() {
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
                     setCover(uri)
+                    // важное присваивание
+                    // для нового плейлиста содержит картинку
+                    // а при редактировании еще определяет что картинка обновилась (если не null)
+                    coverUri = uri
                 }
             }
 
@@ -131,12 +140,20 @@ class PlaylistAddFragment : Fragment() {
 
         binding.btPlaylistSubmit.setOnClickListener {
             lifecycleScope.launch {
-                playlistAddViewModel.submitPlaylist(
-                    playlistId,
-                    binding.newPlaylistName.text.toString(),
-                    binding.newPlaylistDescription.text.toString(),
-                    coverUri
-                )
+                if (playlistId > 0) {
+                    playlistAddViewModel.updatePlaylist(
+                        playlist,
+                        binding.newPlaylistName.text.toString(),
+                        binding.newPlaylistDescription.text.toString(),
+                        newUri = coverUri// будет равна null при редактировании плейлиста, если не менялась
+                    )
+                } else {
+                    playlistAddViewModel.addPlaylist(
+                        binding.newPlaylistName.text.toString(),
+                        binding.newPlaylistDescription.text.toString(),
+                        coverUri
+                    )
+                }
             }
         }
 
@@ -189,7 +206,6 @@ class PlaylistAddFragment : Fragment() {
     }
 
     private fun setCover(uri: Uri) {
-        coverUri = uri
         Glide
             .with(this)
             .load(uri)
@@ -208,7 +224,7 @@ class PlaylistAddFragment : Fragment() {
 
     // инициализируем форму
     private fun playlistFormInit() {
-        val playlistStr = requireArguments().getString(PLAYLIST)
+        val playlistStr = requireArguments().getString(PLAYLIST, "")
         // создание плейлиста
         if (playlistStr.isNullOrBlank()) {
             setHeader(getString(R.string.new_playlist))
@@ -219,9 +235,7 @@ class PlaylistAddFragment : Fragment() {
             val type = object : TypeToken<Playlist>() {}.type
             _playlist = Gson().fromJson(playlistStr, type)
             if (_playlist != null) {
-
                 playlistId = playlist.id
-
                 if (playlist.cover != null) {
                     setCover(playlist.cover!!.toUri())
                 }

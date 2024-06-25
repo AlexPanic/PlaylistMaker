@@ -14,6 +14,7 @@ import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
 import com.example.playlistmaker.domain.playlists.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -81,9 +82,13 @@ class PlaylistDetailViewModel(
         }
     }
 
-    fun deletePlaylist(playlistId: Long) {
+    fun deletePlaylist(playlist_: Playlist) {
         viewModelScope.launch {
-            playlistsInteractor.deletePlaylist(playlistId)
+            playlistsInteractor.deletePlaylist(playlist_).collect{
+
+                Log.d("mine", "$it")
+            //_data.postValue(PlaylistDetailState.Deleted)
+            }
         }
     }
 

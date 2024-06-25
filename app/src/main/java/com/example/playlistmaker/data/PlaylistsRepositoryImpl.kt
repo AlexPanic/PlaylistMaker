@@ -82,12 +82,25 @@ class PlaylistsRepositoryImpl(
         }
     }
 
-    override fun deletePlaylist(playlistId: Long): Flow<Boolean> = flow {
-        // взять треки
-        // удалить лист
-        // удалить треки
-        emit(true)
-    }
+    /*
+            //val trackIDs = playlist.trackIDs
+            withContext(Dispatchers.IO) {
+                appDatabase.playlistsDao().deletePlaylist(playlistsConverter.map(playlist))
+                /*if (trackIDs.isNotEmpty()) {
+                    for (trackId in trackIDs) {
+                        val matches = appDatabase.playlistsDao().getPlaylistsMatchByTrack(trackId)
+                        if (matches == 0) {
+                            appDatabase.tracksDao().deleteTrack(trackId)
+                        }
+                    }
+                }*/
+            }
+
+     */
+
+    override fun deletePlaylist(playlist: Playlist) =
+        appDatabase.playlistsDao().deletePlaylist(playlist.id)
+
 
     private fun convertPlaylists(playlistEntities: List<PlaylistsEntity>): List<Playlist> =
         playlistEntities.map { playlistEntity -> playlistsConverter.map(playlistEntity) }

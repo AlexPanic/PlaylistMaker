@@ -6,6 +6,7 @@ import com.example.playlistmaker.domain.playlists.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 
 class PlaylistsInteractorImpl(
@@ -55,9 +56,12 @@ class PlaylistsInteractorImpl(
             repository.removeTrack(trackId, playlistId)
         }
 
-    override suspend fun deletePlaylist(playlistId: Long): Flow<Boolean> =
+    override suspend fun deletePlaylist(playlist: Playlist): Flow<Int> = flow {
         withContext(Dispatchers.IO) {
-            repository.deletePlaylist(playlistId)
+            repository.deletePlaylist(playlist)
         }
+        emit(1)
+    }
+
 
 }

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -117,8 +118,15 @@ class PlayerActivity : AppCompatActivity() {
         val btPlaylistAdd = findViewById<Button>(R.id.btPlaylistAdd)
         btPlaylistAdd.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+            /*findNavController().navigate(
+                    R.id.action_mediatekaFragment_to_playlistAddFragment,
+                    PlaylistAddFragment.createArgs(null)
+                )*/
+
+
             supportFragmentManager.beginTransaction()
-                .add(R.id.playerFragmentContainerView, PlaylistAddFragment())
+                .replace(R.id.playerFragmentContainerView, PlaylistAddFragment())
                 .addToBackStack(getString(R.string.new_playlist))
                 .commit()
             binding.toolbar.setTitle(getString(R.string.new_playlist))

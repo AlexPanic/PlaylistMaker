@@ -14,5 +14,5 @@ interface PlaylistsRepository {
     fun updateCover(cover: String, id: Long): Flow<Boolean>
     fun addTrack(track: Track, playlist: Playlist): Flow<Boolean>
     fun removeTrack(trackId: Int, playlistId: Long): Flow<List<Int>>
-    fun deletePlaylist(playlistId: Long): Flow<Boolean>
+    fun deletePlaylist(playlist: Playlist): Int
 }

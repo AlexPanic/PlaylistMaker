@@ -44,7 +44,7 @@ class PlaylistDetailFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModel<PlaylistDetailViewModel>()
     private var playlistId: Long = 0
-    private var playlist: Playlist? = null
+    private lateinit var playlist: Playlist
     private lateinit var confirmDialog: MaterialAlertDialogBuilder
     private lateinit var onTrackClickDebounce: (Track) -> Unit
     private lateinit var bsTracksContainer: LinearLayout
@@ -103,7 +103,12 @@ class PlaylistDetailFragment : Fragment() {
                         playlist = it.playlist
                         showPlaylistDetails(it.playlist, it.trackTimeTotalMinutes)
                     }
-
+                    is PlaylistDetailState.Deleted -> {
+                        showToast(getString(R.string.playlist_deleted))
+                        findNavController().navigate(
+                            R.id.action_playlistFragment_to_mediatekaFragment
+                        )
+                    }
                     else -> {}
                 }
             }
@@ -113,9 +118,6 @@ class PlaylistDetailFragment : Fragment() {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             tracksRv.adapter = adapter
             viewModel.observeTracks().observe(viewLifecycleOwner) {
-
-                Log.d("mine", "observe tracks")
-
                 when (it) {
                     is PlaylistTracksState.Content -> {
                         showTracks(it.tracks)
@@ -135,8 +137,6 @@ class PlaylistDetailFragment : Fragment() {
         overlay = requireActivity().findViewById<View>(R.id.overlay)
 
         val screenHeight = requireActivity().resources.displayMetrics.heightPixels
-        Log.d("mine", "height = $screenHeight")
-
         // контейнер треков
         bsTracksContainer = requireActivity().findViewById<LinearLayout>(R.id.bottom_sheet)
         bsTracksContainer.isVisible = true
@@ -206,14 +206,16 @@ class PlaylistDetailFragment : Fragment() {
         // ссылка удаление в опциях
         val optionPlaylistDelete = requireActivity().findViewById<TextView>(R.id.playlist_option_delete)
         optionPlaylistDelete.setOnClickListener{
-            confirmDialog = MaterialAlertDialogBuilder(requireActivity())
-                .setMessage(getString(R.string.playlist_delete_title, playlist!!.name))
+
+            viewModel.deletePlaylist(playlist)
+            /*confirmDialog = MaterialAlertDialogBuilder(requireActivity())
+                .setMessage(getString(R.string.playlist_delete_title, playlist.name))
                 .setNeutralButton(getString(R.string.label_no)) { _, _ ->
 
                 }.setPositiveButton(getString(R.string.label_yes)) { _, _ ->
-                    //viewModel.removeTrackFromPlaylist(track.trackId, playlistId)
+                    viewModel.deletePlaylist(playlist)
                 }
-            confirmDialog.show()
+            confirmDialog.show()*/
         }
 
 
@@ -223,8 +225,8 @@ class PlaylistDetailFragment : Fragment() {
     private fun sharePlaylist() {
         if (adapter.tracks.isEmpty()) {
             showToast(getString(R.string.no_tracks_for_share_playlist))
-        } else if (playlist != null) {
-            viewModel.sharePlaylist(playlist!!, adapter.tracks)
+        } else {
+            viewModel.sharePlaylist(playlist, adapter.tracks)
         }
     }
 
@@ -281,7 +283,7 @@ class PlaylistDetailFragment : Fragment() {
     }
 
     private fun showToast(additionalMessage: String) {
-        Toast.makeText(requireContext(), additionalMessage, Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), additionalMessage, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

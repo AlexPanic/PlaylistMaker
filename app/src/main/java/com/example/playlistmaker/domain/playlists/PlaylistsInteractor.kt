@@ -14,5 +14,5 @@ interface PlaylistsInteractor {
     suspend fun updateCover(cover: String, id: Long): Flow<Boolean>
     suspend fun addTrack(track: Track, playlist: Playlist): Flow<Boolean>
     suspend fun removeTrack(trackId: Int, playlistId: Long): Flow<List<Int>>
-    suspend fun deletePlaylist(playlistId: Long): Flow<Boolean>
+    suspend fun deletePlaylist(playlist: Playlist): Flow<Int>
 }
