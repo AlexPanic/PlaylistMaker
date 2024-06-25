@@ -224,7 +224,7 @@ class PlaylistAddFragment : Fragment() {
 
     // инициализируем форму
     private fun playlistFormInit() {
-        val playlistStr = requireArguments().getString(PLAYLIST, "")
+        val playlistStr = arguments?.getString(PLAYLIST, "")
         // создание плейлиста
         if (playlistStr.isNullOrBlank()) {
             setHeader(getString(R.string.new_playlist))

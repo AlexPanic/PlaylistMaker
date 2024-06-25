@@ -85,7 +85,7 @@ class PlaylistDetailViewModel(
     fun deletePlaylist(playlist_: Playlist) {
         viewModelScope.launch {
             playlistsInteractor.deletePlaylist(playlist_).collect{
-
+                // уже ничего не делаю только удаляю
                 Log.d("mine", "$it")
             //_data.postValue(PlaylistDetailState.Deleted)
             }
