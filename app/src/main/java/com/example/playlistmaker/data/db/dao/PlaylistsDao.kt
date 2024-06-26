@@ -19,7 +19,7 @@ interface PlaylistsDao {
     @Query("UPDATE playlists SET playlistTrackIDs=:trackIDs WHERE playlistId=:id")
     fun updateTrackIDs(trackIDs: String, id: Long)
 
-    @Query("SELECT * FROM playlists WHERE playlistId=:id LIMIT 1")
+    @Query("SELECT * FROM playlists WHERE playlistId=:id")
     fun getPlaylist(id: Long): Flow<PlaylistsEntity>
 
     @Query("SELECT * FROM playlists ORDER BY playlistId DESC")
@@ -37,8 +37,5 @@ interface PlaylistsDao {
     fun updatePlaylist(playlist: PlaylistsEntity)
 
     @Query("DELETE FROM playlists WHERE playlistId=:playlistId")
-    fun deletePlaylist(playlistId: Long): Int
-
-    /*@Delete(PlaylistsEntity::class)
-    fun deletePlaylist(playlist: PlaylistsEntity)*/
+    fun deletePlaylist(playlistId: Long)
 }

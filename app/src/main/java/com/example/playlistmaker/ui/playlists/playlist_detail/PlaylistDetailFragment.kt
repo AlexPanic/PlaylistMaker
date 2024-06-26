@@ -99,15 +99,15 @@ class PlaylistDetailFragment : Fragment() {
             viewModel.loadPlaylist(playlistId)
             viewModel.observeState().observe(viewLifecycleOwner) {
                 when (it) {
+                    // покажем данные плейлиста
                     is PlaylistDetailState.Content -> {
                         playlist = it.playlist
                         showPlaylistDetails(it.playlist, it.trackTimeTotalMinutes)
                     }
+                    // плейлист удален
                     is PlaylistDetailState.Deleted -> {
                         showToast(getString(R.string.playlist_deleted))
-                        findNavController().navigate(
-                            R.id.action_playlistFragment_to_mediatekaFragment
-                        )
+                        backPressedPassed()
                     }
                     else -> {}
                 }
@@ -206,16 +206,14 @@ class PlaylistDetailFragment : Fragment() {
         // ссылка удаление в опциях
         val optionPlaylistDelete = requireActivity().findViewById<TextView>(R.id.playlist_option_delete)
         optionPlaylistDelete.setOnClickListener{
-
-            viewModel.deletePlaylist(playlist)
-            /*confirmDialog = MaterialAlertDialogBuilder(requireActivity())
+            confirmDialog = MaterialAlertDialogBuilder(requireActivity())
                 .setMessage(getString(R.string.playlist_delete_title, playlist.name))
                 .setNeutralButton(getString(R.string.label_no)) { _, _ ->
 
                 }.setPositiveButton(getString(R.string.label_yes)) { _, _ ->
                     viewModel.deletePlaylist(playlist)
                 }
-            confirmDialog.show()*/
+            confirmDialog.show()
         }
 
 
@@ -280,6 +278,13 @@ class PlaylistDetailFragment : Fragment() {
         errorTv.isVisible = false
         adapter.tracks = tracks as ArrayList<Track>
         adapter.notifyDataSetChanged()
+    }
+
+    private fun backPressedPassed() {
+        val toolbar =
+            requireActivity().findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        toolbar.title = ""
+        requireActivity().onBackPressedDispatcher.onBackPressed()
     }
 
     private fun showToast(additionalMessage: String) {

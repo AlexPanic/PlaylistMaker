@@ -86,11 +86,9 @@ class PlaylistsFragment : Fragment() {
 
     private fun showContent(playlists: List<Playlist>) {
         with(binding) {
-            //progressBar.isVisible = false
             errorIcon.isVisible = false
             errorMessage.text = ""
             errorMessage.isVisible = true
-            //playlistsList.isVisible = false
         }
         adapter?.playlists?.clear()
         adapter?.playlists?.addAll(playlists)
@@ -99,12 +97,10 @@ class PlaylistsFragment : Fragment() {
 
     private fun showEmpty(message: String) {
         with(binding) {
-            //progressBar.isVisible = false
             errorIcon.isVisible = true
             errorMessage.text = message
             errorMessage.isVisible = true
             rvPlaylists
-            //playlistsList.isVisible = false
         }
     }
 

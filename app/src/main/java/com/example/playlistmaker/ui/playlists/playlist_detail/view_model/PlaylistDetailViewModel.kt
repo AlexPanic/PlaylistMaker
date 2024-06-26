@@ -1,7 +1,6 @@
 package com.example.playlistmaker.ui.playlists.playlist_detail.view_model
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,8 +12,7 @@ import com.example.playlistmaker.domain.playlists.PlaylistTracksState
 import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
 import com.example.playlistmaker.domain.playlists.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -26,6 +24,7 @@ class PlaylistDetailViewModel(
     private val externalNavigator: ExternalNavigator,
 ) : ViewModel() {
 
+    private var getDataJob: Job? = null
     private val dateFormat by lazy { SimpleDateFormat("m", Locale.getDefault()) }
     private var totalTimeInMillis: Int = 0
     private val _data = MutableLiveData<PlaylistDetailState>()
@@ -34,7 +33,7 @@ class PlaylistDetailViewModel(
     fun observeTracks(): LiveData<PlaylistTracksState> = _tracks
 
     fun loadPlaylist(playlistId: Long) {
-        viewModelScope.launch {
+        getDataJob = viewModelScope.launch {
             playlistsInteractor.getPlaylist(playlistId).collect { playlist ->
                 loadTracks(playlist)
             }
@@ -43,7 +42,7 @@ class PlaylistDetailViewModel(
 
     // сортируем треки в порядке добавления в плейлист (отраженном в trackIDs)
     private fun sortByAdded(tracks: List<Track>, trackIDs: List<Int>): List<Track> {
-        return if (tracks.size>1) {
+        return if (tracks.size > 1) {
             val tracksA = tracks.associateBy { it.trackId }
             // в обратном порядке
             trackIDs.reversed().mapNotNull { tracksA[it] }.toList()
@@ -69,7 +68,7 @@ class PlaylistDetailViewModel(
                         playlist, dateFormat.format(totalTimeInMillis).toInt()
                     )
                 )
-
+                getDataJob?.cancel()
             }
         }
     }
@@ -84,10 +83,8 @@ class PlaylistDetailViewModel(
 
     fun deletePlaylist(playlist_: Playlist) {
         viewModelScope.launch {
-            playlistsInteractor.deletePlaylist(playlist_).collect{
-                // уже ничего не делаю только удаляю
-                Log.d("mine", "$it")
-            //_data.postValue(PlaylistDetailState.Deleted)
+            playlistsInteractor.deletePlaylist(playlist_).collect {
+                _data.postValue(PlaylistDetailState.Deleted)
             }
         }
     }

@@ -10,6 +10,7 @@ import com.example.playlistmaker.domain.playlists.model.Playlist
 import com.example.playlistmaker.domain.search.model.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -25,10 +26,12 @@ class PlaylistsRepositoryImpl(
     override fun getTracks(trackIDs: List<Int>): Flow<List<Track>> =
         appDatabase.tracksDao().getTracks(trackIDs).map(::convertTracks)
 
-    override fun getPlaylist(playlistId: Long): Flow<Playlist> =
-        appDatabase.playlistsDao().getPlaylist(playlistId).map {
-            playlistsConverter.map(it)
-        }
+    override fun getPlaylist(playlistId: Long): Flow<Playlist> = flow {
+        val list = appDatabase.playlistsDao().getPlaylist(playlistId).firstOrNull()
+        if (list == null) {
+            emit(Playlist(0, "", "", "", mutableListOf(), 0))
+        } else emit(playlistsConverter.map(list))
+    }
 
     override fun getTrackTimeMillisTotal(trackIDs: List<Int>): Flow<Int> =
         appDatabase.tracksDao().getTimeMillisTotal(trackIDs)
@@ -82,24 +85,20 @@ class PlaylistsRepositoryImpl(
         }
     }
 
-    /*
-            //val trackIDs = playlist.trackIDs
-            withContext(Dispatchers.IO) {
-                appDatabase.playlistsDao().deletePlaylist(playlistsConverter.map(playlist))
-                /*if (trackIDs.isNotEmpty()) {
-                    for (trackId in trackIDs) {
-                        val matches = appDatabase.playlistsDao().getPlaylistsMatchByTrack(trackId)
-                        if (matches == 0) {
-                            appDatabase.tracksDao().deleteTrack(trackId)
-                        }
+    override fun deletePlaylist(playlist: Playlist): Flow<Boolean> = flow {
+        withContext(Dispatchers.IO) {
+            appDatabase.playlistsDao().deletePlaylist(playlist.id)
+            if (playlist.trackIDs.isNotEmpty()) {
+                for (trackId in playlist.trackIDs) {
+                    val matches = appDatabase.playlistsDao().getPlaylistsMatchByTrack(trackId)
+                    if (matches == 0) {
+                        appDatabase.tracksDao().deleteTrack(trackId)
                     }
-                }*/
+                }
             }
-
-     */
-
-    override fun deletePlaylist(playlist: Playlist) =
-        appDatabase.playlistsDao().deletePlaylist(playlist.id)
+        }
+        emit(true)
+    }
 
 
     private fun convertPlaylists(playlistEntities: List<PlaylistsEntity>): List<Playlist> =

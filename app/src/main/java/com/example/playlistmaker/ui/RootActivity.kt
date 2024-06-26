@@ -36,13 +36,11 @@ class RootActivity : AppCompatActivity() {
                 R.id.playlistFragment -> {
                     toolbar.setNavigationIcon(R.drawable.arrow_back_playlist)
                     toolbar.setBackgroundColor(getColor(R.color.light_gray))
-                    //toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.teal_200))
                 }
 
                 else -> {
                     toolbar.setNavigationIcon(R.drawable.arrow_back)
                     toolbar.setBackgroundColor(getColor(R.color.main_background_color))
-                    //toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.main_text_color))
                 }
             }
             this.setSupportActionBar(toolbar)
