@@ -1,4 +1,4 @@
-package com.example.playlistmaker.ui.playlist_add.view_model
+package com.example.playlistmaker.ui.playlists.playlist_add.view_model
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.domain.playlists.PlaylistAddState
+import com.example.playlistmaker.domain.playlists.PlaylistSubmitState
 import com.example.playlistmaker.domain.playlists.PlaylistsInteractor
 import com.example.playlistmaker.domain.playlists.model.Playlist
 import kotlinx.coroutines.launch
@@ -20,14 +20,34 @@ class PlaylistAddViewModel(
     private val context: Context,
     private val playlistsInteractor: PlaylistsInteractor,
 ) : ViewModel() {
-    private val _data = MutableLiveData<PlaylistAddState>()
-    fun observeState(): LiveData<PlaylistAddState> = _data
+    private val _data = MutableLiveData<PlaylistSubmitState>()
+    fun observeState(): LiveData<PlaylistSubmitState> = _data
+
+    fun updatePlaylist(
+        playlist: Playlist,
+        playlistName: String,
+        playlistDescription: String?,
+        newUri: Uri?,
+    ) {
+        playlist.name = playlistName
+        playlist.description = playlistDescription
+        if (newUri != null) {
+            playlist.cover = saveImageToPrivateStorage(newUri, playlist.id)
+        }
+        viewModelScope.launch {
+            playlistsInteractor.updatePlaylist(playlist)
+                .collect {
+                    renderState(PlaylistSubmitState.Updated)
+                }
+        }
+    }
+
     fun addPlaylist(
         playlistName: String,
         playlistDescription: String?,
         uri: Uri?,
     ) {
-        renderState(PlaylistAddState.Loading)
+        renderState(PlaylistSubmitState.Loading)
         viewModelScope.launch {
             val playlist = Playlist(
                 id = 0,
@@ -43,10 +63,10 @@ class PlaylistAddViewModel(
                         playlistsInteractor
                             .updateCover(savedCover, playlistID)
                             .collect {
-                                renderState(PlaylistAddState.Added)
+                                renderState(PlaylistSubmitState.Added)
                             }
                     } else {
-                        renderState(PlaylistAddState.Added)
+                        renderState(PlaylistSubmitState.Added)
                     }
                 }
         }
@@ -57,7 +77,7 @@ class PlaylistAddViewModel(
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
-        val file = File(filePath, "plcover$playlistId")
+        val file = File(filePath, "${System.currentTimeMillis()}$playlistId")
         val inputStream = context.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
         BitmapFactory
@@ -66,7 +86,8 @@ class PlaylistAddViewModel(
         return file.toURI().toString()
     }
 
-    private fun renderState(state: PlaylistAddState) {
+
+    private fun renderState(state: PlaylistSubmitState) {
         _data.postValue(state)
     }
 

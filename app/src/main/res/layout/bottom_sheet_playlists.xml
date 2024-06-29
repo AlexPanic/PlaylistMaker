@@ -8,7 +8,7 @@
     android:background="@drawable/bottomsheet_background"
     android:orientation="vertical"
     android:paddingHorizontal="@dimen/main_padding"
-    android:paddingTop="24dp"
+    android:paddingTop="@dimen/sheet_margin_top"
     app:behavior_hideable="true"
     app:behavior_peekHeight="400dp"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">

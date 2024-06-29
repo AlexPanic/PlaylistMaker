@@ -16,6 +16,7 @@ import com.example.playlistmaker.domain.sharing.usecase.UserAgreementUseCase
 import com.example.playlistmaker.domain.sharing.usecase.impl.MessageSupportUseCaseImpl
 import com.example.playlistmaker.domain.sharing.usecase.impl.ShareAppUseCaseImpl
 import com.example.playlistmaker.domain.sharing.usecase.impl.UserAgreementUseCaseImpl
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val useCaseModule = module {
@@ -41,7 +42,7 @@ val useCaseModule = module {
 
     // Интеракции в настройках
     factory<ShareAppUseCase> {
-        ShareAppUseCaseImpl(get())
+        ShareAppUseCaseImpl(androidContext(), get())
     }
     factory<MessageSupportUseCase> {
         MessageSupportUseCaseImpl(get())

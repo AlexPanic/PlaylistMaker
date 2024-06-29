@@ -37,13 +37,24 @@
     <string name="created">создан</string>
     <string name="tab_playlists">Плейлисты</string>
     <string name="empty_playlists">Вы не создали\nни одного плейлиста</string>
+    <string name="no_tracks_in_playlist">В этом плейлисте пока нет треков</string>
+    <string name="no_tracks_for_share_playlist">В этом плейлисте нет списка треков, которым можно поделиться</string>
     <string name="new_playlist">Новый плейлист</string>
+    <string name="edit_playlist">Редактирование плейлиста</string>
     <string name="add_to_playlist">Добавить в плейлист</string>
     <string name="added_to_playlist">Добавлено в плейлист</string>
     <string name="already_in_playlist">Трек уже добавлен в плейлист</string>
     <string name="playlist_add_error">Ошибка сохранения плейлиста</string>
     <string name="playlist_add_backpressed_title">Завершить создание плейлиста?</string>
     <string name="playlist_add_backpressed_message">Все несохраненные данные будут потеряны</string>
+    <string name="playlist_remove_track_title">Удалить трек</string>
+    <string name="playlist_remove_track_message">Вы уверены, что хотите удалить трек из плейлиста?</string>
+    <string name="playlist_share_title">Поделиться плейлистом</string>
+    <string name="playlist_option_edit">Редактировать информацию</string>
+    <string name="playlist_option_delete">Удалить плейлист</string>
+    <string name="playlist_delete_title">Хотите удалить плейлист %s?</string>
+    <string name="playlist_deleted">Плейлист удален</string>
+
     <string name="img_alert_icon">Алерт в результатах поиска</string>
 
     <string name="search_history_header">Вы искали</string>
@@ -60,14 +71,37 @@
     <string name="player_track_country">Страна</string>
     <string name="player_track_stop_position">00:00</string>
 
-    <string name="create_btn_label">Создать</string>
+    <string name="label_create">Создать</string>
+    <string name="label_save">Сохранить</string>
     <string name="label_name_required">Название*</string>
     <string name="label_description">Описание</string>
     <string name="label_cancel">Отмена</string>
     <string name="label_finish">Завершить</string>
+    <string name="label_yes">Да</string>
+    <string name="label_no">Нет</string>
 
 
     <string name="permission_images_rationale">Разрешение на использование картинок для обложек плейлиста, хранящихся только на устройстве</string>
 
+    <plurals name="minutes">
+        <item quantity="zero">минут</item>
+        <item quantity="one">минута</item>
+        <item quantity="two">минуты</item>
+        <item quantity="few">минуты</item>
+        <item quantity="other">минут</item>
+        <item quantity="many">минут</item>
+    </plurals>
+
+    <plurals name="tracks">
+        <item quantity="zero">треков</item>
+        <item quantity="one">трек</item>
+        <item quantity="two">трека</item>
+        <item quantity="few">трека</item>
+        <item quantity="other">треков</item>
+        <item quantity="many">треков</item>
+    </plurals>
+
+    <string name="playlist_summary">%1$d %2$s • %3$d %4$s</string>
+    <string name="playlist_tracks_count">%1$d %2$s</string>
 
 </resources>

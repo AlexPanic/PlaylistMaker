@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/bottom_sheet2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bottomsheet_background"
+    android:orientation="vertical"
+    android:paddingHorizontal="@dimen/main_padding"
+    android:paddingTop="@dimen/sheet_margin_top"
+    android:visibility="gone"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="320dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/list_item_playlist_on_player_screen" />
+
+    <TextView
+        android:id="@+id/playlist_option_share"
+        style="@style/playlist_detail_option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/share_title"
+        />
+
+    <TextView
+        android:id="@+id/playlist_option_edit"
+        style="@style/playlist_detail_option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/playlist_option_edit"
+        />
+
+    <TextView
+        android:id="@+id/playlist_option_delete"
+        style="@style/playlist_detail_option"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/playlist_option_delete"
+        />
+
+</LinearLayout>

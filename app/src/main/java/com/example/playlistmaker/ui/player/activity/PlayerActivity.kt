@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,8 +25,8 @@ import com.example.playlistmaker.domain.search.model.Track
 import com.example.playlistmaker.ui.common.Helper
 import com.example.playlistmaker.ui.enums.PlayerState
 import com.example.playlistmaker.ui.player.view_model.PlayerViewModel
-import com.example.playlistmaker.ui.playlist_add.PlaylistAddFragment
-import com.example.playlistmaker.ui.playlists.PlaylistsAdapter
+import com.example.playlistmaker.ui.playlists.playlist_add.PlaylistAddFragment
+import com.example.playlistmaker.ui.playlists.playlists_list.PlaylistsAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -42,7 +43,12 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        Helper.setToolbar(this)
+        this.setSupportActionBar(binding.toolbar)
+        this.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        this.supportActionBar?.setDisplayShowHomeEnabled(true)
+        binding.toolbar.setNavigationOnClickListener{
+            this.onBackPressedDispatcher.onBackPressed()
+        }
 
         val track =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -112,10 +118,18 @@ class PlayerActivity : AppCompatActivity() {
         val btPlaylistAdd = findViewById<Button>(R.id.btPlaylistAdd)
         btPlaylistAdd.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+            /*findNavController().navigate(
+                    R.id.action_mediatekaFragment_to_playlistAddFragment,
+                    PlaylistAddFragment.createArgs(null)
+                )*/
+
+
             supportFragmentManager.beginTransaction()
-                .add(R.id.playerFragmentContainerView, PlaylistAddFragment())
+                .replace(R.id.playerFragmentContainerView, PlaylistAddFragment())
                 .addToBackStack(getString(R.string.new_playlist))
                 .commit()
+            binding.toolbar.setTitle(getString(R.string.new_playlist))
         }
 
         // кнопка добавить трек в плейлист

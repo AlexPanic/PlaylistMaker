@@ -5,17 +5,17 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.content.ContextCompat.getString
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.settings.ExternalNavigator
+import com.example.playlistmaker.domain.ExternalNavigator
 
 
 class ExternalNavigatorImpl(private val context: Context) : ExternalNavigator {
-    override fun shareApp() {
+    override fun shareThis(subj: String, message: String) {
         val intent = Intent(Intent.ACTION_SEND)
         intent.apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, getString(context, R.string.share_subject))
-            putExtra(Intent.EXTRA_TEXT, getString(context, R.string.share_text))
+            putExtra(Intent.EXTRA_SUBJECT, subj)
+            putExtra(Intent.EXTRA_TEXT, message)
         }
         startIntent(intent, getString(context, R.string.share_title))
     }

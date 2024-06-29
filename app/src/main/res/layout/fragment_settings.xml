@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        app:title="@string/screen_settings"
-        app:titleTextAppearance="@style/toolbar" />
-
     <LinearLayout style="@style/screen">
 
         <FrameLayout style="@style/line">
+
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/themeSwitcher"
+                style="@style/theme_switcher"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
-                android:text="@string/settings_dark"
-                style="@style/theme_switcher"
-                />
+                android:text="@string/settings_dark" />
         </FrameLayout>
 
 
@@ -34,6 +26,7 @@
             <TextView
                 style="@style/option"
                 android:text="@string/settings_share" />
+
             <ImageView
                 style="@style/option_icon"
                 android:contentDescription="@string/img_share"

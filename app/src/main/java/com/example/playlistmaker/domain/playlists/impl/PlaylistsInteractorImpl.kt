@@ -11,23 +11,52 @@ import kotlinx.coroutines.withContext
 class PlaylistsInteractorImpl(
     private val repository: PlaylistsRepository,
 ) : PlaylistsInteractor {
-    override suspend fun getPlaylists(): Flow<List<Playlist>> {
-        return withContext(Dispatchers.IO) {
+    override suspend fun getPlaylists(): Flow<List<Playlist>> =
+        withContext(Dispatchers.IO)
+        {
             repository.getPlaylists()
         }
-    }
 
-    override suspend fun addPlaylist(playlist: Playlist): Flow<Long> {
-        return repository.addPlaylist(playlist)
-    }
+    override suspend fun getTracks(trackIDs: List<Int>): Flow<List<Track>> =
+        withContext(Dispatchers.IO)
+        {
+            repository.getTracks(trackIDs)
+        }
 
-    override suspend fun updateCover(cover: String, id: Long): Flow<Boolean> {
-        return repository.updateCover(cover, id)
-    }
 
-    override suspend fun addTrack(track: Track, playlist: Playlist): Flow<Boolean> {
-        return repository.addTrack(track, playlist)
-    }
+    override suspend fun getPlaylist(id: Long): Flow<Playlist> =
+        withContext(Dispatchers.IO)
+        {
+            repository.getPlaylist(id)
+        }
+
+
+    override suspend fun getTrackTimeMillisTotal(trackIDs: List<Int>): Flow<Int> =
+        withContext(Dispatchers.IO) {
+            repository.getTrackTimeMillisTotal(trackIDs)
+        }
+
+    override suspend fun addPlaylist(playlist: Playlist): Flow<Long> =
+        repository.addPlaylist(playlist)
+
+
+    override suspend fun updatePlaylist(playlist: Playlist): Flow<Boolean> =
+        repository.updatePlaylist(playlist)
+
+
+    override suspend fun updateCover(cover: String, id: Long): Flow<Boolean> =
+        repository.updateCover(cover, id)
+
+    override suspend fun addTrack(track: Track, playlist: Playlist): Flow<Boolean> =
+        repository.addTrack(track, playlist)
+
+    override suspend fun removeTrack(trackId: Int, playlistId: Long): Flow<List<Int>> =
+        withContext(Dispatchers.IO) {
+            repository.removeTrack(trackId, playlistId)
+        }
+
+    override suspend fun deletePlaylist(playlist: Playlist): Flow<Boolean> =
+        repository.deletePlaylist(playlist)
 
 
 }
